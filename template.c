@@ -1,0 +1,20 @@
+#ifndef TEMPLATE_HEADER
+#define TEMPLATE_HEADER
+
+
+#endif // TEMPLATE_HEADER
+
+#ifdef TEMPLATE_IMPL
+#undef TEMPLATE_IMPL
+
+
+#ifdef TEMPLATE_MAIN
+#undef TEMPLATE_MAIN
+
+int main() {
+    
+}
+
+#endif // TEMPLATE_MAIN
+
+#endif // TEMPLATE_IMPL
