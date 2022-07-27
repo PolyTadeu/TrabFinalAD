@@ -16,6 +16,10 @@ test_queue: event.c queue.c types.h
 	$(CC) $(CFLAGS) $(call DEF, QUEUE) queue.c
 	./a.out
 
+test_histogram: histogram.c types.h
+	$(CC) $(CFLAGS) $(call DEF, HISTOGRAM) histogram.c
+	./a.out
+
 test_system: event_heap.c event.c queue.c random.c stats.c system.c types.h
 	$(CC) $(CFLAGS) $(MATHLIB) $(call DEF, SYSTEM) system.c
 	./a.out

@@ -7,6 +7,7 @@
 
 #ifdef TEMPLATE_IMPL
 #undef TEMPLATE_IMPL
+#include <assert.h>
 
 
 #ifdef TEMPLATE_MAIN
