@@ -1,5 +1,6 @@
 #ifndef SYSTEM_HEADER
 #define SYSTEM_HEADER
+#include "types.h"
 #include "random.c"
 #include "stats.c"
 #include "event_heap.c"
@@ -7,10 +8,10 @@
 
 typedef struct _System {
     RandCtx *rand;
-    double lambda;
+    f64 lambda;
     EventHeap *events;
     Queue *queue;
-    int busy;
+    b32 busy;
     Color color;
     Time curr_time;
     Stats nq_stat;
@@ -18,7 +19,7 @@ typedef struct _System {
     Stats tq_stat;
 } System;
 
-System init_system(RandCtx *rand, double lambda, EventHeap *eh, Queue *q, Color color);
+System init_system(RandCtx *rand, f64 lambda, EventHeap *eh, Queue *q, Color color);
 
 #endif // SYSTEM_HEADER
 
@@ -37,8 +38,8 @@ System init_system(RandCtx *rand, double lambda, EventHeap *eh, Queue *q, Color 
 #define QUEUE_IMPL
 #include "queue.c"
 
-System init_system(RandCtx *rand, double lambda, EventHeap *es, Queue *q, Color color) {
-    System ret = {
+System init_system(RandCtx *rand, f64 lambda, EventHeap *es, Queue *q, Color color) {
+    const System ret = {
         .rand = rand,
         .lambda = lambda,
         .events = es,
@@ -55,14 +56,14 @@ System init_system(RandCtx *rand, double lambda, EventHeap *es, Queue *q, Color 
 
 void record_queue_time(Stats *stat, Color color, Time now, Person p) {
     if ( p.color == color ) {
-        const double val = now - p.arrived_time;
+        const f64 val = now - p.arrived_time;
         acc_and_update(stat, val);
     }
 }
 
-void record_queue_size(System *s, Time now, Time last_time, unsigned int qsize) {
+void record_queue_size(System *s, Time now, Time last_time, u32 qsize) {
     acc_and_update(&(s->nq_stat), qsize);
-    const double val = (now - last_time) * qsize;
+    const f64 val = (now - last_time) * qsize;
     acc_and_update(&(s->nq_stat_time), val);
 }
 
@@ -108,7 +109,6 @@ void handle_next_event(System *s) {
 #undef SYSTEM_MAIN
 
 int main() {
-    
 }
 
 #endif // SYSTEM_MAIN

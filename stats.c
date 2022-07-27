@@ -1,17 +1,18 @@
 #ifndef STATS_HEADER
 #define STATS_HEADER
+#include "types.h"
 
 typedef struct _Stats  {
-    unsigned int n;
-    double acc;
-    double sqr_acc;
+    u32 n;
+    f64 acc;
+    f64 sqr_acc;
 } Stats;
 
 Stats new_stats();
-Stats accumulate(Stats stat, double val);
-void acc_and_update(Stats *stat, double val);
-double average(Stats stat);
-double variance(Stats stat);
+Stats accumulate(Stats stat, f64 val);
+void acc_and_update(Stats *stat, f64 val);
+f64 average(Stats stat);
+f64 variance(Stats stat);
 
 #endif // STATS_HEADER
 
@@ -24,7 +25,7 @@ Stats new_stats() {
     return ret;
 }
 
-Stats accumulate(Stats stat, double val) {
+Stats accumulate(Stats stat, f64 val) {
     const Stats ret = {
         .n = stat.n + 1,
         .acc = stat.acc + val,
@@ -33,18 +34,18 @@ Stats accumulate(Stats stat, double val) {
     return ret;
 }
 
-void acc_and_update(Stats *stat, double val) {
+void acc_and_update(Stats *stat, f64 val) {
     *stat = accumulate(*stat, val);
 }
 
-double average(Stats stat) {
+f64 average(Stats stat) {
     assert( stat.n > 0 );
-    return stat.acc / ((double) stat.n);
+    return stat.acc / ((f64) stat.n);
 }
 
-double variance(Stats stat) {
+f64 variance(Stats stat) {
     assert( stat.n > 1 );
-    return (stat.sqr_acc - (stat.acc * stat.acc / ((double) stat.n))) / ((double) (stat.n - 1));
+    return (stat.sqr_acc - (stat.acc * stat.acc / ((f64) stat.n))) / ((f64) (stat.n - 1));
 }
 
 #endif // STATS_IMPL

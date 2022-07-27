@@ -1,5 +1,6 @@
 #ifndef QUEUE_HEADER
 #define QUEUE_HEADER
+#include "types.h"
 #include "event.c"
 
 typedef enum _QueueType {
@@ -8,16 +9,16 @@ typedef enum _QueueType {
 
 typedef struct _Queue {
     QueueType type;
-    int len;
-    int head;
-    int tail;
+    u32 len;
+    u32 head;
+    u32 tail;
     Person *people;
 } Queue;
 
 Queue init_queue(QueueType type);
 void deinit_queue(Queue *q);
-int size_queue(Queue *q);
-int is_empty_queue(Queue *q);
+u32 size_queue(Queue *q);
+u32 is_empty_queue(Queue *q);
 void insert_queue(Queue *q, Person p);
 Person remove_queue(Queue *q);
 
@@ -25,8 +26,8 @@ Person remove_queue(Queue *q);
 
 #ifdef QUEUE_IMPL
 #undef QUEUE_IMPL
-#import <stdlib.h>
-#import <assert.h>
+#include <stdlib.h>
+#include <assert.h>
 
 // inicializa a lista de eventos
 Queue init_queue(QueueType type) {
@@ -44,12 +45,12 @@ void deinit_queue(Queue *q) {
     free(q->people);
 }
 
-int size_queue(Queue *q) {
+u32 size_queue(Queue *q) {
     assert( q->type != Queue_LCFS || q->head == 0 );
     return ( q->tail - q->head + q->len ) % q->len;
 }
 
-int is_empty_queue(Queue *q) {
+u32 is_empty_queue(Queue *q) {
     assert( q->type != Queue_LCFS || q->head == 0 );
     return q->head == q->tail;
 }
@@ -66,16 +67,16 @@ void insert_queue(Queue *q, Person p) {
         assert( q->people );
         if ( q->head > q->tail ) {
             assert( q->type == Queue_FCFS );
-            const int head_size = (q->len/2) - q->head;
-            const int tail_size = q->tail;
+            const u32 head_size = (q->len/2) - q->head;
+            const u32 tail_size = q->tail;
             if ( head_size < tail_size ) {
-                int new_head = q->head + (q->len/2);
-                for ( int i = 0; i < head_size; i++ ) {
+                const u32 new_head = q->head + (q->len/2);
+                for ( u32 i = 0; i < head_size; i++ ) {
                     q->people[new_head + i] = q->people[q->head + i];
                 }
                 q->head = new_head;
             } else {
-                for ( int i = 0; i < tail_size; i++ ) {
+                for ( u32 i = 0; i < tail_size; i++ ) {
                     q->people[(q->len/2) + i] = q->people[i];
                 }
                 q->tail += q->len/2;
@@ -112,7 +113,7 @@ Person remove_queue(Queue *q) {
 
 void print_queue(Queue *q) {
     printf("{");
-    for ( int i = 0; i < q->len; i++ ) {
+    for ( u32 i = 0; i < q->len; i++ ) {
         printf("%s%s%02u", (i == q->head) ? " [" : " ", (i == q->tail) ? "]" : "", q->people[i].color);
     }
     printf(" }");

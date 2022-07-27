@@ -1,9 +1,10 @@
 #ifndef EVENT_HEAP_HEADER
 #define EVENT_HEAP_HEADER
-#import "event.c"
+#include "types.h"
+#include "event.c"
 
 typedef struct _EventHeap {
-    int size, len;
+    u32 size, len;
     Event* events;
 } EventHeap;
 
@@ -16,8 +17,8 @@ Event remove_heap(EventHeap *q);
 
 #ifdef EVENT_HEAP_IMPL
 #undef EVENT_HEAP_IMPL
-#import <stdlib.h>
-#import <assert.h>
+#include <stdlib.h>
+#include <assert.h>
 
 // inicializa a lista de eventos
 EventHeap init_heap() {
@@ -39,7 +40,7 @@ void deinit_heap(EventHeap *q) {
 #define RIGHT(i)    ((i) * 2 + 2)
 
 // função utilizada para ordenar a lista quando há uma inserção 
-void bubbleUp(EventHeap *q, int i) {
+void bubbleUp(EventHeap *q, u32 i) {
     Event *events = q->events;
     while (i > 0 && events[PARENT(i)].time > events[i].time ) {
        const Event tmp = events[PARENT(i)];
@@ -50,7 +51,7 @@ void bubbleUp(EventHeap *q, int i) {
 }
 
 // função utilizada para ordenar a lista quando há uma remoção
-void bubbleDown(EventHeap *q, int i) {
+void bubbleDown(EventHeap *q, u32 i) {
     Event *events = q->events;
     assert( i < q->size );
     while ( ( LEFT(i) < q->size && events[LEFT(i)].time < events[i].time ) || ( RIGHT(i) < q->size && events[RIGHT(i)].time < events[i].time ) ) {
@@ -80,6 +81,7 @@ void insert_heap(EventHeap *q, Event e) {
     bubbleUp(q, q->size);
     q->size += 1;
 }
+
 // remove evento da lista
 Event remove_heap(EventHeap *q) {
     assert( q->size );
@@ -109,28 +111,28 @@ void padd_x() {
     half_padd_x();
 }
 
-void padd_y(int dim) {
-    for ( int i = 0; i < dim; i++ ) {
+void padd_y(u32 dim) {
+    for ( u32 i = 0; i < dim; i++ ) {
         printf("   ");
         half_padd_x();
     }
 }
 
 void print_heap(EventHeap *q) {
-    int depth = 0; (void) depth;
-    int size = q->size;
-    int dim_pad = 0;
+    u32 depth = 0; (void) depth;
+    u32 size = q->size;
+    u32 dim_pad = 0;
     while ( size ) {
         size /= 2;
         depth += 1;
         dim_pad = dim_pad * 2 + 1;
     }
 
-    int next_start = 0;
-    int line = 1;
-    int next_line = 0;
+    u32 next_start = 0;
+    u32 line = 1;
+    u32 next_line = 0;
     dim_pad /= 2;
-    for ( int i = 0; i < q->size; i++ ) {
+    for ( u32 i = 0; i < q->size; i++ ) {
         if ( next_start != i ) {
             padd_x();
         } else {
@@ -153,7 +155,7 @@ void print_heap(EventHeap *q) {
 int main() {
     EventHeap eq = init_heap(), *q = &eq;
     double arr[] = { 5, 9, 14, 17, 1, 3, 7 };
-    for ( int i = 0; i < 7; i++ ) {
+    for ( u32 i = 0; i < 7; i++ ) {
         const Event e = {
             .time = arr[i],
         };

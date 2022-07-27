@@ -1,8 +1,9 @@
 #ifndef EVENT_HEADER
 #define EVENT_HEADER
+#include "types.h"
 
-typedef double Time;
-typedef unsigned int Color;
+typedef f64 Time;
+typedef u32 Color;
 
 typedef enum _EventType {
     EVENT_arrival, EVENT_leave,
@@ -24,33 +25,12 @@ Event create_event_leave(Time t, Person p);
 
 #endif // EVENT_HEADER
 
-Event create_event_arrival(Time t, Color color) {
-    Event ret = {
-        .type = EVENT_arrival,
-        .time = t,
-        .person = {
-            .arrived_time = t,
-            .color = color,
-        },
-    };
-    return ret;
-}
-
-Event create_event_leave(Time t, Person p) {
-    Event ret = {
-        .type = EVENT_leave,
-        .time = t,
-        .person = p,
-    };
-    return ret;
-}
-
 #ifdef EVENT_IMPL
 #undef EVENT_IMPL
 #include <assert.h>
 
 Event create_event_arrival(Time t, Color color) {
-    Event ret = {
+    const Event ret = {
         .type = EVENT_arrival,
         .time = t,
         .person = {
@@ -62,7 +42,7 @@ Event create_event_arrival(Time t, Color color) {
 }
 
 Event create_event_leave(Time t, Person p) {
-    Event ret = {
+    const Event ret = {
         .type = EVENT_leave,
         .time = t,
         .person = p,
@@ -74,7 +54,6 @@ Event create_event_leave(Time t, Person p) {
 #undef EVENT_MAIN
 
 int main() {
-    
 }
 
 #endif // EVENT_MAIN

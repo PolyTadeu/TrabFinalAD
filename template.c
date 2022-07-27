@@ -1,5 +1,6 @@
 #ifndef TEMPLATE_HEADER
 #define TEMPLATE_HEADER
+#include "types.h"
 
 
 #endif // TEMPLATE_HEADER
@@ -12,7 +13,6 @@
 #undef TEMPLATE_MAIN
 
 int main() {
-    
 }
 
 #endif // TEMPLATE_MAIN
