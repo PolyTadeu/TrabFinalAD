@@ -66,10 +66,11 @@ int main() {
 
     for ( u32 i = 0; i < n; i++ ) {
         const f64 val = randUniform(&ctx);
-        acc_and_update(&stat, val);
+        acc_and_update(&stat, val, 1);
     }
 
-    const f64 mediaUni = average(stat), varUni = variance(stat);
+    const f64 mediaUni = discrete_average(stat),
+          varUni = discrete_variance(stat);
     const f64 unimedia = 0.5f, univar = 1.0f / 12.0f;
     printf("   media: %7.7lf,    var: %7.7lf\n", mediaUni, varUni);
     printf("unimedia: %7.7lf, univar: %7.7lf\n\n", unimedia, univar);
@@ -78,10 +79,11 @@ int main() {
     const f64 lambda = 7.3f;
     for ( u32 i = 0; i < n; i++ ) {
         const f64 val = randExp(&ctx, lambda);
-        acc_and_update(&stat, val);
+        acc_and_update(&stat, val, 1);
     }
 
-    const f64 media = average(stat), var = variance(stat);
+    const f64 media = discrete_average(stat),
+          var = discrete_variance(stat);
     const f64 expmedia = 1 / lambda, expvar = expmedia * expmedia;
     printf("   media: %7.7lf,    var: %7.7lf\n", media, var);
     printf("expmedia: %7.7lf, expvar: %7.7lf\n\n", expmedia, expvar);
