@@ -57,14 +57,12 @@ System init_system(RandCtx *rand, f64 lambda, EventHeap *es, Queue *q, Color col
 void record_queue_time(Stats *stat, Color color, Time now, Person p) {
     if ( p.color == color ) {
         const f64 val = now - p.arrived_time;
-        acc_and_update(stat, val);
+        acc_and_update(stat, val, 1);
     }
 }
 
 void record_queue_size(System *s, Time now, Time last_time, u32 qsize) {
-    acc_and_update(&(s->nq_stat), qsize);
-    const f64 val = (now - last_time) * qsize;
-    acc_and_update(&(s->nq_stat_time), val);
+    acc_and_update(&(s->nq_stat_time), qsize, (now - last_time));
 }
 
 void handle_next_event(System *s) {

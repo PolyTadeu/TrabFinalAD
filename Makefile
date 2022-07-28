@@ -17,10 +17,6 @@ test_queue: $($(SRCDIR){event.c, queue.c, types.h})
 	$(CC) $(CFLAGS) $(call DEF, QUEUE) $(SRCDIR)queue.c
 	./a.out
 
-test_histogram: $($(SRCDIR){histogram.c, types.h})
-	$(CC) $(CFLAGS) $(call DEF, HISTOGRAM) $(SRCDIR)histogram.c
-	./a.out
-
 test_system: $($(SRCDIR){event_heap.c, event.c, queue.c, random.c, stats.c, system.c, types.h})
 	$(CC) $(CFLAGS) $(MATHLIB) $(call DEF, SYSTEM) $(SRCDIR)system.c
 	./a.out
