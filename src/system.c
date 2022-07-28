@@ -15,7 +15,6 @@ typedef struct _System {
     Color color;
     Time curr_time;
     Stats nq_stat;
-    Stats nq_stat_time;
     Stats tq_stat;
 } System;
 
@@ -48,7 +47,6 @@ System init_system(RandCtx *rand, f64 lambda, EventHeap *es, Queue *q, Color col
         .color = color,
         .curr_time = 0,
         .nq_stat = new_stats(),
-        .nq_stat_time = new_stats(),
         .tq_stat = new_stats(),
     };
     return ret;
@@ -61,13 +59,13 @@ void record_queue_time(Stats *stat, Color color, Time now, Person p) {
     }
 }
 
-void record_queue_size(System *s, Time now, Time last_time, u32 qsize) {
-    acc_and_update(&(s->nq_stat_time), qsize, (now - last_time));
+void record_queue_size(Stats *stat, Time now, Time last_time, u32 qsize) {
+    acc_and_update(stat, qsize, (now - last_time));
 }
 
 void handle_next_event(System *s) {
     Event e = remove_heap(s->events);
-    record_queue_size(s, e.time, s->curr_time, size_queue(s->queue));
+    record_queue_size(&(s->nq_stat), e.time, s->curr_time, size_queue(s->queue));
     switch ( e.type ) {
         case EVENT_arrival: {
             const Time t_arr = randExp(s->rand, s->lambda);
