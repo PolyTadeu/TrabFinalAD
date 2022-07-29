@@ -18,7 +18,7 @@ typedef struct _Queue {
 Queue init_queue(QueueType type);
 void deinit_queue(Queue *q);
 u32 size_queue(const Queue *q);
-u32 is_empty_queue(const Queue *q);
+b32 is_empty_queue(const Queue *q);
 void insert_queue(Queue *q, const Person p);
 Person remove_queue(Queue *q);
 
@@ -47,10 +47,12 @@ void deinit_queue(Queue *q) {
 
 u32 size_queue(const Queue *q) {
     assert( q->type != Queue_LCFS || q->head == 0 );
-    return ( q->tail - q->head + q->len ) % q->len;
+    return q->len
+        ? ( q->tail - q->head + q->len ) % q->len
+        : 0;
 }
 
-u32 is_empty_queue(const Queue *q) {
+b32 is_empty_queue(const Queue *q) {
     assert( q->type != Queue_LCFS || q->head == 0 );
     return q->head == q->tail;
 }

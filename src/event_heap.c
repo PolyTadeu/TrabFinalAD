@@ -10,6 +10,8 @@ typedef struct _EventHeap {
 
 EventHeap init_heap();
 void deinit_heap(EventHeap *q);
+u32 size_heap(const EventHeap *q);
+b32 is_empty_heap(const EventHeap *q);
 void insert_heap(EventHeap *q, Event e);
 Event remove_heap(EventHeap *q);
 
@@ -23,7 +25,7 @@ Event remove_heap(EventHeap *q);
 // inicializa a lista de eventos
 EventHeap init_heap() {
     EventHeap ret = {
-        .size = 0, 
+        .size = 0,
         .len = 0,
         .events = 0,
     };
@@ -32,6 +34,14 @@ EventHeap init_heap() {
 
 void deinit_heap(EventHeap *q) {
     free(q->events);
+}
+
+u32 size_heap(const EventHeap *q) {
+    return q->size;
+}
+
+b32 is_empty_heap(const EventHeap *q) {
+    return q->size == 0;
 }
 
 #define MIN(a, b)   (((a) <= (b) ? (a) : (b)))
@@ -177,24 +187,24 @@ int main() {
         log_heap(q);
         heap_expect_ok(q);
         u32_expect_equal("Heap inserting increases size",
-                i+1, q->size);
+                i+1, size_heap(q));
     }
 
     SECTION("Heap Remove");
     u32 removed_cnt = 0;
-    while ( q->size ) {
+    while ( size_heap(q) ) {
         const Event e = remove_heap(q);
         removed_cnt += 1;
         log("\nremoved: %4.2lf\n", e.time);
         log_heap(q);
         heap_expect_ok(q);
         u32_expect_equal("Heap removing decreases size",
-                arr_len - removed_cnt, q->size);
+                arr_len - removed_cnt, size_heap(q));
     }
     u32_expect_equal("Heap removed all that was put",
             arr_len, removed_cnt);
     u32_expect_equal("Heap is empty",
-            0, q->size);
+            0, size_heap(q));
     deinit_heap(q);
 
     end_tests("Heap");
