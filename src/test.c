@@ -7,12 +7,18 @@
 #ifdef VERBOSE
 #define log(...)            printf(__VA_ARGS__)
 #else // VERBOSE
-#define log_rec1(a, ...)     (void) a __VA_OPT__(, log_rec(__VA_ARGS__))
-#define log_rec(a, ...)     (void) a __VA_OPT__(, log_rec1(__VA_ARGS__))
+#define log_rec3(a, ...)     (void) (a) __VA_OPT__(; log_rec(__VA_ARGS__))
+#define log_rec2(a, ...)     (void) (a) __VA_OPT__(; log_rec3(__VA_ARGS__))
+#define log_rec1(a, ...)     (void) (a) __VA_OPT__(; log_rec2(__VA_ARGS__))
+#define log_rec(a, ...)     (void) (a) __VA_OPT__(; log_rec1(__VA_ARGS__))
 #define log(...)            log_rec(__VA_ARGS__)
 #endif // VERBOSE
 
-#define SECTION(name)       log("\n==== %s ====\n\n", name)
+#define ANY_SECT(pre, name, suf)    log("%s%s%s", pre, name, suf)
+#define SECTION(name)       ANY_SECT("\n==== ", name, " ====\n\n")
+#define SECTIONn(name)      ANY_SECT("\n==== ", name, " ====\n")
+#define SUBSECTION(name)    ANY_SECT("\n--- ", name, " ---\n\n")
+#define nSUBSECTION(name)   ANY_SECT("--- ", name, " ---\n\n")
 
 #define DOUBLE_EPSILON  1e-32
 

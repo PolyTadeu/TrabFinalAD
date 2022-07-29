@@ -17,9 +17,9 @@ typedef struct _Queue {
 
 Queue init_queue(QueueType type);
 void deinit_queue(Queue *q);
-u32 size_queue(Queue *q);
-u32 is_empty_queue(Queue *q);
-void insert_queue(Queue *q, Person p);
+u32 size_queue(const Queue *q);
+u32 is_empty_queue(const Queue *q);
+void insert_queue(Queue *q, const Person p);
 Person remove_queue(Queue *q);
 
 #endif // QUEUE_HEADER
@@ -45,17 +45,17 @@ void deinit_queue(Queue *q) {
     free(q->people);
 }
 
-u32 size_queue(Queue *q) {
+u32 size_queue(const Queue *q) {
     assert( q->type != Queue_LCFS || q->head == 0 );
     return ( q->tail - q->head + q->len ) % q->len;
 }
 
-u32 is_empty_queue(Queue *q) {
+u32 is_empty_queue(const Queue *q) {
     assert( q->type != Queue_LCFS || q->head == 0 );
     return q->head == q->tail;
 }
 
-void insert_queue(Queue *q, Person p) {
+void insert_queue(Queue *q, const Person p) {
     assert( q->type != Queue_LCFS || q->head == 0 );
     if ( q->len == 0 ) {
         q->len = 4;
@@ -109,46 +109,81 @@ Person remove_queue(Queue *q) {
 
 #ifdef QUEUE_MAIN
 #undef QUEUE_MAIN
-#include <stdio.h>
 
-void print_queue(Queue *q) {
-    printf("{");
-    for ( u32 i = 0; i < q->len; i++ ) {
-        printf("%s%s%02u", (i == q->head) ? " [" : " ", (i == q->tail) ? "]" : "", q->people[i].color);
-    }
-    printf(" }");
+#include "test.c"
+
+b32 person_expect_equal(const char *test_name,
+        const Person expected, const Person actual) {
+    b32 ret = 1;
+    ret = ret
+        && f64_expect_equal_tol(test_name,
+            expected.arrived_time, actual.arrived_time, 0);
+    ret = ret
+        && u32_expect_equal(test_name, expected.color, actual.color);
+    return ret;
 }
 
-void test_queue(Queue *q, Color color_start, Color color_end) {
+b32 queue_expect_at_end(const Queue *q, const Person expected_last) {
+    assert( !is_empty_queue(q) );
+    const u32 last_i = (q->tail - 1 + q->len) % q->len;
+    const Person actual_last = q->people[last_i];
+    return person_expect_equal("Queue person at end",
+            expected_last, actual_last);
+}
+
+void log_queue(Queue *q) {
+    log("{");
+    for ( u32 i = 0; i < q->len; i++ ) {
+        log("%s%s%02u", (i == q->head) ? " [" : " ", (i == q->tail) ? "]" : "", q->people[i].color);
+    }
+    log(" }\n");
+}
+
+void test_queue(const char *test_name,
+        Queue *q, Color color_start, Color color_end) {
+    SECTIONn(test_name);
+    nSUBSECTION("Queue Insert");
     for ( Color color = color_start; color < color_end; color++ ) {
         Person p = {
-            .arrived_time = 0,
+            .arrived_time = ((f64) color) * 1.5,
             .color = color,
         };
         insert_queue(q, p);
-        print_queue(q);
-        printf("\n\n\n");
+        log_queue(q);
+        queue_expect_at_end(q, p);
+        u32_expect_equal("Queue inserting increases size",
+                color - color_start + 1, size_queue(q));
     }
-    printf("=========\n");
+    SUBSECTION("Queue Remove");
+    const u32 len = color_end - color_start;
+    u32 removed_cnt = 0;
     while ( !is_empty_queue(q) ) {
         Person p = remove_queue(q);
-        printf("removed: %u\n", p.color);
-        print_queue(q);
-        printf("\n\n\n");
+        removed_cnt += 1;
+        log("removed: %u\n", p.color);
+        log_queue(q);
+        u32_expect_equal("Queue removing decreases size",
+                len - removed_cnt, size_queue(q));
     }
+    u32_expect_equal("Queue removed all that was put",
+            len, removed_cnt);
+    u32_expect_equal("Queue is empty",
+            1, is_empty_queue(q));
 }
 
 int main() {
     Queue fcfs = init_queue(Queue_FCFS), *q1 = &fcfs;
-    printf("FCFS:\n");
-    test_queue(q1, 0, 10);
-    test_queue(q1, 10, 30);
+    test_queue("FCFS 1", q1, 0, 10);
+    test_queue("FCFS 2", q1, 10, 30);
     deinit_queue(q1);
 
+    end_tests("Queue FCFS");
+
     Queue lcfs = init_queue(Queue_LCFS), *q2 = &lcfs;
-    printf("LCFS\n");
-    test_queue(q2, 50, 60);
+    test_queue("LCFS", q2, 50, 60);
     deinit_queue(q2);
+
+    end_tests("Queue LCFS");
 }
 
 #endif // QUEUE_MAIN

@@ -26,6 +26,10 @@ test_event_heap: $($(SRC){event_heap.c, event.c, test.c, types.h})
 	$(CC) $(CFLAGS) $(call DEF, EVENT_HEAP) $(SRC)event_heap.c
 	./a.out
 
+test_queue_v: $($(SRC){event.c, queue.c, types.h})
+	$(CC) $(CFLAGS) $(call DEF, QUEUE) $(VERB) $(SRC)queue.c
+	./a.out
+
 test_queue: $($(SRC){event.c, queue.c, types.h})
 	$(CC) $(CFLAGS) $(call DEF, QUEUE) $(SRC)queue.c
 	./a.out
