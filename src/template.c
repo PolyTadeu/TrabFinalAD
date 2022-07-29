@@ -13,6 +13,8 @@
 #ifdef TEMPLATE_MAIN
 #undef TEMPLATE_MAIN
 
+#include "test.c"
+
 int main() {
 }
 

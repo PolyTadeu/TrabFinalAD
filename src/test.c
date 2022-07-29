@@ -64,6 +64,24 @@ b32 u32_expect_equal(const char *test_name,
     return 1;
 }
 
+void u32_err_between(const char *test_name,
+        const u32 lower, const u32 upper, const u32 actual) {
+    err();
+    printf("\nFALIED TEST: %s:\n"
+        "    expected range[%u, %u], actual(%u)\n",
+            test_name, lower, upper, actual);
+}
+
+b32 u32_expect_between(const char *test_name,
+        const u32 lower, const u32 upper, const u32 actual) {
+    assert( lower <= upper );
+    if ( lower > actual || actual > upper ) {
+        u32_err_between(test_name, lower, upper, actual);
+        return 0;
+    }
+    return 1;
+}
+
 //////////  f64  ///////
 
 void f64_err_equal(const char *test_name,
@@ -101,26 +119,44 @@ void f64_err_less(const char *test_name,
 }
 
 b32 f64_expect_less(const char *test_name,
-        const f64 expected_upper, const f64 actual) {
-    if ( expected_upper >= actual ) {
-        f64_err_less(test_name, expected_upper, actual);
+        const f64 expected_lower, const f64 actual) {
+    if ( expected_lower >= actual ) {
+        f64_err_less(test_name, expected_lower, actual);
         return 0;
     }
     return 1;
 }
 
 void f64_err_less_eq(const char *test_name,
-        const f64 expected_upper, const f64 actual) {
+        const f64 expected_lower, const f64 actual) {
     err();
     printf("\nFALIED TEST: %s:\n"
         "    expected(%lg) le_eq than actual(%lg), diff %lg\n",
+            test_name, expected_lower, actual,
+            expected_lower - actual);
+}
+
+b32 f64_expect_less_eq(const char *test_name,
+        const f64 expected_lower, const f64 actual) {
+    if ( expected_lower > actual ) {
+        f64_err_less(test_name, expected_lower, actual);
+        return 0;
+    }
+    return 1;
+}
+
+void f64_err_greater_eq(const char *test_name,
+        const f64 expected_upper, const f64 actual) {
+    err();
+    printf("\nFALIED TEST: %s:\n"
+        "    expected(%lg) ge_eq than actual(%lg), diff %lg\n",
             test_name, expected_upper, actual,
             expected_upper - actual);
 }
 
-b32 f64_expect_less_eq(const char *test_name,
+b32 f64_expect_greater_eq(const char *test_name,
         const f64 expected_upper, const f64 actual) {
-    if ( expected_upper > actual ) {
+    if ( expected_upper < actual ) {
         f64_err_less(test_name, expected_upper, actual);
         return 0;
     }
