@@ -193,9 +193,11 @@ int main() {
     }
     u32_expect_equal("Heap removed all that was put",
             arr_len, removed_cnt);
+    u32_expect_equal("Heap is empty",
+            0, q->size);
     deinit_heap(q);
 
-    end_tests();
+    end_tests("Heap");
 }
 
 #endif // EVENT_HEAP_MAIN

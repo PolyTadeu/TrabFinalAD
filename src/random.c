@@ -136,8 +136,10 @@ int main() {
     log("   avg: %7.7lf,    var: %7.7lf\n", avgExp, varExp);
     log("expavg: %7.7lf, expvar: %7.7lf\n\n", expavg, expvar);
 
+    end_tests("Random RANDC");
 
-    SECTION("TABLE");
+
+    SECTION("Random Table");
     u32 table_len = 40;
     f64 rand_table[table_len];
     for ( u32 i = 0; i < table_len; i++ ) {
@@ -157,7 +159,7 @@ int main() {
     }
     log("\n");
 
-    end_tests();
+    end_tests("Random Table");
 
 }
 #endif // RAND_MAIN

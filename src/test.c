@@ -18,8 +18,9 @@
 
 u64 failed = 0;
 
-void end_tests() {
+void end_tests(const char *test_name) {
     log("\n");
+    printf("%s: ", test_name);
     if ( failed == 1 ) {
         printf("\n======================\n");
         printf("|  %02lu test  failed!  |\n", failed);
