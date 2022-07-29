@@ -81,6 +81,7 @@ f64 randUniform(RandCtx *ctx) {
 
 // função que uniforme apartir de qualquer RandCtx
 f64 randExp(RandCtx *ctx, f64 lambda) {
+    assert( lambda > 0 );
     f64 val = randUniform(ctx);
     return -1.0f * (log(val) / lambda);
 }
@@ -141,12 +142,12 @@ int main() {
 
     SECTION("Random Table");
     u32 table_len = 40;
-    f64 rand_table[table_len];
+    f64 table[table_len];
     for ( u32 i = 0; i < table_len; i++ ) {
-        rand_table[i] = ((f64) i) / table_len;
+        table[i] = ((f64) i) / table_len;
     }
-    RandTable table = create_table_ctx(rand_table, table_len);
-    RandCtx *tctx = (RandCtx *) &table;
+    RandTable rand_table = create_table_ctx(table, table_len);
+    RandCtx *tctx = (RandCtx *) &rand_table;
     log("table output:");
     for ( u32 i = 0; i < 2 * table_len; i++ ) {
         const f64 expected = ((f64) (i % table_len)) / table_len;
