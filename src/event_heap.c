@@ -93,17 +93,13 @@ Event remove_heap(EventHeap *q) {
     return ret;
 }
 
-#undef MIN
-#undef PARENT
-#undef LEFT
-#undef RIGHT
-
 #ifdef EVENT_HEAP_MAIN
 #undef EVENT_HEAP_MAIN
-#include <stdio.h>
+
+#include "test.c"
 
 void half_padd_x() {
-    printf("  ");
+    log("  ");
 }
 
 void padd_x() {
@@ -113,13 +109,13 @@ void padd_x() {
 
 void padd_y(u32 dim) {
     for ( u32 i = 0; i < dim; i++ ) {
-        printf("   ");
+        log("   ");
         half_padd_x();
     }
 }
 
-void print_heap(EventHeap *q) {
-    u32 depth = 0; (void) depth;
+void log_heap(EventHeap *q) {
+    u32 depth = 0;
     u32 size = q->size;
     u32 dim_pad = 0;
     while ( size ) {
@@ -140,9 +136,9 @@ void print_heap(EventHeap *q) {
         }
         padd_y(dim_pad);
 
-        printf("%6.2lf", q->events[i].time);
+        log("%6.2lf", q->events[i].time);
         if ( next_line == i ) {
-            printf("\n");
+            log("\n");
             line *= 2;
             next_line += line;
             dim_pad /= 2;
@@ -150,30 +146,63 @@ void print_heap(EventHeap *q) {
             padd_y(dim_pad);
         }
     }
+    log("\n");
+}
+
+void heap_expect_ok(const EventHeap *q) {
+    const Event *events = q->events;
+    for ( u32 i = 0; i < q->size; i++ ) {
+        if ( LEFT(i) < q->size ) {
+            f64_expect_less_eq("Heap root <= left",
+                    events[i].time, events[LEFT(i)].time);
+        }
+        if ( RIGHT(i) < q->size ) {
+            f64_expect_less_eq("Heap root <= right",
+                    events[i].time, events[RIGHT(i)].time);
+        }
+    }
 }
 
 int main() {
+    SECTION("Heap Insert");
     EventHeap eq = init_heap(), *q = &eq;
-    double arr[] = { 5, 9, 14, 17, 1, 3, 7 };
-    for ( u32 i = 0; i < 7; i++ ) {
+    const u32 arr_len = 7;
+    f64 arr[] = { 5, 9, 14, 17, 1, 3, 7 };
+    for ( u32 i = 0; i < arr_len; i++ ) {
         const Event e = {
             .time = arr[i],
         };
+        log("\ninserting: %4.2lf\n", e.time);
         insert_heap(q, e);
-
-        print_heap(q);
-        printf("\n\n\n");
+        log_heap(q);
+        heap_expect_ok(q);
+        u32_expect_equal("Heap inserting increases size",
+                i+1, q->size);
     }
-    printf("=========\n\n");
+
+    SECTION("Heap Remove");
+    u32 removed_cnt = 0;
     while ( q->size ) {
         const Event e = remove_heap(q);
-        printf("removed: %4.2lf\n", e.time);
-        print_heap(q);
-        printf("\n\n\n");
+        removed_cnt += 1;
+        log("\nremoved: %4.2lf\n", e.time);
+        log_heap(q);
+        heap_expect_ok(q);
+        u32_expect_equal("Heap removing decreases size",
+                arr_len - removed_cnt, q->size);
     }
+    u32_expect_equal("Heap removed all that was put",
+            arr_len, removed_cnt);
     deinit_heap(q);
+
+    end_tests();
 }
 
 #endif // EVENT_HEAP_MAIN
 
 #endif // EVENT_HEAP_IMPL
+
+#undef MIN
+#undef PARENT
+#undef LEFT
+#undef RIGHT

@@ -5,7 +5,7 @@ SRC=src/
 
 all: main
 
-test_all_v: test_rand_v test_event_heap test_queue test_system
+test_all_v: test_rand_v test_event_heap_v test_queue test_system
 
 test_all: test_rand test_event_heap test_queue test_system
 
@@ -17,7 +17,11 @@ test_rand: $($(SRC)random.c, stats.c, test.c, types.h})
 	$(CC) $(CFLAGS) $(MATHLIB) $(call DEF, RAND) $(SRC)random.c
 	./a.out
 
-test_event_heap: $($(SRC){event_heap.c, event.c, types.h})
+test_event_heap_v: $($(SRC){event_heap.c, event.c, test.c, types.h})
+	$(CC) $(CFLAGS) $(call DEF, EVENT_HEAP) -D VERBOSE $(SRC)event_heap.c
+	./a.out
+
+test_event_heap: $($(SRC){event_heap.c, event.c, test.c, types.h})
 	$(CC) $(CFLAGS) $(call DEF, EVENT_HEAP) $(SRC)event_heap.c
 	./a.out
 
