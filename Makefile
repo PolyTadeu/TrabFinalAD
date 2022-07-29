@@ -6,7 +6,7 @@ VERB=-D VERBOSE
 
 all: main
 
-test_all_v: test_rand_v test_event_heap_v test_queue_v test_system
+test_all_v: test_rand_v test_event_heap_v test_queue_v test_system_v
 
 test_all: test_rand test_event_heap test_queue test_system
 
@@ -34,9 +34,13 @@ test_queue: $($(SRC){event.c, queue.c, types.h})
 	@$(CC) $(CFLAGS) $(call DEF, QUEUE) $(SRC)queue.c
 	@./a.out
 
-test_system: $($(SRC){event_heap.c, event.c, queue.c, random.c, stats.c, system.c, types.h})
-	$(CC) $(CFLAGS) $(MATHLIB) $(call DEF, SYSTEM) $(SRC)system.c
+test_system_v: $($(SRC){event_heap.c, event.c, queue.c, random.c, stats.c, system.c, test.c, types.h})
+	$(CC) $(CFLAGS) $(MATHLIB) $(call DEF, SYSTEM) $(VERB) $(SRC)system.c
 	./a.out
+
+test_system: $($(SRC){event_heap.c, event.c, queue.c, random.c, stats.c, system.c, test.c, types.h})
+	@$(CC) $(CFLAGS) $(MATHLIB) $(call DEF, SYSTEM) $(SRC)system.c
+	@./a.out
 
 main: $($(SRC){main.c, event_heap.c, event.c, queue.c, random.c, types.h})
 	$(CC) $(CFLAGS) $(CLIBS) $(SRC)main.c -o main
