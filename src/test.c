@@ -64,6 +64,23 @@ b32 u32_expect_equal(const char *test_name,
     return 1;
 }
 
+void u32_err_greater_eq(const char *test_name,
+        const u32 expected_upper, const u32 actual) {
+    err();
+    printf("\nFALIED TEST: %s:\n"
+        "    expected(%u) ge_eq than actual(%u)\n",
+            test_name, expected_upper, actual);
+}
+
+b32 u32_expect_greater_eq(const char *test_name,
+        const u32 expected_upper, const u32 actual) {
+    if ( expected_upper < actual ) {
+        u32_err_greater_eq(test_name, expected_upper, actual);
+        return 0;
+    }
+    return 1;
+}
+
 void u32_err_between(const char *test_name,
         const u32 lower, const u32 upper, const u32 actual) {
     err();
@@ -157,7 +174,7 @@ void f64_err_greater_eq(const char *test_name,
 b32 f64_expect_greater_eq(const char *test_name,
         const f64 expected_upper, const f64 actual) {
     if ( expected_upper < actual ) {
-        f64_err_less(test_name, expected_upper, actual);
+        f64_err_greater_eq(test_name, expected_upper, actual);
         return 0;
     }
     return 1;
