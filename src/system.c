@@ -80,8 +80,8 @@ void add_first_event(System *s) {
 
 void next_batch(System *s) {
     assert( s->color + 1 != 0 );
-    // TODO: offset_heap_events_by(s->events, s->curr_time);
-    // TODO: inc_next_arrival_event_color(s->events, s->curr_time);
+    offset_heap_events_by(s->events, s->curr_time);
+    inc_next_arrival_event_color(s->events);
     System new_sys = {
         .rand = s->rand,
         .lambda = s->lambda,
@@ -236,13 +236,41 @@ void test_system(System *s, const u32 events_to_handle) {
     }
 }
 
+void test_next_batch(System *s) {
+    const System snapshot = *s;
+    next_batch(s);
+    f64_expect_equal_tol("next_batch keeps lambda",
+            snapshot.lambda, s->lambda, 0.0);
+    f64_expect_equal_tol("next_batch keeps mu",
+            snapshot.mu, s->mu, 0.0);
+    u32_expect_equal("next_batch keeps busy",
+            snapshot.busy, s->busy);
+    u32_expect_equal("next_batch increments color",
+            snapshot.color + 1, s->color);
+    f64_expect_equal_tol("next_batch resets curr_time",
+            0.0, s->curr_time, 0.0);
+    u32_expect_equal("next_batch resets nq_stat.n",
+            0, s->nq_stat.n);
+    f64_expect_equal_tol("next_batch resets nq_stat.acc",
+            0.0, s->nq_stat.acc, 0.0);
+    f64_expect_equal_tol("next_batch resets nq_stat.sqr_acc",
+            0.0, s->nq_stat.sqr_acc, 0.0);
+    u32_expect_equal("next_batch resets wt_stat.n",
+            0, s->wt_stat.n);
+    f64_expect_equal_tol("next_batch resets wt_stat.acc",
+            0.0, s->wt_stat.acc, 0.0);
+    f64_expect_equal_tol("next_batch resets wt_stat.sqr_acc",
+            0.0, s->wt_stat.sqr_acc, 0.0);
+
+}
+
 int main() {
     SECTION("System 2*lambda = mu (randExp = 1) test");
 
     f64 table[1] = { exp(-1.0) };
     RandTable rand_table = create_table_ctx(table, 1);
     const f64 lambda = 0.5;
-    const f64 mu = 1;
+    const f64 mu = 2.0 * lambda;
     RandCtx *ctx = (RandCtx *) &rand_table;
     EventHeap e_heap = init_heap(), *eh = &e_heap;
     Queue queue = init_queue(Queue_FCFS), *q = &queue;
@@ -256,11 +284,44 @@ int main() {
     u32_expect_equal("System with first event is not empty",
             0, is_empty_system(s));
 
-    const u32 events_to_handle = 10;
+    const u32 events_to_handle = 11;
     test_system(s, events_to_handle);
 
-    deinit_system(s);
+    // TODO: test average and variance
+
     end_tests("System 2*lambda = mu");
+
+    SECTIONn("System switching batch");
+
+    test_next_batch(s);
+
+    end_tests("System switching batch");
+
+    SECTION("System lambda = 2*mu (randExp = 1) test");
+    s->lambda = 2.0 * mu;
+
+    test_system(s, events_to_handle);
+
+    // TODO: test average and variance
+
+    end_tests("System lambda = 2*mu");
+
+    SECTIONn("System switching batch (2)");
+
+    test_next_batch(s);
+
+    end_tests("System switching batch (2)");
+
+    SECTION("System 2*lambda = mu (randExp = 1) test 2");
+    s->lambda = lambda;
+
+    test_system(s, events_to_handle + 1);
+
+    // TODO: test average and variance
+
+    end_tests("System 2*lambda = mu (2)");
+
+    deinit_system(s);
 }
 
 #endif // SYSTEM_MAIN

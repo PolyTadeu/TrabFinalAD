@@ -15,6 +15,9 @@ b32 is_empty_heap(const EventHeap *q);
 void insert_heap(EventHeap *q, Event e);
 Event remove_heap(EventHeap *q);
 
+void offset_heap_events_by(EventHeap *q, f64 offset);
+void inc_next_arrival_event_color(EventHeap *q);
+
 #endif // EVENT_HEAP_HEADER
 
 #ifdef EVENT_HEAP_IMPL
@@ -101,6 +104,26 @@ Event remove_heap(EventHeap *q) {
     if ( q->size )
         bubbleDown(q, 0);
     return ret;
+}
+
+void offset_heap_events_by(EventHeap *q, f64 offset) {
+    assert( offset >= 0 );
+    for ( u32 i = 0; i < q->size; i++ ) {
+        assert( q->events[i].time >= offset );
+        q->events[i].time -= offset;
+        q->events[i].person.arrived_time -= offset;
+    }
+}
+
+void inc_next_arrival_event_color(EventHeap *q) {
+    for ( u32 i = 0; i < q->size; i++ ) {
+        Event *e = &(q->events[i]);
+        if ( e->type == EVENT_arrival ) {
+            e->person.color += 1;
+            return;
+        }
+    }
+    assert( 0 && "arrival_event not found" );
 }
 
 #ifdef EVENT_HEAP_MAIN
