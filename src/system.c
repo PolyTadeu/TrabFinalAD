@@ -159,21 +159,52 @@ Event handle_next_event(System *s) {
 
 #include "test.c"
 
-void test_system(System *s, const u32 events_to_handle) {
+const char *event_type_name[] = { "arrival", "leave", };
+
+void log_system(const System *s) {
+    log("\nEvents:");
+    {
+        const u32 esize = s->events->size;
+        for ( u32 i = 0; i < esize; i++ ) {
+            const Event e = s->events->events[i];
+            log(" (%s - %6.4lf | %u - %6.4lf)",
+                    event_type_name[e.type], e.time,
+                    e.person.color, e.person.arrived_time);
+        }
+    }
+    log("\nQueue:");
+    {
+        const Queue *q = s->queue;
+        const u32 qsize = size_queue(q);
+        for ( u32 i = 0; i < qsize; i++ ) {
+            const u32 index = (q->head + i + q->len) % q->len;
+            const Person p = q->people[index];
+            if ( i % 4 == 0 ) {
+                log("\n");
+            }
+            log(" (%u | %6.4lf)",
+                    p.color, p.arrived_time);
+        }
+    }
+    log("\n");
+}
+
+void test_system(System *s, const u32 leaves_to_count) {
     f64 last_time = s->curr_time;
     b32 last_busy = s->busy;
     u32 last_qsize = size_queue(s->queue);
     u32 last_esize = size_heap(s->events);
-    for ( u32 i = 0; i < events_to_handle; i++ ) {
+    for ( u32 i = 0; s->wt_stat.n < leaves_to_count; i++ ) {
         log("Before event %u\n", i);
         const Event e = handle_next_event(s);
-        const char *event_type_name[] = { "arrival", "leave", };
         const f64 curr_time  = s->curr_time;
         const u32 curr_busy  = s->busy;
         const u32 curr_qsize = size_queue(s->queue);
         const u32 curr_esize = size_heap(s->events);
         log("Handled event: %s (%6.4lf)\n",
                 event_type_name[e.type], e.time);
+        log("Person: arrived (%6.4lf) color (%u)\n",
+                e.person.arrived_time, e.person.color);
         log("Curr time    : %6.4lf -> %6.4lf\n",
                 last_time, curr_time);
         log("Busy         : %u -> %u\n",
@@ -264,7 +295,34 @@ void test_next_batch(System *s) {
             0.0, s->wt_stat.acc, 0.0);
     f64_expect_equal_tol("next_batch resets wt_stat.sqr_acc",
             0.0, s->wt_stat.sqr_acc, 0.0);
+}
 
+void check_stats(const System *s,
+        const f64 expected_wt_avg, const f64 expected_wt_var,
+        const f64 expected_qs_avg, const f64 expected_qs_var) {
+    const f64
+        wt_avg = discrete_average(s->wt_stat),
+        wt_var = discrete_variance(s->wt_stat),
+        qs_avg = continuous_average(s->nq_stat, s->curr_time),
+        qs_var = continuous_variance(s->nq_stat, s->curr_time);
+    log("Wait time (%u samples):\n", s->wt_stat.n);
+    log("    avg: %6.4lf,     var: %6.4lf\n",
+            wt_avg, wt_var);
+    log("exp_avg: %6.4lf, exp_var: %6.4lf\n",
+            expected_wt_avg, expected_wt_var);
+    f64_expect_equal("System wait time average (2*lambda = mu)",
+            expected_wt_avg, wt_avg);
+    f64_expect_equal("System wait time variance (2*lambda = mu)",
+            expected_wt_var, wt_var);
+    log("Queue size:\n");
+    log("    avg: %6.4lf,     var: %6.4lf\n",
+            qs_avg, qs_var);
+    log("exp_avg: %6.4lf, exp_var: %6.4lf\n",
+            expected_qs_avg, expected_qs_var);
+    f64_expect_equal("System queue size average (2*lambda = mu)",
+            expected_qs_avg, qs_avg);
+    f64_expect_equal("System queue size variance (2*lambda = mu)",
+            expected_qs_var, qs_var);
 }
 
 int main() {
@@ -287,40 +345,44 @@ int main() {
     u32_expect_equal("System with first event is not empty",
             0, is_empty_system(s));
 
-    const u32 events_to_handle = 11;
-    test_system(s, events_to_handle);
+    const u32 leaves_to_count = 5;
 
-    // TODO: test average and variance
+    test_system(s, leaves_to_count);
+    check_stats(s, 0.0, 0.0, 0.0, 0.0);
+    log_system(s);
 
     end_tests("System 2*lambda = mu");
 
-    SECTIONn("System switching batch");
-
+    SECTION("System lambda = mu (randExp = 1) test");
     test_next_batch(s);
 
-    end_tests("System switching batch");
+    s->lambda = mu;
+
+    test_system(s, leaves_to_count);
+    check_stats(s, 0.0, 0.0, 0.0, 0.0);
+    log_system(s);
+
+    end_tests("System lambda = mu");
 
     SECTION("System lambda = 2*mu (randExp = 1) test");
+    test_next_batch(s);
+
     s->lambda = 2.0 * mu;
 
-    test_system(s, events_to_handle);
-
-    // TODO: test average and variance
+    test_system(s, 2 * leaves_to_count);
+    check_stats(s, 2.25, 2.2916666666666667, 4.05, 22.80975);
+    log_system(s);
 
     end_tests("System lambda = 2*mu");
 
-    SECTIONn("System switching batch (2)");
-
+    SECTION("System 2*lambda = mu (randExp = 1) test 2");
     test_next_batch(s);
 
-    end_tests("System switching batch (2)");
-
-    SECTION("System 2*lambda = mu (randExp = 1) test 2");
     s->lambda = lambda;
 
-    test_system(s, events_to_handle + 1);
-
-    // TODO: test average and variance
+    test_system(s, leaves_to_count);
+    check_stats(s, 7.0, 2.5, 5.769230769230769, 34.285844333181607);
+    log_system(s);
 
     end_tests("System 2*lambda = mu (2)");
 

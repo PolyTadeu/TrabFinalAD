@@ -7,7 +7,8 @@
 #ifdef VERBOSE
 #define log(...)            printf(__VA_ARGS__)
 #else // VERBOSE
-#define log_rec3(a, ...)     (void) (a) __VA_OPT__(; log_rec(__VA_ARGS__))
+#define log_rec4(a, ...)     (void) (a) __VA_OPT__(; log_rec(__VA_ARGS__))
+#define log_rec3(a, ...)     (void) (a) __VA_OPT__(; log_rec4(__VA_ARGS__))
 #define log_rec2(a, ...)     (void) (a) __VA_OPT__(; log_rec3(__VA_ARGS__))
 #define log_rec1(a, ...)     (void) (a) __VA_OPT__(; log_rec2(__VA_ARGS__))
 #define log_rec(a, ...)     (void) (a) __VA_OPT__(; log_rec1(__VA_ARGS__))
