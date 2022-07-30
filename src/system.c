@@ -97,26 +97,29 @@ void next_batch(System *s) {
     *s = new_sys;
 }
 
-void record_wait_time(Stats *stat, Color color, Time now, Person p) {
+void record_wait_time(Stats *stat,
+        const Color color, const Time now, const Person p) {
     if ( p.color == color ) {
         const f64 val = now - p.arrived_time;
         acc_and_update(stat, val, 1);
     }
 }
 
-void record_queue_size(Stats *stat, Time now, Time last_time, u32 qsize) {
+void record_queue_size(Stats *stat,
+        const Time now, Time last_time, u32 qsize) {
     acc_and_update(stat, qsize, (now - last_time));
 }
 
 Event handle_next_event(System *s) {
     const Event e = remove_heap(s->events);
     const Time now = e.time;
-    assert( s->curr_time <= now );
+    const Time last_time = s->curr_time;
+    assert( last_time <= now );
     const Person p = e.person;
-    record_queue_size(&(s->nq_stat), e.time, s->curr_time, size_queue(s->queue));
+    record_queue_size(&(s->nq_stat), now, last_time, size_queue(s->queue));
     switch ( e.type ) {
         case EVENT_arrival: {
-            assert( e.time == p.arrived_time );
+            assert( now == p.arrived_time );
             const Time t_arr = now + randExp(s->rand, s->lambda);
             const Event e_arr = create_event_arrival(t_arr, s->color);
             assert( e_arr.time == e_arr.person.arrived_time );
@@ -124,7 +127,7 @@ Event handle_next_event(System *s) {
             if ( s->busy ) {
                 insert_queue(s->queue, p);
             } else {
-                record_wait_time(&(s->wt_stat), s->color, e.time, p);
+                record_wait_time(&(s->wt_stat), s->color, now, p);
                 const Time t_lea = now + randExp(s->rand, s->mu);
                 const Event e_lea = create_event_leave(t_lea, p);
                 insert_heap(s->events, e_lea);
@@ -137,7 +140,7 @@ Event handle_next_event(System *s) {
                 s->busy = 0;
             } else {
                 const Person new_p_lea = remove_queue(s->queue);
-                record_wait_time(&(s->wt_stat), s->color, e.time, new_p_lea);
+                record_wait_time(&(s->wt_stat), s->color, now, new_p_lea);
                 const Time new_t_lea = now + randExp(s->rand, s->mu);
                 const Event new_e_lea = create_event_leave(new_t_lea, new_p_lea);
                 insert_heap(s->events, new_e_lea);
