@@ -23,7 +23,11 @@ f64 continuous_variance(Stats stat, f64 t);
 #include <assert.h>
 
 Stats new_stats() {
-    const Stats ret = { 0 };
+    const Stats ret = {
+        .n = 0,
+        .acc = 0.0,
+        .sqr_acc = 0.0,
+    };
     return ret;
 }
 
