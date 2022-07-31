@@ -19,7 +19,9 @@ f64 continuous_variance(Stats stat, f64 t);
 #endif // STATS_HEADER
 
 #ifdef STATS_IMPL
+#ifndef STATS_IMPL_ED
 #undef STATS_IMPL
+#define STATS_IMPL_ED
 #include <assert.h>
 
 Stats new_stats() {
@@ -63,4 +65,6 @@ f64 continuous_variance(Stats stat, f64 t) {
     const f64 sqr_avg = avg * avg;
     return (stat.sqr_acc - sqr_avg) / t;
 }
+#endif // STATS_IMPL_ED
+
 #endif // STATS_IMPL

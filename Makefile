@@ -4,7 +4,7 @@ DEF=-D $(join $1,_IMPL) -D $(join $1,_MAIN)
 SRC=src/
 VERB=-D VERBOSE
 
-all: main
+all: main_exe
 
 test_all_v: test_rand_v test_event_heap_v test_queue_v test_system_v
 
@@ -42,9 +42,9 @@ test_system: $($(SRC){event_heap.c, event.c, queue.c, random.c, stats.c, system.
 	@$(CC) $(CFLAGS) $(MATHLIB) $(call DEF, SYSTEM) $(SRC)system.c
 	@./a.out
 
-main: $($(SRC){main.c, event_heap.c, event.c, queue.c, random.c, types.h})
-	$(CC) $(CFLAGS) $(CLIBS) $(SRC)main.c -o main
+main_exe: $($(SRC){args.c, main.c, event_heap.c, event.c, queue.c, random.c, stats.c, system.c, types.h})
+	$(CC) $(CFLAGS) $(MATHLIB) $(SRC)main.c -o main
 
 clean:
-	rm -f *.out
+	rm -f *.out main
 
