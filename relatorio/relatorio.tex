@@ -69,6 +69,224 @@ Gustavo Muzy Fraga -
 \section{Estimativa da Fase Transiente}
 %\newpage
 \section{Dedução dos Valores Analíticos}
+\begin{itemize}
+    \item Número médio de pessoas na fila\\\\
+    Vamos analisar a evolução do número deixado para trás na i-ésma e i+1-ésima partidas. Seja \(N_i\) e  \(N_{i+1}\) os núemro de pessoas deixadas para trás nestes instantes rescpectivamente. Seja \(K\) o número de chegadas POisson durante um serviço \(X\), com \(K(z) = X^*(\lambda - \lambda\;z)\). Para uma fila M/M/1 \(\rho = \lambda\;E[X]\)
+    \begin{center}
+         \begin{align*}
+            &K^{'}(1) = -\lambda\;X^{*'}(0) = \lambda\; E[X] = \rho\\
+            &K^{''}(1) = \lambda^2\;X^{*''}(0) = \lambda^2\; E[X^2] = 2\;\rho^2\\
+            &K^{'''}(1) = -\lambda^3\;X^{*'''}(0) = \lambda^3\; E[X^3] = 6\;\rho^3
+         \end{align*}
+    \end{center}
+    Desse modo:
+    \begin{center}
+        COLOCAR IMAGEM
+    \end{center}
+    Usando tranformadas e condicionamentos, temos: 
+    \begin{center}
+        \(E[z^{N_{1}+1}] = E[z^{K}| N_i = 0]P(N_i = 0) + E[z^{N_{i}+K-1} | N_i>0]P(N_i>0)\)
+    \end{center}
+    No comportamento limite \(N_i \Rightarrow N\) e \(N_{i+1} \Rightarrow N\) com \(i \Rightarrow \infty\), e para \(\rho < 1 \), haverá uma distribuição estacionário do número de pessoas na fila com T.Z dada por \(N(z) = E[z^N]\). Assim sendo, temos:
+     \begin{center}
+         \begin{align*}
+            E[z^N] &= E[z^{K}| N = 0]P(N = 0) + E[z^{N+K-1} | N>0]P(N>0)\\
+            &=K(z)(1-\rho)+ \frac{K(z)}{z} E[z^{N} | N>0]\rho
+         \end{align*}
+    \end{center}
+    Entretando, sabemos que: 
+    \begin{center}
+         \begin{align*}
+            &E[z^N] = E[z^{N}| N = 0]P(N = 0) + E[z^{N} | N>0]P(N>0)\\
+            &E[z^N] =(1-\rho)+ E[z^{N} | N>0]\rho\\
+            &E[z^{N} | N>0] = \frac{N(z)-(1-\rho)}{\rho}
+         \end{align*}
+    \end{center}
+    Substituindo \(E[z^{N} | N>0]\) na expressão anterior obtemos:
+    \begin{center}
+         \begin{align*}
+            N(z) &= K(z)\;(1-\rho) + \frac{K(z)}{z}\; \frac{N(z)-(1-\rho)}{\rho}\; \rho\\
+            N(z) &= \frac{z\;K(z)\;(1-\rho) + k(z)\;N(z) - K(z)\;(1-\rho)}{z}\\
+            z\;N(z) &= z\;K(z)\;(1-\rho) + k(z)\;N(z) - K(z)\;(1-\rho)\\
+            N(z)\;(z-k(z)) &= \;K(z)\;(1-\rho)\; (z-1)\\
+            N(z) &= \frac{K(z)\;(1-\rho)\; (1-z)}{K(z)-z} 
+         \end{align*}
+    \end{center}
+    Apartir de N(z), podemos obter a E[N], uma vez que \(E[N] = N^{'}(1)\). Derivando N(z) pela primeira vez:
+    \begin{center}
+         \begin{align*}
+           N(z)\;(K(z)-z) &= K(z)\;(1-\rho)\; (1-z)\\
+           N^{'}(z)\;(K(z)-z) +  N(z)\;(K^{'}(z)-1) &= (1-\rho)(K^{'}(z)\;(1-z) - K^(z))\\ 
+         \end{align*}
+    \end{center}
+    Derivando novamente para retirar as indeterminações:
+    \begin{align*}
+       N^{''}(z)\;(K(z)-z) + N^{'}(z)\;(K^{'}(z)-1) +  N^{'}(z)\;(K^{'}(z)-1) +  N(z)\;(K^{''}(z)) =\\ (1-\rho)(K^{''}(z)\;(1-z) - K(z)- K(z))\\ 
+    \end{align*}
+    Fazendo z = 1:
+    \begin{align*}
+       N^{''}(1)\;(K(1)-1) +2 N^{'}(1)\;(K^{'}(1)-1) +  N(1)\;(K^{''}(1)) &= (1-\rho)(K^{''}(z\1)\;(1-1) - 2K(1))\\ 
+       2 N^{'}(1)\;(\lambda\;E[X]-1) + \lambda^2\; E[X^2] \; &= (1-\rho)(- 2\lambda\;E[X])\\ 
+       N^{'}(1) &= \frac{(1-\rho)(2\lambda\;E[X])+ \lambda^2\; E[X^2]}{1-\lambda E[X]}
+    \end{align*}
+    Para M/M/1
+    \begin{align*}
+      N^{'}(1) = \frac{(1-\rho)\;2\;\rho+ 2\;\rho^2 }{1-\rho} = \frac{\rho}{1-\rho}
+    \end{align*}
+    Com N(z) calculada, é fácil achar o número de pessoas na fila de espera, uma vez que:
+    \begin{center}
+        COLOCAR IMAGEM
+    \end{center}
+    \begin{center}
+         \begin{align*}
+            E[z^{Nq}] &= E[z^{N}| N = 0]P(N = 0) + E[z^{N-1} | N>0]P(N>0)\\
+            Nq(z)&=(1-\rho)+ \frac{N(z) -  (1-\rho)}{z\;\rho} \;\rho\\
+            Nq(z)&=\frac{z\;(1-\rho) + N(z) -  (1-\rho)}{z} \;\\
+            Nq(z)&=\frac{N(z) -  (1-\rho)(1-z)}{z} \;\\
+         \end{align*}
+    \end{center}
+    Derivando Nq(z) uma vez para calcular o primeiro momento \(E[Nq] = Nq^{'}(1)\).
+    \begin{center}
+         \begin{align*}
+            Nq(z)\;z&=N(z) -  (1-\rho)(1-z)\\
+            Nq^{'}(z)\;z + Nq(z)&=N^{'}(z) + (1-\rho)
+         \end{align*}
+    \end{center}
+    Fazendo z = 1 
+    \begin{center}
+         \begin{align*}
+            Nq^{'}(1) + Nq(1)&=N^{'}(1) + (1-\rho)\\
+            Nq^{'}(1) &=N^{'}(1) -\rho \;=\; \frac{\rho}{1-\rho} -\rho \;=\;  \frac{\rho^2}{1-\rho}
+         \end{align*}
+    \end{center}
+\end{itemize}
+\begin{itemize}
+    \item Variância do número de pessoas na fila\\\\
+    Para achar a variância do núemro de pessoas na fila, precisamos encontrar o segundo momento de Nq, que pode ser dados por \(E[Nq^2] = Nq^{'}(1) + Nq^{''}(1)\), então precisamos derivar Nq(z) novamente.
+    \begin{center}
+            \(Nq^{''}(z)\;z + Nq^{'}(z)\; + Nq^{'}(z)=N^{''}(z)\)
+    \end{center}
+    Fazendo z = 1 
+    \begin{center}
+         \begin{align*}
+            Nq^{''}(1)\;1 + Nq^{'}(1)\; + Nq^{'}(1)&=N^{''}(1)\\
+            Nq^{''}(1) &=N^{''}(1) - 2\;Nq^{'}(1)
+         \end{align*}
+    \end{center}
+    Logo, 
+    \begin{center}
+         \begin{align*}
+            E[Nq^2] &= N^{'}(1) -\rho + N^{''}(1) - 2\;Nq^{'}(1)\\
+            E[Nq^2] &= N^{'}(1) -\rho + N^{''}(1) - 2\;(N^{'}(1) -\rho)\\
+            E[Nq^2] &= E[N^2]-2\;E[N] + \rho
+         \end{align*}
+    \end{center}
+    Como já temos o primeiro momento \(E[N]\) calculado, precisamos agora achar o segundo momento \(E[N^2]\). Derivando \(N(z)\) pela terceura vez vamos obter:
+    \begin{align*}
+           N^{'''}(z)\;(K(z)-z) +N^{''}(z)\;(K^{'}((z)-1)+ 2N^{''}(z)\;(K^{'}(z)-1) +\\
+           2\;N^{'}(z)\;(K^{''}(z)) + N^{'}(z)\;(K^{''}(z))+  N(z)\;(K^{'''}(z)) =\\
+           (1-\rho)(-2\;K^{''}(z)-K^{''}(z)+ (1-z)K^{'''}(z))
+    \end{align*}
+    Fazendo z = 1 
+    \begin{align*}
+           &3\;N^{''}(1)\;(K^{'}((z)-1) + 3\;N^{'}(1)\;(K^{''}(1)) + \;(K^{'''}(1)) =(1-\rho)(-3\;K^{''}(1))\\
+           &3\;N^{''}(1)\;(1-\lambda E[X]) - 3\;N^{'}(1)\;(\lambda^2 E[X^2]) - \;\lambda^3 E[X^3] =(1-\rho)(3\;\lambda^2 E[X^2])\\
+           &3\;N^{''}(1)\;(1-\lambda E[X])=(1-\rho)(3\;\lambda^2 E[X^2]) +3\;N^{'}(1)\;(\lambda^2 E[X^2]) + \;\lambda^3 E[X^3] \\
+           &3\;N^{''}(1)\;(1-\lambda E[X])=(1-\rho)(3\;\lambda^2 E[X^2]) +\;\frac{3\;(\lambda^2 E[X^2])((1-\rho)(2\lambda\;E[X])+ \lambda^2\; E[X^2])}{2(1-\lambda E[X])} + \;\lambda^3 E[X^3] \\
+    \end{align*}
+    \(3\;N^{''}(1)\;(1-\lambda E[X]) = \)
+    \begin{align*}
+        \frac{6\;(1-\rho)(\lambda^2 E[X^2])(1-\lambda E[X]) +\;+3\;(\lambda^2 E[X^2])((1-\rho)(2\lambda\;E[X])+ \lambda^2\; E[X^2]) + 2(1-\lambda E[X]) (\;\lambda^3 E[X^3] )}{2(1-\lambda E[X])}\\
+    \end{align*}
+    \(N^{''}(1) = \)
+    \begin{align*}
+        \frac{6\;(1-\rho)(\lambda^2 E[X^2])(1-\lambda E[X]) +\;+3\;(\lambda^2 E[X^2])((1-\rho)(2\lambda\;E[X])+ \lambda^2\; E[X^2]) + 2(1-\lambda E[X]) (\;\lambda^3 E[X^3] )}{6(1-\lambda E[X])^2}\\
+    \end{align*}
+    Logo \(E[N^{2}] = N^{''}(1) + N^{'}(1)\) para uma fila M/M/1, pode ser dado por:
+    \begin{align*}
+        &\frac{12\;(1-\rho)^2\;\rho^2\;+ 6\;\rho^2\; ((1-\rho)\;2\;\rho+ \; 2\;\rho^2) + 12\;(1-\rho)\;\rho^3 + 3(1-\rho)(2\;\rho(1-\rho) + 2\;\rho^2 )\;}{6(1-\rho)^2}\\
+        &\frac{6\rho-6\rho^2+12\rho^2-24\rho^3+12\rho^4+12\rho^3+12\rho^3-12\rho^4}{6(1-\rho)^2}\\
+        &\frac{6\rho^2 + 6\rho}{6(1-\rho)^2} = \frac{\rho^2 + \rho}{(1-\rho)^2}
+    \end{align*}
+    Agora podemos calcular \(E[Nq^{2}]\)
+    \begin{align*}
+        E[Nq^2] &= \frac{\rho^2 + \rho}{(1-\rho)^2} -\frac{2\;\rho}{(1-\rho)} + \rho\\
+        &= \frac{\rho^2 + \rho - 2\;\rho + 2\;\rho^2 + \rho - 2\;\rho^2 + \rho^3}{(1-\rho)^2}\\
+         &= \frac{\rho^2 + \rho^3}{(1-\rho)^2}
+    \end{align*}
+    Por fim, calculamos a variância do número de pessoas na fila de espera de uma M/M/1:
+    \begin{align*}
+        V(Nq) &= \frac{\rho^2 + \rho^3}{(1-\rho)^2} - (\frac{\rho^2}{1-\rho})^2\\
+        &=\frac{\rho^2 + \rho^3 - \rho^4}{(1-\rho)^2}
+    \end{align*}
+\end{itemize}
+\begin{itemize}
+    \item Tempo médio em uma fila de espera FCFS\\\\
+    Acompanhando um freguês tíıpico em uma fila M/G/1 FCFS, podemos observar que o núemro deixado para trás é exatamente o núemro de pessoas que chegou durante o tempo T que o freguês típico passou no sistema. Como o processo de chegada  é Poisson e relacionando as chegadas ao intervalo de tempo em que as chegadas ocorreram, pode-se escrever \(N(z) = T(\lambda - \lambda \;z)\). Fazendo \(s = \lambda - \lambda \;z\) e substituindo \(z = \frac{\lambda-s}{\lambda} \), temos:
+    
+    \begin{center}
+        \(T^{*}(s) = \frac{(1-\rho)sX^{*}(s)}{s-\lambda+\lambda X^{*}(s)}\)
+    \end{center}
+    Sabemos que T = W + X, como W e X sãp independentes e uma fila FCFS, então  \(T^{*}(s) =  W^{*}(s)\;X^{*}(s)\), logo a tranformada de Laplace da pdf do tempo de espera na fila é dada por:
+    \begin{center}
+        \(W^{*}(s) = \frac{(1-\rho)s}{s-\lambda+\lambda X^{*}(s)}\)
+    \end{center}
+    O tempo médio de espera na fila pode ser facilmente obtido derivando \(W^{*}(s)\), uma vez que \(E[W] = - W^{*'}(0)\). Dessa forma, derivando em relação a s temos:
+    \begin{align*}
+       W^{*}(s)(s-\lambda+\lambda X^{*}(s)) &= (1-\rho)s\\
+       W^{*'}(s)(s-\lambda+\lambda X^{*}(s))+ W^{*}(s)(1+\lambda X^{*'}(s)) &= (1-\rho)
+    \end{align*}
+    Derivando novamente para retirar  a ideterminação:
+    \begin{align*}
+       W^{*''}(s)(s-\lambda+\lambda X^{*}(s)) + W^{*'}(s)(1+\lambda X^{*'}(s))+ W^{*'}(s)(1+\lambda X^{*'}(s)) + W^{*}(s)(\lambda X^{*''}(s))= 0
+    \end{align*}
+    Fazendo s = 0 
+    \begin{align*}
+        2 W^{*'}(0)(1+\lambda X^{*'}(0)) &=  -\lambda X^{*''}(0)\\
+        W^{*'}(0) &= \frac{-\lambda X^{*''}(0)}{1+\lambda X^{*'}(0)}\\
+        E[W] &= \frac{\lambda E[X^2]}{2(1- \lambda E[X])}
+    \end{align*}
+    Como \(E[X^2] = 2\;E[X]\;E[Xr]\), podemos escrever \(E[W] = \frac{\lambda\; 2\;E[X]\;E[Xr]}{2(1- \lambda E[X])}\). \\\\
+    Para a fila M/M/1, como temos um serviço exponencial, \(E[Xr] = E[X]\), logo \(E[W] = \frac{\rho\;E[X]}{(1- \rho)}\). Para o nosso simulador o tempo médio de serviço é 1 segundo, então \(E[W] = \frac{\rho}{(1- \rho)}\)
+\end{itemize}
+\begin{itemize}
+    \item Variância do tempo de espera em uma fila de espera FCFS\\\\
+    Para o cálculo da variância é preciso achar o segundo momento  \(E[W^2] = W^{*''}(0)\). Assim sendo, derivando \(W^{*}(s)\) pela terceira vez:
+    \begin{align*}
+        W^{*''}(s)(s-\lambda+\lambda X^{*}(s)) + W^{*'}(s)(1+\lambda X^{*'}(s))+ W^{*'}(s)(1+\lambda X^{*'}(s)) + W^{*}(s)(\lambda X^{*''}(s))= 0\\
+        W^{*'''}(s)(s-\lambda+\lambda X^{*}(s))+W^{*''}(s)(1+\lambda X^{*'}(s)) + W^{*''}(s)(1+\lambda X^{*'}(s))+W^{*'}(s)(\lambda X^{*''}(s))+\\ W^{*''}(s)(1+\lambda X^{*'}(s))+W^{*'}(s)(\lambda X^{*''}(s)) + W^{*'}(s)(\lambda X^{*''}(s)) + W^{*}(s)(\lambda X^{*'''}(s))= 0
+    \end{align*}
+    Fazendo s = 0
+    \begin{align*}
+        &3W^{*''}(0)(1+\lambda X^{*''}(s)) + 3 W^{*'}(0)(\lambda X^{*''}(0)) + \lambda X^{*'''}(0) = 0\\
+        &3W^{*''}(0)(1-\lambda X^{*''}(s)) =- 3 W^{*'}(0)(\lambda X^{*''}(0)) - \lambda X^{*'''}(0)\\
+        &3W^{*''}(0)(1-\lambda E[X^2]) =3 E[W](\lambda E[X^2]) + \lambda E[X^3]\\
+        &W^{*''}(0)= \frac{3\;\lambda E[X^2]\; \lambda E[X^2]}{6\;(1-\lambda E[X^2])^2} + \frac{\lambda E[X^3]}{3\;(1-\lambda E[X^2])}\\
+        &W^{*''}(0)= \frac{\;\lambda E[X^2]\; \lambda E[X^2]}{2\;(1-\lambda E[X^2])^2} + \frac{\lambda E[X^3]}{3\;(1-\lambda E[X^2])} \\
+        &W^{*''}(0)= 2\; E[W]^2 + \frac{\lambda E[X^3]}{3\;(1-\lambda E[X^2])} = E[W^2]
+    \end{align*}
+    Logo, para a fila M/M/1 \(E[W^2] = 2\; E[W]^2 + \frac{\lambda E[X^3]}{3\;(1-\rho)}\)
+    Finalmente, pemos achar a variância para uma fila M/M/1 FCFS:
+    \begin{align*}
+        V(W_{FCFS}) &= E[W^2] - E[W]^2\\
+        &= 2\; E[W]^2 + \frac{\lambda E[X^3]}{3\;(1-\rho)} - E[W]^2\\
+        &= E[W]^2 + \frac{\lambda E[X^3]}{3\;(1-\rho)}\\ &=\frac{\lambda^2\;E[X^2]^2}{4\;(1-\rho)^2} + \frac{\lambda E[X^3]}{3\;(1-\rho)} \\
+        &= \frac{3\;\lambda^2\;E[X^2]^2 + 4\;\lambda E[X^3]- 4\rho\lambda E[X^3]}{12\;(1-\rho)^2}
+    \end{align*}
+    Como o tempo médio de serviço é 1 segundo, \(\lambda = \rho\)
+    \begin{align*}
+        V(W_{FCFS}) = \frac{3\;\rho^2\;E[X^2]^2 + 4\;\rho E[X^3]- 4\rho^2 E[X^3]}{12\;(1-\rho)^2}
+    \end{align*}
+    O segundo e o terceiro momentos de uma exponencial, com \(\mu = 1\) podem ser dados por:
+    \begin{align*}
+       &E[X^2] BOTAR INTEGRAL = \frac{2}{\mu^2 } = 2 \\
+       &E[X^3] BOTAR INTEGRAL = \frac{6}{\mu^3 } = 6
+    \end{align*}
+    Então,
+    \begin{align*}
+        V(W_{FCFS}) = \frac{-12\;\rho^2+ 24\;\rho }{12\;(1-\rho)^2}
+    \end{align*}
+\end{itemize}
 %\newpage
 \section{Tabelas com Resultados e Comentários Pertinentes}
 %\newpage
