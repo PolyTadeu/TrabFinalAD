@@ -118,7 +118,7 @@ int main(const int argc, const char **argv) {
         clock2 = clock() - clock2;
         printf("transient: %lf seconds (clock)\n",
                 ((f64) clock2) / ((f64) CLOCKS_PER_SEC));
-        clock2 = clock() - clock2;
+        clock2 = clock();
     }
 
     // Rodadas
@@ -133,8 +133,9 @@ int main(const int argc, const char **argv) {
         acc_and_update(&nq_hat, nq_i, 1);
         if ( opts.verbose ) {
             clock2 = clock() - clock2;
-            printf("round %4lu: %lf seconds (clock)\n",
-                    i, ((f64) clock2) / ((f64) CLOCKS_PER_SEC));
+            printf("round %4lu: %lf seconds (so far %lf)\n",
+                    i, ((f64) clock2) / ((f64) CLOCKS_PER_SEC),
+                    ((f64)(clock()-clock1)) / ((f64) CLOCKS_PER_SEC));
             printf("Wait time : %lf\n", wt_i);
             if ( i > 0 ) {
                 printf("(So far)    average %lf, variance %lf\n",
@@ -154,7 +155,7 @@ int main(const int argc, const char **argv) {
                     discrete_average(nq_hat));
             }
             printf("\n");
-            clock2 = clock() - clock2;
+            clock2 = clock();
         }
     }
     assert( wt_hat.n == opts.round_count );
