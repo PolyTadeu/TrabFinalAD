@@ -197,7 +197,7 @@ size_t ARGS_find_index_small(const ARGS_ArgSpec spec, const char *arg) {
     }
     for ( size_t i = 0; i < spec.options_len; i++ ) {
         const ARGS_ArgOption option = spec.options[i];
-        if ( ARGS_streq(arg, option.small) ) {
+        if ( option.small[0] && ARGS_streq(arg, option.small) ) {
             assert( index >= spec.options_len );
             index = i;
         }
@@ -214,7 +214,7 @@ size_t ARGS_find_index_big(const ARGS_ArgSpec spec, const char *arg) {
     }
     for ( size_t i = 0; i < spec.options_len; i++ ) {
         const ARGS_ArgOption option = spec.options[i];
-        if ( ARGS_streq(arg, option.big) ) {
+        if ( option.big[0] && ARGS_streq(arg, option.big) ) {
             assert( index >= spec.options_len );
             index = i;
         }
