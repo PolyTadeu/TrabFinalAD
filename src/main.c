@@ -70,6 +70,34 @@ int gen_struct() {
     return 0;
 }
 
+void print_opts(const Options opts) {
+    const char *qtype_name[] = { "FCFS", "LCFS", };
+    printf("Seed       : %lu\n", opts.seed);
+    printf("Round size : %lu\n", opts.round_size);
+    printf("Round count: %lu\n", opts.round_count);
+    printf("Lambda     : %lf\n", opts.lambda);
+    printf("Mu         : %lf\n", opts.mu);
+    printf("Queue type : %s\n\n", qtype_name[opts.lcfs]);
+}
+
+void print_stats(const char *name,
+        const CachedStats mu, const CachedStats sigma) {
+    printf("Avg %s: %lf\n", name, mu.avg);
+    printf("Var %s: %lf\n\n", name, sigma.avg);
+
+    printf("IC Avg %s : [%lf - %lf] (precision %lf)\n",
+            name, mu.tstudent.low, mu.tstudent.up,
+            mu.tstudent.precision);
+
+    printf("IC Var t-Student %s   : [%lf - %lf] (prec %lf)\n",
+            name, sigma.tstudent.low, sigma.tstudent.up,
+            sigma.tstudent.precision);
+
+    printf("IC Var Chi-squared %s : [%lf - %lf] (prec %lf)\n\n",
+            name, sigma.chi.low, sigma.chi.up,
+            sigma.chi.precision);
+}
+
 int main(const int argc, const char **argv) {
     Options opts = {
         .seed = time(NULL),
@@ -84,17 +112,6 @@ int main(const int argc, const char **argv) {
     if ( !opts.ARGS_valid ) {
         return 0;
     }
-
-    printf("opts = {\n");
-    printf("    .seed = %lu\n", opts.seed);
-    printf("    .round_size = %lu\n", opts.round_size);
-    printf("    .lambda = %lf\n", opts.lambda);
-    printf("    .mu = %lf\n", opts.mu);
-    printf("    .round_count = %lu\n", opts.round_count);
-    printf("    .lcfs = %hhu\n", opts.lcfs);
-    printf("    .verbose = %hhu\n", opts.verbose);
-    printf("    .ARGS_valid = %hhu\n", opts.ARGS_valid);
-    printf("}\n");
 
     // Inicializar sistema
     RandCtx rand = create_rand_ctx(opts.seed);
@@ -129,10 +146,11 @@ int main(const int argc, const char **argv) {
         for ( ; s->wt_stat.n < opts.round_size; ) {
             handle_next_event(s);
         }
-        const f64 wt_avg_i = discrete_average(s->wt_stat),
-              wt_var_i = discrete_variance(s->wt_stat),
-              nq_avg_i = continuous_average(s->nq_stat, s->curr_time),
-              nq_var_i = continuous_variance(s->nq_stat, s->curr_time);
+        const f64
+            wt_avg_i = discrete_average(s->wt_stat),
+            wt_var_i = discrete_variance(s->wt_stat),
+            nq_avg_i = continuous_average(s->nq_stat, s->curr_time),
+            nq_var_i = continuous_variance(s->nq_stat, s->curr_time);
         acc_and_update(&wt_mu_hat, wt_avg_i, 1);
         acc_and_update(&wt_sigma_hat, wt_var_i, 1);
         acc_and_update(&nq_mu_hat, nq_avg_i, 1);
@@ -168,39 +186,13 @@ int main(const int argc, const char **argv) {
           cache_nq_mu = cache_stats(nq_mu_hat),
           cache_nq_sigma = cache_stats(nq_sigma_hat);
 
-    const char *qtype_name[] = { "FCFS", "LCFS", };
-    printf("Total runtime : %lf seconds (clock)\n",
+    print_opts(opts);
+
+    printf("Total runtime : %lf seconds (clock)\n\n",
             ((f64) clock1) / ((f64) CLOCKS_PER_SEC));
-    printf("Queue type : %s\n", qtype_name[s->queue->type]);
-    printf("Avg Wait time : %lf\n", cache_wt_mu.avg);
-    printf("Var Wait time : %lf\n\n", cache_wt_sigma.avg);
 
-    printf("IC Avg Wait time : [%lf - %lf] (precision %lf)\n",
-            cache_wt_mu.tstudent.low, cache_wt_mu.tstudent.up,
-            cache_wt_mu.tstudent.precision);
-
-    printf("IC Var t-Student Wait time   : [%lf - %lf] (prec %lf)\n",
-            cache_wt_sigma.tstudent.low, cache_wt_sigma.tstudent.up,
-            cache_wt_sigma.tstudent.precision);
-
-    printf("IC Var Chi-squared Wait time : [%lf - %lf] (prec %lf)\n\n",
-            cache_wt_sigma.chi.low, cache_wt_sigma.chi.up,
-            cache_wt_sigma.chi.precision);
-
-    printf("Avg Queue size: %lf\n", cache_nq_mu.avg);
-    printf("Var Queue size: %lf\n\n", cache_nq_sigma.avg);
-
-    printf("IC Avg Queue size : [%lf - %lf] (precision %lf)\n",
-            cache_nq_mu.tstudent.low, cache_nq_mu.tstudent.up,
-            cache_nq_mu.tstudent.precision);
-
-    printf("IC Var t-Student Queue size   : [%lf - %lf] (prec %lf)\n",
-            cache_nq_sigma.tstudent.low, cache_nq_sigma.tstudent.up,
-            cache_nq_sigma.tstudent.precision);
-
-    printf("IC Var Chi-squared Queue size : [%lf - %lf] (prec %lf)\n\n",
-            cache_nq_sigma.chi.low, cache_nq_sigma.chi.up,
-            cache_nq_sigma.chi.precision);
+    print_stats("Wait time", cache_wt_mu, cache_wt_sigma);
+    print_stats("Queue size", cache_nq_mu, cache_nq_sigma);
 
     return 0;
 }
