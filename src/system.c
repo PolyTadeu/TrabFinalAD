@@ -101,6 +101,7 @@ void record_wait_time(Stats *stat,
         const Color color, const Time now, const Person p) {
     if ( p.color == color ) {
         const f64 val = now - p.arrived_time;
+        assert( val >= 0 );
         acc_and_update(stat, val, 1);
     }
 }

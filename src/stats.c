@@ -36,8 +36,8 @@ Stats new_stats() {
 Stats accumulate(Stats stat, f64 val, f64 mul) {
     const Stats ret = {
         .n = stat.n + 1,
-        .acc = stat.acc + val * mul,
-        .sqr_acc = stat.sqr_acc + val * val * mul,
+        .acc = stat.acc + (val * mul),
+        .sqr_acc = stat.sqr_acc + (val * val * mul),
     };
     return ret;
 }
