@@ -17,7 +17,6 @@ typedef struct _CI {
 typedef struct _CachedStats {
     f64 avg;
     f64 var;
-    CI ci_avg;
     CI tstudent;
     CI chi;
 } CachedStats;
@@ -83,7 +82,7 @@ f64 continuous_variance(Stats stat, f64 t) {
     return (stat.sqr_acc - sqr_avg) / t;
 }
 
-#define TCONST      1.645
+#define TCONST      1.960
 #define CHI_HIGH    0.025
 #define CHI_LOW     0.975
 
@@ -96,11 +95,6 @@ CachedStats cache_stats(const Stats stat) {
     CachedStats ret = {
         .avg = avg,
         .var = var,
-        .ci_avg = {
-            .up = avg + diff_t,
-            .low = avg - diff_t,
-            .precision = diff_t / avg,
-        },
         .tstudent = {
             .up = avg + diff_t,
             .low = avg - diff_t,

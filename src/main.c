@@ -80,7 +80,6 @@ int main(const int argc, const char **argv) {
         .lcfs = 0,
         .verbose = 0,
     };
-
     ARGS_parse(spec, (void*) &opts, sizeof(opts), argc, argv);
     if ( !opts.ARGS_valid ) {
         return 0;
@@ -106,7 +105,10 @@ int main(const int argc, const char **argv) {
     System sys = init_system(&rand, opts.lambda, opts.mu,
             eh, q, init_color),
            *s = &sys;
-    Stats wt_hat = new_stats(), nq_hat = new_stats();
+    Stats wt_mu_hat = new_stats(),
+          wt_sigma_hat = new_stats(),
+          nq_mu_hat = new_stats(),
+          nq_sigma_hat = new_stats();
     add_first_event(s);
 
     clock_t clock1 = clock(), clock2 = clock1;
@@ -127,49 +129,78 @@ int main(const int argc, const char **argv) {
         for ( ; s->wt_stat.n < opts.round_size; ) {
             handle_next_event(s);
         }
-        const f64 wt_i = discrete_average(s->wt_stat),
-              nq_i = continuous_average(s->nq_stat, s->curr_time);
-        acc_and_update(&wt_hat, wt_i, 1);
-        acc_and_update(&nq_hat, nq_i, 1);
+        const f64 wt_avg_i = discrete_average(s->wt_stat),
+              wt_var_i = discrete_variance(s->wt_stat),
+              nq_avg_i = continuous_average(s->nq_stat, s->curr_time),
+              nq_var_i = continuous_variance(s->nq_stat, s->curr_time);
+        acc_and_update(&wt_mu_hat, wt_avg_i, 1);
+        acc_and_update(&wt_sigma_hat, wt_var_i, 1);
+        acc_and_update(&nq_mu_hat, nq_avg_i, 1);
+        acc_and_update(&nq_sigma_hat, nq_var_i, 1);
         if ( opts.verbose ) {
             clock2 = clock() - clock2;
             printf("round %4lu: %lf seconds (so far %lf)\n",
                     i, ((f64) clock2) / ((f64) CLOCKS_PER_SEC),
                     ((f64)(clock()-clock1)) / ((f64) CLOCKS_PER_SEC));
-            printf("Wait time : %lf\n", wt_i);
-            if ( i > 0 ) {
-                printf("(So far)    average %lf, variance %lf\n",
-                    discrete_average(wt_hat),
-                    discrete_variance(wt_hat));
-            } else {
-                printf("(So far)    average %lf\n",
-                    discrete_average(wt_hat));
-            }
-            printf("Queue size: %lf\n", nq_i);
-            if ( i > 0 ) {
-                printf("(So far)    average %lf, variance %lf\n",
-                    discrete_average(nq_hat),
-                    discrete_variance(nq_hat));
-            } else {
-                printf("(So far)    average %lf\n",
-                    discrete_average(nq_hat));
-            }
+            printf("Wait time : avg %lf, var %lf\n",
+                    wt_avg_i, wt_var_i);
+            printf("(So far)    average %lf, variance %lf\n",
+                discrete_average(wt_mu_hat),
+                discrete_average(wt_sigma_hat));
+            printf("Queue size: average %lf, variance %lf\n",
+                    nq_avg_i, nq_var_i);
+            printf("(So far)    average %lf, variance %lf\n",
+                discrete_average(nq_mu_hat),
+                discrete_average(nq_sigma_hat));
             printf("\n");
             clock2 = clock();
         }
     }
-    assert( wt_hat.n == opts.round_count );
-    assert( nq_hat.n == opts.round_count );
+    assert( wt_mu_hat.n == opts.round_count );
+    assert( wt_sigma_hat.n == opts.round_count );
+    assert( nq_mu_hat.n == opts.round_count );
+    assert( nq_sigma_hat.n == opts.round_count );
 
     clock1 = clock() - clock1;
+
+    const CachedStats cache_wt_mu = cache_stats(wt_mu_hat),
+          cache_wt_sigma = cache_stats(wt_sigma_hat),
+          cache_nq_mu = cache_stats(nq_mu_hat),
+          cache_nq_sigma = cache_stats(nq_sigma_hat);
+
     const char *qtype_name[] = { "FCFS", "LCFS", };
     printf("Total runtime : %lf seconds (clock)\n",
             ((f64) clock1) / ((f64) CLOCKS_PER_SEC));
     printf("Queue type : %s\n", qtype_name[s->queue->type]);
-    printf("Avg Wait time : %lf\n", discrete_average(wt_hat));
-    printf("Var Wait time : %lf\n\n", discrete_variance(wt_hat));
-    printf("Avg Queue size: %lf\n", discrete_average(nq_hat));
-    printf("Var Queue size: %lf\n\n", discrete_variance(nq_hat));
+    printf("Avg Wait time : %lf\n", cache_wt_mu.avg);
+    printf("Var Wait time : %lf\n\n", cache_wt_sigma.avg);
+
+    printf("IC Avg Wait time : [%lf - %lf] (precision %lf)\n",
+            cache_wt_mu.tstudent.low, cache_wt_mu.tstudent.up,
+            cache_wt_mu.tstudent.precision);
+
+    printf("IC Var t-Student Wait time   : [%lf - %lf] (prec %lf)\n",
+            cache_wt_sigma.tstudent.low, cache_wt_sigma.tstudent.up,
+            cache_wt_sigma.tstudent.precision);
+
+    printf("IC Var Chi-squared Wait time : [%lf - %lf] (prec %lf)\n\n",
+            cache_wt_sigma.chi.low, cache_wt_sigma.chi.up,
+            cache_wt_sigma.chi.precision);
+
+    printf("Avg Queue size: %lf\n", cache_nq_mu.avg);
+    printf("Var Queue size: %lf\n\n", cache_nq_sigma.avg);
+
+    printf("IC Avg Queue size : [%lf - %lf] (precision %lf)\n",
+            cache_nq_mu.tstudent.low, cache_nq_mu.tstudent.up,
+            cache_nq_mu.tstudent.precision);
+
+    printf("IC Var t-Student Queue size   : [%lf - %lf] (prec %lf)\n",
+            cache_nq_sigma.tstudent.low, cache_nq_sigma.tstudent.up,
+            cache_nq_sigma.tstudent.precision);
+
+    printf("IC Var Chi-squared Queue size : [%lf - %lf] (prec %lf)\n\n",
+            cache_nq_sigma.chi.low, cache_nq_sigma.chi.up,
+            cache_nq_sigma.chi.precision);
 
     return 0;
 }
