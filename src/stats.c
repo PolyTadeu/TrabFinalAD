@@ -79,7 +79,7 @@ f64 continuous_average(Stats stat, f64 t) {
 f64 continuous_variance(Stats stat, f64 t) {
     const f64 avg = continuous_average(stat, t);
     const f64 sqr_avg = avg * avg;
-    return (stat.sqr_acc - sqr_avg) / t;
+    return (stat.sqr_acc / t) - sqr_avg;
 }
 
 #define TCONST      1.960
