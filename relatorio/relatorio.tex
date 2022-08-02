@@ -12,8 +12,8 @@
 
 \usepackage{hyperref}
 
-\title{Relatório Simulador\\
-  Avaliação e Desempenho - 2022.1}
+\title{Relatório Parcial de Atividades\\
+  Iniciação Científica}
 \author{Daniel Kiyoshi Hashimoto Vouzella de Andrade - 119025937
   \\
 Polyana Tadeu -
@@ -66,10 +66,10 @@ Gustavo Muzy Fraga -
 %\newpage
 \section{Introdução}
 \subsection{Funcionamento Geral do Simulador}
-De forma geral, o simulador cria eventos em tempos pseudoaleatorios que são colocados na lista de eventos.
-Para a lista de eventos, utilizamos uma heap para salvá-los. Utilizamos o tempo para ordenar os eventos na heap. Conforme vamos tratando esses eventos, vamos criando mais eventos.
-Os eventos geram clientes entrando no sistema.
-Essas entradas podem tanto ser direto no servidor, caso a fila esteja vazia, quanto na fila caso contrário.
+De forma geral, o simulador cria eventos em tempos pseudoaleatorios que são colocados na lista de eventos. 
+Para a lista de eventos, utilizamos uma heap para salvá-los. Utilizamos o tempo para ordenar os eventos na heap. Conforme vamos tratando esses eventos, vamos criando mais eventos. 
+Os eventos geram clientes entrando no sistema. 
+Essas entradas podem tanto ser direto no servidor, caso a fila esteja vazia, quanto na fila caso contrário. 
 Conforme os clientes vão saindo da fila de espera, registramos informações como tempo e cor para calcularmos as estatísticas posteriormente.
 
 Como o tempo de simulação considerado ??????????????????;
@@ -77,61 +77,63 @@ Como o tempo de simulação considerado ??????????????????;
 Foram escolhidos dois tipos de evento:
 \begin{itemize}
     \item Evento de Chegada
-
+    
     O primeiro evento de chegada é gerado na função \texttt{add\_first\_event()}.
     Ele é criado e inserido na heap de eventos para a chegada no tempo 0.
     Quando um evento de chegada é tratado, criamos um novo evento de chegada com tempo pseudoaleatório e inserimos na heap de eventos. Em seguida checamos se o servidor está ocioso ou não.
     No caso do servidor estar ocupado, adicionamos o evento à fila de acordo com a disciplina da fila.
     No caso do servidor estar ocioso, registramos o tempo de espera e criamos um evento de saída com tempo pseudoaleatório e colocamos na heap de eventos e colocamos o servidor como ocupado.
     \item Evento de Saída
-
+    
     O evento de saída, como descrito anteriormente é gerado quando um cliente encontra o servidor ocioso. Ao tratarmos o evento, checamos se a fila está vazia ou não. No caso dela estar vazia, apenas indicamos que o servidor está ocioso. Caso haja clientes na fila, registramos o tempo de espera na fila do próximo cliente a entrar em serviço e geramos um novo evento de saída para ele (colocando este na heap de eventos).
 \end{itemize}
 \subsection{Estrutura Interna}
 Utilizamos várias estruturas, sendo elas:
 \begin{itemize}
     \item System
-
+    
     Esta estrutura guarda todas as variáveis estruturas necessárias para o sistema. As estruturas são:
-
-    \texttt{RandCtx, EventHeap, Queue,
-        Stats (para Número de pessoas na fila e Tempo de espera)}
+    
+    \texttt{RandCtx, 
+    EventHeap,
+    Queue,
+    Stats(Número de pessoas na fila e Tempo de espera)}
     \item RandCtx
-
+    
     Espaço de memória para guardar o contexto para gerar números pseudoaleatórios
-
+    
     \item RandTable
-
+    
     Em conjunto ao RandCtx, utilizamos uma tabela que guarda a sequência de valores pseudoaleatórios da uniforme.
-
+    
     \item EventHeap
-
+    
     Utilizamos a estrutura da heap para ordenar os eventos baseado no tempo deles.
-
+    
     \item Queue
-
-    Uma estrutra de fila simples. Para a disciplina de FCFS utilizamos um buffer circular, pois tanto a head quanto a tail podem ser alterados e para LCFS apenas a calda é expandida.
-
+    
+    Uma estrutra de fila simples. Para a disciplina de FCFS utilizamos um buffer circular, pois tanto a head quanto a tail podem ser alterados e para LCFS apenas a calda é expandida. 
+    
     \item Stats
-
+    
     Estrutura para auxiliar as estatisticas. Nela tem n, que é o número de amostras e acc e sqr\_acc que são seus incrementador e incrementador ao quadrado, respectivamente.
-
+    
     \item CI
-
+    
     No arquivo de status.c também utilizamos a estrutura CI para calcular o intervalo de confiança. Nela contem o valor superior, o inferior e a precisão do IC.
-
+    
     \item CachedStats
-
+    
     Uma estrutura também no arquivo status.c para guardar os valores de média, variança e os intervalos de IC obtidos com o uso da Tstudent e Chi square.
-
+    
     \item Person
-
+    
     Estrutura utilizada no arquivo event.c para salvar a cor da pessoa e o tempo de chegada dela no sistema.
-
+    
     \item Event
-
+    
     Estrutura utilizada no arquivo event.c para salvar informações como o tipo do evento, a pessoa envolvida e o seu tempo.
-
+    
 \end{itemize}
 \subsection{Linguagem Utilizada e Geração das Variáveis Aleatórias}
 A linguagem utilizada foi C.
@@ -330,15 +332,16 @@ Fazendo \(z = 1\):
         = (1 - \rho) \; (3 \; \lambda^2 \; \E[X^2])
         + \frac{3 \; (\lambda^2 \; \E{X^2}) \;
         ((1 - \rho) \; (2 \; \lambda \; \E{X})
-        + \lambda^2 \; \E{X^2})}{2 \; (1 - \lambda \; \E{X})}
-        + \lambda^3 \; \E{X^3} \\
+        + \lambda^2 \; \E{X^2})}{2 \; (1 - \lambda \; \E{X})}\\
+        &+ \lambda^3 \; \E{X^3} \\
 \end{align*}
 \begin{align*}
     &3\;N^{''}(1)\;(1-\lambda E[X]) = \\
     &\frac{6 \; (1 - \rho) \; (\lambda^2 \; \E{X^2}) \;
         (1 - \lambda \; \E{X}) + 3 \; (\lambda^2 \; \E{X^2})
         \; ((1 - \rho) \; (2 \; \lambda \; \E{X})
-        + \lambda^2 \; \E{X^2}) + 2 \; (1 - \lambda \; \E{X})
+        + \lambda^2 \; \E{X^2})}{2 \; (1 - \lambda \; \E{X})}\\
+        &+\frac{2 \; (1 - \lambda \; \E{X})
         \;(\lambda^3 \; \E{X^3})}{2 \; (1 - \lambda \; \E{X})}
 \end{align*}
 \begin{align*}
@@ -347,7 +350,8 @@ Fazendo \(z = 1\):
         \; (1 - \lambda \; \E{X})
         + 3 \; (\lambda^2 \; \E{X^2}) \; ((1 - \rho)
         \; (2 \; \lambda \; \E[X]) + \lambda^2 \; \E{X^2})
-        + 2 \; (1 - \lambda \; \E{X}) \; \lambda^3
+        }{6 \; (1 - \lambda \; \E{X})^2}\\
+        &+\frac{2 \; (1 - \lambda \; \E{X}) \; \lambda^3
         \; \E[X^3]}{6 \; (1 - \lambda \; \E{X})^2}
 \end{align*}
 Logo \(\E{N^2} = N''(1) + N'(1)\)
@@ -524,9 +528,80 @@ com \(\mu = 1\) podem ser dados por:
 Então,
 \[
     V(W_{FCFS})
-    = \frac{-12 \; \rho^2 + 24 \; \rho}{12 \; (1 - \rho)^2}
+    = \frac{-12 \; \rho^2 + 24 \; \rho}{12 \; (1 - \rho)^2} = \frac{-\rho^2 + 2 \; \rho}{(1 - \rho)^2}
 \]
+\subsection{Tempo médio em uma fila de espera LCFS}
+Quando um freguêes típico chega à fila, o instante de chegada 
+é equivalente a uma amostragem aleatória no tempo (PASTA) 
+e a fila  é encontrada com seus valores médios no tempo,
+tanto na fila de espera quanto no serviço. 
+O serviço médio pendente neste instante  é dado
+por \(\E{U_0} = \E{N_q}\;\E{X} + \E{N_s}\;\E{Xr}\), com \(\E{N_q} = \lambda\;\E{W}\).
 
+Deste serviço pendente, a parte \(\E{W_0} = \E{N_s}\;\E{Xr} = \rho\;\E{Xr}\)
+ser;a executada antes da entrada do freguês típico em serviço.
+Caso novas chegadas nãpo ocorressem após a chegada
+do freguês típico, o tempo médio de espera seria dado simplesmente 
+pelo atraso \(\E{W_0}\). A expressão para \(\E{W_0}\) pode ser também 
+obtida condicionando no estado ocupado ou ocioso
+encontrado ao chegar:
+\[
+    \E{W_0} = \E{W_0|ocupado} \; P(ocupado) + \E{W_0|ociso} \; P(ocioso) = \rho\;\E{Xr}
+\]
+Se a fila  é encontrada ociosa o atraso até entrada em serviço  é zero e se o servidor
+está ocupado o serviço residual  é o atraso mínimo a ser observado.
+Entretanto, toda nova chegada que ocorre enquanto o fregues típico 
+ainda está na fila deespera será servida antes do freguês típico. 
+O tempo médio de espera na fila pode ser visto
+como um período ocupado diferenciado iniciado por \(\E{W_0}\), logo:
+\[
+    \E{W_{LCFS}} = \frac{ \E{W_0}}{ 1-\rho} = \frac{ \rho\;\E{Xr}}{ 1-\rho},\;\rho < 1
+\]
+Como na fila M/M/1 \(\E{Xr} = \E{X}\), pela propriedade da falta de memória, e  \(\E{X} =1s\)
+\(\E{W_LCFS}\) pode ser escrito como \(\E{W_{LCFS}} =  \frac{ \rho}{ 1-\rho}\), que
+é o mesmo tempo médio de espera em uma fila FCFS, como esperado e discutido em aula.
+\subsection{Variância do tempo de espera em uma fila LCFS}
+Para calcular a variância do tempo de espera em uma fila LCFS, precisamos obter
+a sua transfromada \(W_{LCFS}^*(s)\), que pode ser obtida diretamente da T.L
+do período ocupado, condicionando no estado ocupado ou ocioso que a fila  é encontrada pelo freguês tépico. 
+Quando o sistema é encontrado ocupado, o serviço inicial do período ocupado  é dado pela vida residual do
+serviço, que no caso da fila M/M/1 é o proprio serviço.
+\begin{align*}
+    W_{LCFS}^*(s) &= \E{e^{s\;W_{LCFS}}|ocupado} \; P(ocupado) + \E{e^{s\;W_{LCFS}}|ocioso} \; P(ocioso)\\
+    &= \rho\;  X^*(s+\lambda- \lambda\;G^*(s)) + (1-\rho)\\
+    &=  \rho\; G^*(s) + (1-\rho)
+\end{align*}
+Derivando uma vez e fazendo s = 0 obetmos o primeiro momento:
+\[
+{W_{LCFS}^*}'(0) =  \rho\; {G^*}'(0) = \frac{ \rho\;\E{X}}{ 1-\rho}
+\]
+Como esperado e visto anteriormente. Agora derivamos novamente, para achar o segundo momento:
+\[
+{W_{LCFS}^*}''(0) =  \rho\; {G^*}''(0) = \frac{ \rho\;\E{X^2}}{(1-\rho)^3}
+\]
+Para achar a variância :
+\begin{align*}
+V(W_{LCFS})&= \frac{ \rho\;\E{X^2}}{(1-\rho)^3} - (\frac{ \rho\;\E{X}}{ 1-\rho})^2\\
+&= \frac{ 2\; \rho}{(1-\rho)^3} - (\frac{ \rho}{ 1-\rho})^2\\
+&=\frac{ 2\; \rho -\rho^2 + \rho^3}{(1-\rho)^3}
+\end{align*}
+
+Ao final obtivemos os seguintes valores analíticos:
+
+\begin{table}[h]
+\centering
+\caption{Valores analíticos}
+\vspace{0.9cm}
+\begin{tabular}{r|lr}
+
+Variável & Média & Variância \\ % Note a separação de col. e a quebra de linhas
+\hline                               % para uma linha horizontal
+\(W_{LCFS}\) & \(\frac{ \rho}{ 1-\rho}\)  & \(\frac{ 2\; \rho -\rho^2 + \rho^3}{(1-\rho)^3}\) \\
+\(W_{FCFS}\) & \(\frac{ \rho}{ 1-\rho}\)  & \(\frac{2 \; \rho -\rho^2 }{(1 - \rho)^2}\) \\
+\(N_q\)      & \(\frac{ \rho^2}{ 1-\rho}\)& \(\frac{\rho^2 + \rho^3 - \rho^4}{(1 - \rho)^2}\) \\
+
+\end{tabular}
+\end{table}
 \newpage
 \section{Tabelas com Resultados e Comentários Pertinentes}
 %\newpage
