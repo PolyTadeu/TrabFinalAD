@@ -8,9 +8,12 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 
+\usepackage{hyperref}
+
 \newcommand{\E}[1]{E\!\left[#1\right]}
 
-\usepackage{hyperref}
+\newcommand{\arq}{\texttt}
+\newcommand{\inlcode}{\texttt}
 
 \title{Relatório Simulador\\
   Avaliação e Desempenho - 2022.1}
@@ -66,13 +69,22 @@ Gustavo Muzy Fraga -
 %\newpage
 \section{Introdução}
 \subsection{Funcionamento Geral do Simulador}
-De forma geral, o simulador cria eventos em tempos pseudoaleatorios que são colocados na lista de eventos.
-Para a lista de eventos, utilizamos uma heap para salvá-los. Utilizamos o tempo para ordenar os eventos na heap. Conforme vamos tratando esses eventos, vamos criando mais eventos.
-Os eventos geram clientes entrando no sistema.
-Essas entradas podem tanto ser direto no servidor, caso a fila esteja vazia, quanto na fila caso contrário.
-Conforme os clientes vão saindo da fila de espera, registramos informações como tempo e cor para calcularmos as estatísticas posteriormente.
+De forma geral,
+o programa é dividido logicamente em arquivos,
+onde cada um descreve uma \emph{função}
+e, se for moderadamente complexa, possui alguns testes,
+gerar números pseudoaleatórios e implementar uma fila,
+são exemplos.
+O simulador (lógica em \arq{system.c})
+apenas retira e trata o evento mais próximo do \emph{instante atual},
+possivelmente criando eventos com tempos pseudoaleatorios
+e os colocando na lista de eventos e alterando o estado do sistema.
+Para a lista de eventos,
+utilizamos uma heap de mínimo ordenado pelo tempo do eventos.
+O \emph{instante atual}, assim como o tempo de cada evento,
+é armazenado em memória como um \inlcode{double}, ou seja,
+um float de 64 bits.
 
-Como o tempo de simulação considerado ??????????????????;
 \subsection{Eventos}
 Foram escolhidos dois tipos de evento:
 \begin{itemize}
