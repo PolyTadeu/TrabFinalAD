@@ -65,8 +65,85 @@ Gustavo Muzy Fraga -
 
 %\newpage
 \section{Introdução}
+\subsection{Funcionamento Geral do Simulador}
+De forma geral, o simulador cria eventos em tempos pseudoaleatorios que são colocados na lista de eventos. 
+Para a lista de eventos, utilizamos uma heap para salvá-los. Utilizamos o tempo para ordenar os eventos na heap. Conforme vamos tratando esses eventos, vamos criando mais eventos. 
+Os eventos geram clientes entrando no sistema. 
+Essas entradas podem tanto ser direto no servidor, caso a fila esteja vazia, quanto na fila caso contrário. 
+Conforme os clientes vão saindo da fila de espera, registramos informações como tempo e cor para calcularmos as estatísticas posteriormente.
+
+Como o tempo de simulação considerado ??????????????????;
+\subsection{Eventos}
+Foram escolhidos dois tipos de evento:
+\begin{itemize}
+    \item Evento de Chegada
+    
+    O primeiro evento de chegada é gerado na função \texttt{add\_first\_event()}.
+    Ele é criado e inserido na heap de eventos para a chegada no tempo 0.
+    Quando um evento de chegada é tratado, criamos um novo evento de chegada com tempo pseudoaleatório e inserimos na heap de eventos. Em seguida checamos se o servidor está ocioso ou não.
+    No caso do servidor estar ocupado, adicionamos o evento à fila de acordo com a disciplina da fila.
+    No caso do servidor estar ocioso, registramos o tempo de espera e criamos um evento de saída com tempo pseudoaleatório e colocamos na heap de eventos e colocamos o servidor como ocupado.
+    \item Evento de Saída
+    
+    O evento de saída, como descrito anteriormente é gerado quando um cliente encontra o servidor ocioso. Ao tratarmos o evento, checamos se a fila está vazia ou não. No caso dela estar vazia, apenas indicamos que o servidor está ocioso. Caso haja clientes na fila, registramos o tempo de espera na fila do próximo cliente a entrar em serviço e geramos um novo evento de saída para ele (colocando este na heap de eventos).
+\end{itemize}
+\subsection{Estrutura Interna}
+Utilizamos várias estruturas, sendo elas:
+\begin{itemize}
+    \item System
+    
+    Esta estrutura guarda todas as variáveis estruturas necessárias para o sistema. As estruturas são:
+    
+    \texttt{RandCtx, 
+    EventHeap,
+    Queue,
+    Stats(Número de pessoas na fila e Tempo de espera)}
+    \item RandCtx
+    
+    Espaço de memória para guardar o contexto para gerar números pseudoaleatórios
+    
+    \item RandTable
+    
+    Em conjunto ao RandCtx, utilizamos uma tabela que guarda a sequência de valores pseudoaleatórios da uniforme.
+    
+    \item EventHeap
+    
+    Utilizamos a estrutura da heap para ordenar os eventos baseado no tempo deles.
+    
+    \item Queue
+    
+    Uma estrutra de fila simples. Para a disciplina de FCFS utilizamos um buffer circular, pois tanto a head quanto a tail podem ser alterados e para LCFS apenas a calda é expandida. 
+    
+    \item Stats
+    
+    Estrutura para auxiliar as estatisticas. Nela tem n, que é o número de amostras e acc e sqr\_acc que são seus incrementador e incrementador ao quadrado, respectivamente.
+    
+    \item CI
+    
+    No arquivo de status.c também utilizamos a estrutura CI para calcular o intervalo de confiança. Nela contem o valor superior, o inferior e a precisão do IC.
+    
+    \item CachedStats
+    
+    Uma estrutura também no arquivo status.c para guardar os valores de média, variança e os intervalos de IC obtidos com o uso da Tstudent e Chi square.
+    
+    \item Person
+    
+    Estrutura utilizada no arquivo event.c para salvar a cor da pessoa e o tempo de chegada dela no sistema.
+    
+    \item Event
+    
+    Estrutura utilizada no arquivo event.c para salvar informações como o tipo do evento, a pessoa envolvida e o seu tempo.
+    
+\end{itemize}
+\subsection{Linguagem Utilizada e Geração das Variáveis Aleatórias}
+A linguagem utilizada foi C.
+\subsection{Cores}
+\subsection{Precisão IC}
+\subsection{Médias e Variância}
+\subsection{Máquina Utilizada e Tempo Total}
+
 %\newpage
-\section{Testes e Correção}
+\section{Testes de Correção}
 %\newpage
 \section{Estimativa da Fase Transiente}
 
