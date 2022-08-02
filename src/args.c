@@ -144,10 +144,65 @@ void ARGS_log(const ARGS_ArgSpec spec, const char * format, ... ) {
     }
 }
 
-void ARGS_implicit_help(const ARGS_ArgSpec spec) {
-    (void) spec;
-    // TODO: assert( 0 && "ARGS_implicit_help: not implemented" );
-    printf("TODO: print implicit help\n");
+void ARGS_implicit_help(const ARGS_ArgSpec spec,
+        const char *prog_name) {
+    assert( !(spec.flags & ARGS_SPECFLAGS_no_implicit_help) );
+    printf("usage: %s [flags]\n\n", prog_name);
+    printf("Accepted flags:\n");
+    for ( size_t i = 0; i < spec.options_len; i++ ) {
+        const ARGS_ArgOption option = spec.options[i];
+        assert( option.small );
+        assert( option.big );
+        assert( option.small[0] || option.big[0] );
+        printf("  ");
+        if ( option.small[0] ) {
+            printf("-%c%c ", option.small[0],
+                    option.big[0] ? ',' : ' ');
+        } else {
+            printf("    ");
+        }
+        if ( option.big[0] ) {
+            printf("--%s ", option.big);
+        } else {
+            printf(" ");
+        }
+        switch ( option.type ) {
+            case ARGS_flag:
+                printf("\n");
+                break;
+            case ARGS_literal:
+                printf("<text_literal>\n");
+                break;
+            case ARGS_string:
+                printf("<string>\n");
+                break;
+            case ARGS_uint:
+                printf("<unsigned_integer>\n");
+                break;
+            case ARGS_int:
+                printf("<signed_integer>\n");
+                break;
+            case ARGS_float:
+                printf("<floating_number>\n");
+                break;
+            default:
+                assert( 0 && "unreachable" );
+                break;
+        }
+        if ( option.description && option.description[0] ) {
+            const char *desc = option.description;
+            int start = 0, end = 0;
+            for ( ; desc[end]; end++ ) {
+                if ( desc[end] == '\n' ) {
+                    printf("     %.*s\n", end - start, desc + start);
+                    start = end + 1;
+                }
+            }
+            printf("     %.*s\n\n", end - start, desc + start);
+        } else {
+            printf("\n");
+        }
+    }
 }
 
 inline static
@@ -384,12 +439,12 @@ void* ARGS_parse(ARGS_ArgSpec spec, void *ret, size_t size,
                     break;
             }
         } else if ( opt_index == spec.options_len ) {
-            ARGS_implicit_help(spec);
+            ARGS_implicit_help(spec, argv[0]);
             is_valid = 0;
             break;
         } else {
             if ( !(spec.flags & ARGS_SPECFLAGS_no_implicit_help) ) {
-                ARGS_implicit_help(spec);
+                ARGS_implicit_help(spec, argv[0]);
                 is_valid = 0;
                 break;
             } else {
