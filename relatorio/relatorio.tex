@@ -107,7 +107,7 @@ Utilizamos várias estruturas, sendo elas:
     Esta estrutura guarda todas as variáveis estruturas necessárias para o sistema. As estruturas são:
 
     \texttt{RandCtx, EventHeap, Queue,
-        Stats (para Número de pessoas na fila e Tempo de espera)}
+        Stats (Número de pessoas na fila e Tempo de espera)}
     \item RandCtx
 
     Espaço de memória para guardar o contexto para gerar números pseudoaleatórios
@@ -342,15 +342,16 @@ Fazendo \(z = 1\):
         = (1 - \rho) \; (3 \; \lambda^2 \; \E[X^2])
         + \frac{3 \; (\lambda^2 \; \E{X^2}) \;
         ((1 - \rho) \; (2 \; \lambda \; \E{X})
-        + \lambda^2 \; \E{X^2})}{2 \; (1 - \lambda \; \E{X})}
-        + \lambda^3 \; \E{X^3} \\
+        + \lambda^2 \; \E{X^2})}{2 \; (1 - \lambda \; \E{X})}\\
+        &+ \lambda^3 \; \E{X^3} \\
 \end{align*}
 \begin{align*}
     &3\;N^{''}(1)\;(1-\lambda E[X]) = \\
     &\frac{6 \; (1 - \rho) \; (\lambda^2 \; \E{X^2}) \;
         (1 - \lambda \; \E{X}) + 3 \; (\lambda^2 \; \E{X^2})
         \; ((1 - \rho) \; (2 \; \lambda \; \E{X})
-        + \lambda^2 \; \E{X^2}) + 2 \; (1 - \lambda \; \E{X})
+        + \lambda^2 \; \E{X^2})}{2 \; (1 - \lambda \; \E{X})}\\
+        &+\frac{2 \; (1 - \lambda \; \E{X})
         \;(\lambda^3 \; \E{X^3})}{2 \; (1 - \lambda \; \E{X})}
 \end{align*}
 \begin{align*}
@@ -359,7 +360,8 @@ Fazendo \(z = 1\):
         \; (1 - \lambda \; \E{X})
         + 3 \; (\lambda^2 \; \E{X^2}) \; ((1 - \rho)
         \; (2 \; \lambda \; \E[X]) + \lambda^2 \; \E{X^2})
-        + 2 \; (1 - \lambda \; \E{X}) \; \lambda^3
+        }{6 \; (1 - \lambda \; \E{X})^2}\\
+        &+\frac{2 \; (1 - \lambda \; \E{X}) \; \lambda^3
         \; \E[X^3]}{6 \; (1 - \lambda \; \E{X})^2}
 \end{align*}
 Logo \(\E{N^2} = N''(1) + N'(1)\)
@@ -536,9 +538,80 @@ com \(\mu = 1\) podem ser dados por:
 Então,
 \[
     V(W_{FCFS})
-    = \frac{-12 \; \rho^2 + 24 \; \rho}{12 \; (1 - \rho)^2}
+    = \frac{-12 \; \rho^2 + 24 \; \rho}{12 \; (1 - \rho)^2} = \frac{-\rho^2 + 2 \; \rho}{(1 - \rho)^2}
 \]
+\subsection{Tempo médio em uma fila de espera LCFS}
+Quando um freguêes típico chega à fila, o instante de chegada
+é equivalente a uma amostragem aleatória no tempo (PASTA)
+e a fila  é encontrada com seus valores médios no tempo,
+tanto na fila de espera quanto no serviço.
+O serviço médio pendente neste instante  é dado
+por \(\E{U_0} = \E{N_q}\;\E{X} + \E{N_s}\;\E{Xr}\), com \(\E{N_q} = \lambda\;\E{W}\).
 
+Deste serviço pendente, a parte \(\E{W_0} = \E{N_s}\;\E{Xr} = \rho\;\E{Xr}\)
+ser;a executada antes da entrada do freguês típico em serviço.
+Caso novas chegadas nãpo ocorressem após a chegada
+do freguês típico, o tempo médio de espera seria dado simplesmente
+pelo atraso \(\E{W_0}\). A expressão para \(\E{W_0}\) pode ser também
+obtida condicionando no estado ocupado ou ocioso
+encontrado ao chegar:
+\[
+    \E{W_0} = \E{W_0|ocupado} \; P(ocupado) + \E{W_0|ociso} \; P(ocioso) = \rho\;\E{Xr}
+\]
+Se a fila  é encontrada ociosa o atraso até entrada em serviço  é zero e se o servidor
+está ocupado o serviço residual  é o atraso mínimo a ser observado.
+Entretanto, toda nova chegada que ocorre enquanto o fregues típico
+ainda está na fila deespera será servida antes do freguês típico.
+O tempo médio de espera na fila pode ser visto
+como um período ocupado diferenciado iniciado por \(\E{W_0}\), logo:
+\[
+    \E{W_{LCFS}} = \frac{ \E{W_0}}{ 1-\rho} = \frac{ \rho\;\E{Xr}}{ 1-\rho},\;\rho < 1
+\]
+Como na fila M/M/1 \(\E{Xr} = \E{X}\), pela propriedade da falta de memória, e  \(\E{X} =1s\)
+\(\E{W_LCFS}\) pode ser escrito como \(\E{W_{LCFS}} =  \frac{ \rho}{ 1-\rho}\), que
+é o mesmo tempo médio de espera em uma fila FCFS, como esperado e discutido em aula.
+\subsection{Variância do tempo de espera em uma fila LCFS}
+Para calcular a variância do tempo de espera em uma fila LCFS, precisamos obter
+a sua transfromada \(W_{LCFS}^*(s)\), que pode ser obtida diretamente da T.L
+do período ocupado, condicionando no estado ocupado ou ocioso que a fila  é encontrada pelo freguês tépico.
+Quando o sistema é encontrado ocupado, o serviço inicial do período ocupado  é dado pela vida residual do
+serviço, que no caso da fila M/M/1 é o proprio serviço.
+\begin{align*}
+    W_{LCFS}^*(s) &= \E{e^{s\;W_{LCFS}}|ocupado} \; P(ocupado) + \E{e^{s\;W_{LCFS}}|ocioso} \; P(ocioso)\\
+    &= \rho\;  X^*(s+\lambda- \lambda\;G^*(s)) + (1-\rho)\\
+    &=  \rho\; G^*(s) + (1-\rho)
+\end{align*}
+Derivando uma vez e fazendo s = 0 obetmos o primeiro momento:
+\[
+{W_{LCFS}^*}'(0) =  \rho\; {G^*}'(0) = \frac{ \rho\;\E{X}}{ 1-\rho}
+\]
+Como esperado e visto anteriormente. Agora derivamos novamente, para achar o segundo momento:
+\[
+{W_{LCFS}^*}''(0) =  \rho\; {G^*}''(0) = \frac{ \rho\;\E{X^2}}{(1-\rho)^3}
+\]
+Para achar a variância :
+\begin{align*}
+V(W_{LCFS})&= \frac{ \rho\;\E{X^2}}{(1-\rho)^3} - (\frac{ \rho\;\E{X}}{ 1-\rho})^2\\
+&= \frac{ 2\; \rho}{(1-\rho)^3} - (\frac{ \rho}{ 1-\rho})^2\\
+&=\frac{ 2\; \rho -\rho^2 + \rho^3}{(1-\rho)^3}
+\end{align*}
+
+Ao final obtivemos os seguintes valores analíticos:
+
+\begin{table}[h]
+\centering
+\caption{Valores analíticos}
+\vspace{0.9cm}
+\begin{tabular}{r|lr}
+
+Variável & Média & Variância \\ % Note a separação de col. e a quebra de linhas
+\hline                               % para uma linha horizontal
+\(W_{LCFS}\) & \(\frac{ \rho}{ 1-\rho}\)  & \(\frac{ 2\; \rho -\rho^2 + \rho^3}{(1-\rho)^3}\) \\
+\(W_{FCFS}\) & \(\frac{ \rho}{ 1-\rho}\)  & \(\frac{2 \; \rho -\rho^2 }{(1 - \rho)^2}\) \\
+\(N_q\)      & \(\frac{ \rho^2}{ 1-\rho}\)& \(\frac{\rho^2 + \rho^3 - \rho^4}{(1 - \rho)^2}\) \\
+
+\end{tabular}
+\end{table}
 \newpage
 \section{Tabelas com Resultados e Comentários Pertinentes}
 %\newpage
