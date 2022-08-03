@@ -14,6 +14,7 @@
 
 \newcommand{\arq}{\texttt}
 \newcommand{\inlcode}{\texttt}
+\newcommand{\lang}{\texttt}
 
 \title{Relatório Simulador\\
   Avaliação e Desempenho - 2022.1}
@@ -71,19 +72,68 @@ Gustavo Muzy Fraga -
 \subsection{Funcionamento Geral do Simulador}
 De forma geral,
 o programa é dividido logicamente em arquivos,
-onde cada um descreve uma \emph{função}
-e, se for moderadamente complexa, possui alguns testes,
+onde cada um descreve uma estrutura de dados
+específica para realizar uma \emph{função}.
+Se for moderadamente complexa, possui alguns testes,
 gerar números pseudoaleatórios e implementar uma fila,
 são exemplos.
-O simulador (lógica em \arq{system.c})
+
+O simulador (\arq{system.c})
 apenas retira e trata o evento mais próximo do \emph{instante atual},
 possivelmente criando eventos com tempos pseudoaleatorios
 e os colocando na lista de eventos e alterando o estado do sistema.
-Para a lista de eventos,
-utilizamos uma heap de mínimo ordenado pelo tempo do eventos.
-O \emph{instante atual}, assim como o tempo de cada evento,
+
+Para a lista de eventos (\arq{event\_heap.c}),
+utilizamos uma heap de mínimo ordenada pelo tempo do eventos.
+O \emph{instante atual} da simulação,
+assim como o tempo de cada evento,
 é armazenado em memória como um \inlcode{double}, ou seja,
 um float de 64 bits.
+
+A fila de clientes (\arq{queue.c})
+é implementada usando um buffer circular extensível,
+um array,
+e suporta tanto a disciplina de FCFS quanto de LCFS.
+
+A geração de números pseudoaleatórios (\arq{random.c})
+é feita a partir de uma \inlcode{struct} que ``sabe''
+gerar um valor de uma uniforme.
+A partir disso, temos funções que usam esse valor da uniforme
+para gerar valores de outras distribuições
+(só foi implementado para exponencial).
+Assim, criando uma espécie de \emph{interface},
+tornando fácil a troca do gerador.
+Excluindo nos testes, sempre usamos
+um gerador baseado nas funções do \lang{C}
+(\inlcode{srand} e \inlcode{rand}).
+
+O cálculo incremental de estatísticas (\arq{stats.c}),
+para saber média, variância e intervalos de confiança,
+é implementado por uma estrutura que acumula amostras,
+suporta tanto amostras discretas e contínuas.
+As amostras contínuas são aquelas da forma
+``o sistema ficou no estado X, por T tempo''.
+
+O \emph{entry point} do simulador está na \arq{main.c},
+ele usa os outros arquivos para realizar a simulação
+e mostrar os resultados.
+Alí está descrito como funciona a fase transiente e
+coleta de informação no final das rodadas.
+
+Também foram usados alguns arquivos extras:
+\arq{args.c}, \arq{test.c}, \arq{template.c}, \arq{types.h}.
+Eles têm o propósito de, respectivamente:
+ler e fazer parsing dos argumentos de entrada;
+ajudar a testar outras funções;
+ser um arquivo base para o código; e
+disponibilizar tipos com tamanho de bits já definido.
+Além disso, os arquivos principais possui um sistema simples
+de \inlcode{\#ifdef} e \inlcode{\#define}
+que permite usar o mesmo arquivo para
+\emph{header}, \emph{implementação} e \emph{teste}.
+Essas informações não são muito importantes
+para a compreensão do simulador,
+então não serão muito comentadas pelo resto do relatório.
 
 \subsection{Eventos}
 Foram escolhidos dois tipos de evento:
