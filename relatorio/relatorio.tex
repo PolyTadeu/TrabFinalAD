@@ -354,9 +354,54 @@ Então, incrementamos a cor do sistema e
 zeramos o \emph{tempo atual} e
 acumuladores de estatística.
 
-\subsection{Precisão IC}
-\subsection{Médias e Variância}
+\subsection{Kmin e ICs}
+% TODO(Polyana)
+
+\subsection{Coleta e Cálculo de Estatísticas}
+Relembrando que todos os calculos estatísticos estão
+descritos em \arq{stats.c}.
+
+A coleta de amostras de \emph{Tempo de Espera} é feita
+quando um cliente da cor atual entra no servidor,
+como descrita na subseção anterior.
+Durante a coleta é registrado o tempo
+que o cliente ficou na fila de espera,
+calculado a partir da subtração do tempo de agora
+pelo tempo de chegada do cliente.
+Usa a \emph{``versão discreta''} do acumulador.
+
+A coleta de amostras do \emph{Número de Pessoas na Fila} é feita
+logo antes de um evento ser tratado,
+é registado o tempo desde a última coleta e o número atual
+de pessoas na fila.
+Usa a \emph{``versão contínua''} do acumulador.
+
+A \emph{versão discreta} é a simples, mencionada em aula,
+vão acumulando os valores \(x\) e \(x^2\) nos dois campos
+da \inlcode{struct}, respectivamente, \inlcode{acc} e
+\inlcode{sqr\_acc} e contando quantas amostras em \inlcode{n}.
+A fórmula usada para calcular a média e variância são:
+\[
+    \frac{acc}{n}
+    \qquad\text{e}\qquad
+    \frac{sqr\_acc \cdot \frac{acc^2}{n}}{n - 1}
+\]
+
+A \emph{versão contínua} é semelhante a anterior,
+mas acumula \(x \cdot t\) e \(x^2 \cdot t\) nos mesmos campos,
+onde \(t\) é
+o tempo desde a última amostragem, ou seja,
+o tempo que a amostra está num valor \(x\).
+Então usamos o \(T\) (tempo de execução/total)
+e as fórmulas abaixo para calcular a média e variância:
+\[
+    \frac{acc}{T}
+    \qquad\text{e}\qquad
+    \frac{sqr\_acc}{T} - \frac{acc^2}{T^2}
+\]
+
 \subsection{Máquina Utilizada e Tempo Total}
+% TODO(Polyana)
 
 \subsection{Considerações importantes}
 
