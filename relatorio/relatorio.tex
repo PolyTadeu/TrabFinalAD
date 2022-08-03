@@ -108,11 +108,20 @@ Foram escolhidos dois tipos de evento:
         colocamos um evento de saída na lista de eventos,
         e marcamos o servidor como ocupado.
 
-    \item Evento de Saída
+    \item \textbf{Evento de Saída}
 
         O evento de saída,
-        como descrito anteriormente é gerado quando um cliente encontra o servidor ocioso. Ao tratarmos o evento, checamos se a fila está vazia ou não. No caso dela estar vazia, apenas indicamos que o servidor está ocioso. Caso haja clientes na fila, registramos o tempo de espera na fila do próximo cliente a entrar em serviço e geramos um novo evento de saída para ele (colocando este na heap de eventos).
+        é gerado quando um cliente encontra o servidor ocioso.
+        Ao tratarmos o evento;
+        se a fila está vazia,
+        apenas indicamos que o servidor está ocioso.
+        Caso contrário,
+        registramos o tempo de espera na fila
+        do próximo cliente a entrar em serviço
+        e geramos um novo evento de saída para ele
+        (inserindo esse na lista de eventos).
 \end{itemize}
+
 \subsection{Estrutura Interna}
 Utilizamos várias estruturas, sendo elas:
 \begin{itemize}
