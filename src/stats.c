@@ -2,21 +2,21 @@
 #define STATS_HEADER
 #include "types.h"
 
-//Estrutura de status de amostrar e incrementadores
+// Estrutura de status de amostrar e incrementadores
 typedef struct _Stats  {
     u32 n;
     f64 acc;
     f64 sqr_acc;
 } Stats;
 
-//Estrutura do intervalo de confianca
+// Estrutura do intervalo de confianca
 typedef struct _CI {
     f64 up;
     f64 low;
     f64 precision;
 } CI;
 
-//Estrutura para salvar as estatisticas
+// Estrutura para salvar as estatisticas
 typedef struct _CachedStats {
     f64 avg;
     f64 var;
@@ -43,7 +43,7 @@ CachedStats cache_stats(const Stats stat);
 #include <assert.h>
 #include <math.h>
 
-// Inicia estrutuurua de status com valores nulos
+// Inicia estrutura de status com valores nulos
 Stats new_stats() {
     const Stats ret = {
         .n = 0,
@@ -53,7 +53,8 @@ Stats new_stats() {
     return ret;
 }
 
-//Aumentar os valores das amostras e dos incrementadores
+// Acumula os valores das amostras e dos incrementadores
+// 'mul' é um hackzinho para suportar amostras continuas
 Stats accumulate(Stats stat, f64 val, f64 mul) {
     const Stats ret = {
         .n = stat.n + 1,
@@ -63,30 +64,29 @@ Stats accumulate(Stats stat, f64 val, f64 mul) {
     return ret;
 }
 
-//Funcao para acumular e atualizar
-//Utilzia a funcao descrita anteriormente
+// Acumula e atualiza
 void acc_and_update(Stats *stat, f64 val, f64 mul) {
     *stat = accumulate(*stat, val, mul);
 }
 
-//Funcao para calcular media em tempo discreta
+// Calcula media assumindo que as amostras foram discretas
 f64 discrete_average(Stats stat) {
     assert( stat.n > 0 );
     return stat.acc / ((f64) stat.n);
 }
 
-///Funcao para calcular varianca em tempo discreto
+// Calcula variancia assumindo que as amostras foram discretas
 f64 discrete_variance(Stats stat) {
     assert( stat.n > 1 );
     return (stat.sqr_acc - (stat.acc * stat.acc / ((f64) stat.n))) / ((f64) (stat.n - 1));
 }
 
-//Funcao para calcular a media em tempo continuo
+// Calcula media assumindo que as amostras foram continua
 f64 continuous_average(Stats stat, f64 t) {
     return stat.acc / t;
 }
 
-//Funcao para calcuula a varianca em tempo continuo
+// Calcula variancia assumindo que as amostras foram continua
 f64 continuous_variance(Stats stat, f64 t) {
     const f64 avg = continuous_average(stat, t);
     const f64 sqr_avg = avg * avg;
@@ -98,7 +98,7 @@ f64 continuous_variance(Stats stat, f64 t) {
 #define CHI_LOW     3332.715
 
 
-//Funcao para salvar as estatisticas na estrutura de cached status
+// Salva as estatisticas na estrutura de CachedStats
 CachedStats cache_stats(const Stats stat) {
     assert( stat.n >= 30 );
     const f64 avg = discrete_average(stat);

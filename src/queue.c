@@ -3,12 +3,12 @@
 #include "types.h"
 #include "event.c"
 
-//Enum para tipos das queues
+// Enum para tipos das queues
 typedef enum _QueueType {
     Queue_FCFS, Queue_LCFS,
 } QueueType;
 
-//Estrutura da queueu
+// Estrutura da queue
 typedef struct _Queue {
     QueueType type;
     u32 len;
@@ -31,7 +31,7 @@ Person remove_queue(Queue *q);
 #include <stdlib.h>
 #include <assert.h>
 
-// inicializa a lista de eventos
+// Inicializa a queue
 Queue init_queue(QueueType type) {
     Queue ret = {
         .type = type,
@@ -43,12 +43,12 @@ Queue init_queue(QueueType type) {
     return ret;
 }
 
-//Libera memoria
+// Libera memoria
 void deinit_queue(Queue *q) {
     free(q->people);
 }
 
-//Retorna tamanho da queue
+// Retorna tamanho da queue
 u32 size_queue(const Queue *q) {
     assert( q->type != Queue_LCFS || q->head == 0 );
     return q->len
@@ -56,13 +56,13 @@ u32 size_queue(const Queue *q) {
         : 0;
 }
 
-//Checa se queue esta vazia
+// Checa se queue esta vazia
 b32 is_empty_queue(const Queue *q) {
     assert( q->type != Queue_LCFS || q->head == 0 );
     return q->head == q->tail;
 }
 
-//Inserir na queue
+// Inserir na queue
 void insert_queue(Queue *q, const Person p) {
     assert( q->type != Queue_LCFS || q->head == 0 );
     if ( q->len == 0 ) {
@@ -95,7 +95,7 @@ void insert_queue(Queue *q, const Person p) {
     q->tail = ( q->tail + 1 ) % q->len;
 }
 
-//Remover da queue
+// Remover da queue
 Person remove_queue(Queue *q) {
     assert( !is_empty_queue(q) );
     Person ret;
@@ -121,7 +121,7 @@ Person remove_queue(Queue *q) {
 
 #include "test.c"
 
-//Funcao para teste de pessoa
+// Funcao para teste de pessoa
 b32 person_expect_equal(const char *test_name,
         const Person expected, const Person actual) {
     b32 ret = 1;
@@ -133,7 +133,7 @@ b32 person_expect_equal(const char *test_name,
     return ret;
 }
 
-//Funcao para testar o final da queue
+// Funcao para testar o final da queue
 b32 queue_expect_at_end(const Queue *q, const Person expected_last) {
     assert( !is_empty_queue(q) );
     const u32 last_i = (q->tail - 1 + q->len) % q->len;
@@ -142,7 +142,7 @@ b32 queue_expect_at_end(const Queue *q, const Person expected_last) {
             expected_last, actual_last);
 }
 
-//Funcao para logar a queuue
+// Funcao para logar a queue
 void log_queue(Queue *q) {
     log("{");
     for ( u32 i = 0; i < q->len; i++ ) {
@@ -151,7 +151,7 @@ void log_queue(Queue *q) {
     log(" }\n");
 }
 
-//Funcaoa para testar queue
+// Funcao para testar queue
 void test_queue(const char *test_name,
         Queue *q, Color color_start, Color color_end) {
     SECTIONn(test_name);
@@ -184,7 +184,7 @@ void test_queue(const char *test_name,
             1, is_empty_queue(q));
 }
 
-//Main para rodar testes
+// Main para rodar testes
 int main() {
     Queue fcfs = init_queue(Queue_FCFS), *q1 = &fcfs;
     test_queue("FCFS 1", q1, 0, 10);

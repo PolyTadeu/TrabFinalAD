@@ -3,13 +3,12 @@
 #include "types.h"
 #include "event.c"
 
-//Estrutura da heap
+// Estrutura da heap
 typedef struct _EventHeap {
     u32 size, len;
     Event* events;
 } EventHeap;
 
-//Nomeando Funcoes e Variaveis
 EventHeap init_heap();
 void deinit_heap(EventHeap *q);
 u32 size_heap(const EventHeap *q);
@@ -27,7 +26,7 @@ void inc_next_arrival_event_color(EventHeap *q);
 #include <stdlib.h>
 #include <assert.h>
 
-// inicializa a lista de eventos
+// Inicializa a lista de eventos
 EventHeap init_heap() {
     EventHeap ret = {
         .size = 0,
@@ -37,28 +36,28 @@ EventHeap init_heap() {
     return ret;
 }
 
-//Liberar Heap
+// Liberar Heap
 void deinit_heap(EventHeap *q) {
     free(q->events);
 }
 
-//Retornar tamanho da Heap
+// Retornar tamanho da Heap
 u32 size_heap(const EventHeap *q) {
     return q->size;
 }
 
-//Checar se a Heap está vazia
+// Checar se a Heap está vazia
 b32 is_empty_heap(const EventHeap *q) {
     return q->size == 0;
 }
 
-//Defines auxiliares
+// Defines auxiliares
 #define MIN(a, b)   (((a) <= (b) ? (a) : (b)))
 #define PARENT(i)   (((i) - 1) / 2)
 #define LEFT(i)     ((i) * 2 + 1)
 #define RIGHT(i)    ((i) * 2 + 2)
 
-// função utilizada para ordenar a lista quando há uma inserção 
+// Função utilizada para ordenar a lista quando há uma inserção
 void bubbleUp(EventHeap *q, u32 i) {
     Event *events = q->events;
     while (i > 0 && events[PARENT(i)].time > events[i].time ) {
@@ -69,7 +68,7 @@ void bubbleUp(EventHeap *q, u32 i) {
     }
 }
 
-// função utilizada para ordenar a lista quando há uma remoção
+// Função utilizada para ordenar a lista quando há uma remoção
 void bubbleDown(EventHeap *q, u32 i) {
     Event *events = q->events;
     assert( i < q->size );
@@ -88,7 +87,7 @@ void bubbleDown(EventHeap *q, u32 i) {
     }
 }
 
-// insere evento na lista
+// Insere evento na lista
 void insert_heap(EventHeap *q, Event e) {
     if ( q->size + 1 > q->len ) {
         assert( q->size == q->len );
@@ -101,7 +100,7 @@ void insert_heap(EventHeap *q, Event e) {
     q->size += 1;
 }
 
-// remove evento da lista
+// Remove evento da lista
 Event remove_heap(EventHeap *q) {
     assert( q->size );
     const Event ret = q->events[0];
@@ -112,7 +111,7 @@ Event remove_heap(EventHeap *q) {
     return ret;
 }
 
-//Aproximar eventos de acordo com um offset
+// Aproximar eventos de acordo com um offset
 void offset_heap_events_by(EventHeap *q, f64 offset) {
     assert( offset >= 0 );
     for ( u32 i = 0; i < q->size; i++ ) {
@@ -122,8 +121,7 @@ void offset_heap_events_by(EventHeap *q, f64 offset) {
     }
 }
 
-//Pega proximo evento de chegada
-//Incrementa a cor da pessoa
+// Incrementa a cor da pessoa do proximo evento de chegada
 void inc_next_arrival_event_color(EventHeap *q) {
     for ( u32 i = 0; i < q->size; i++ ) {
         Event *e = &(q->events[i]);
@@ -140,8 +138,7 @@ void inc_next_arrival_event_color(EventHeap *q) {
 
 #include "test.c"
 
-//Os paddings sao funcoes 
-//auxiliares para printar Heap 
+// Os paddings sao funcoes auxiliares para printar Heap
 void half_padd_x() {
     log("  ");
 }
@@ -158,7 +155,7 @@ void padd_y(u32 dim) {
     }
 }
 
-//Printar a heap
+// Printar a heap
 void log_heap(EventHeap *q) {
     u32 depth = 0;
     u32 size = q->size;
@@ -194,7 +191,7 @@ void log_heap(EventHeap *q) {
     log("\n");
 }
 
-//Funçao para realizar teste da heap
+// Funçao para realizar teste da heap
 void heap_expect_ok(const EventHeap *q) {
     const Event *events = q->events;
     for ( u32 i = 0; i < q->size; i++ ) {
@@ -209,9 +206,9 @@ void heap_expect_ok(const EventHeap *q) {
     }
 }
 
-//main para testar heap
+// main para testar heap
 int main() {
-    //Inserir na heap
+    // Inserir na heap
     SECTION("Heap Insert");
     EventHeap eq = init_heap(), *q = &eq;
     const u32 arr_len = 7;
@@ -227,7 +224,7 @@ int main() {
         u32_expect_equal("Heap inserting increases size",
                 i+1, size_heap(q));
     }
-    //Remover da heap
+    // Remover da heap
     SECTION("Heap Remove");
     u32 removed_cnt = 0;
     while ( size_heap(q) ) {
@@ -252,6 +249,7 @@ int main() {
 
 #endif // EVENT_HEAP_IMPL
 
+// Removendo defines auxiliares
 #undef MIN
 #undef PARENT
 #undef LEFT

@@ -26,7 +26,7 @@
 
 u64 failed = 0;
 
-//Funcao para mostrar os resultadaos do teste 
+// Mostra os resultadaos do teste
 void end_tests(const char *test_name) {
     log("\n");
     printf("%s: ", test_name);
@@ -44,13 +44,12 @@ void end_tests(const char *test_name) {
     failed = 0;
 }
 
-//Contar as falhas
+// Conta as falhas
 void err() {
     failed += 1;
 }
 
-//Funcoes testar tipos especificos de variaveis
-//Checando o valor esperado
+// Checando o valor esperado de tipos especificos de variaveis
 
 //////////  u32  ///////
 

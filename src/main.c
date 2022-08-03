@@ -10,7 +10,7 @@
 #define SYSTEM_IMPL
 #include "system.c"
 
-//Argumentos
+// Argumentos
 ARGS_ArgOption options[] = {
     [0] = {
         .small = "s",
@@ -71,7 +71,7 @@ const ARGS_ArgSpec spec = {
     .options = options,
 };
 
-//Estrutura para options
+// Estrutura para options
 typedef struct {
     u64 seed;
     u64 round_size;
@@ -83,13 +83,13 @@ typedef struct {
     u8 ARGS_valid;
 } Options;
 
-//Funcao para gerar estrutura
+// Funcao para printar a struct Options no stdout
 int gen_struct() {
     ARGS_struct_from_spec(spec);
     return 0;
 }
 
-//Funcao de print das options
+// Funcao de print das options
 void print_opts(const Options opts) {
     const char *qtype_name[] = { "FCFS", "LCFS", };
     printf("Seed       : %lu\n", opts.seed);
@@ -100,7 +100,7 @@ void print_opts(const Options opts) {
     printf("Queue type : %s\n\n", qtype_name[opts.lcfs]);
 }
 
-//Funcao para printar as estatisticas
+// Funcao para printar as estatisticas
 void print_stats(const char *name,
         const CachedStats mu, const CachedStats sigma) {
     printf("Avg %s: %lf\n", name, mu.avg);
@@ -119,7 +119,7 @@ void print_stats(const char *name,
             sigma.chi.precision);
 }
 
-//Main para rodar o codigo
+// Main para rodar o codigo
 int main(const int argc, const char **argv) {
     Options opts = {
         .seed = time(NULL),

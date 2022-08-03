@@ -7,13 +7,13 @@ typedef enum _RandType {
     RandType_Table,
 } RandType;
 
-// contexto necessário para gerar uniforme
+// Contexto necessário para gerar uniforme
 typedef struct _RandCtx {
     f64 (*uniform)(struct _RandCtx *);
     RandType type;
 } RandCtx;
 
-// contexto necessário para gerar uniforme
+// Contexto necessário para gerar uniforme
 typedef struct _RandTable {
     RandCtx ctx;
     f64 *table;
@@ -34,14 +34,14 @@ f64 randExp(RandCtx *ctx, f64 lambda);
 #include <math.h>
 #include <assert.h>
 
-// gera um uniforme a partir da biblioteca de C (rand)
+// Gera um uniforme a partir da biblioteca de C (rand)
 f64 rand_uni(RandCtx *ctx) {
     assert( ctx->uniform == rand_uni );
     assert( ctx->type == RandType_RANDC );
     return ((f64) rand()) / ((f64) RAND_MAX);
 }
 
-// cria um contexto de random do c
+// Cria um contexto de random do c
 RandCtx create_rand_ctx(u32 t) {
     srand(t);
     RandCtx ret = {
@@ -51,7 +51,7 @@ RandCtx create_rand_ctx(u32 t) {
     return ret;
 }
 
-//Retorna proximo valor aleatorio da tabela
+// Retorna proximo valor aleatorio da tabela
 f64 table_uni(RandCtx *ctx) {
     assert( ctx->uniform == table_uni );
     assert( ctx->type == RandType_Table );
@@ -61,7 +61,7 @@ f64 table_uni(RandCtx *ctx) {
     return ret;
 }
 
-// cria um contexto de random de tabela
+// Cria um contexto de random de tabela
 RandTable create_table_ctx(f64 *table, u32 len) {
     RandTable ret = {
         .ctx = {
@@ -75,12 +75,12 @@ RandTable create_table_ctx(f64 *table, u32 len) {
     return ret;
 }
 
-// função que uniforme apartir de qualquer RandCtx
+// Gera um valor uniforme a partir de qualquer RandCtx
 f64 randUniform(RandCtx *ctx) {
     return ctx->uniform(ctx);
 }
 
-// função que uniforme apartir de qualquer RandCtx
+// Gera um valor exponencial a partir de qualquer RandCtx
 f64 randExp(RandCtx *ctx, f64 lambda) {
     assert( lambda > 0 );
     f64 val = randUniform(ctx);
@@ -97,14 +97,13 @@ f64 randExp(RandCtx *ctx, f64 lambda) {
 
 #include "test.c"
 
-//main para testar os valores pseudoaleatorios
+// main para testar os valores pseudoaleatorios
 int main() {
     RandCtx rand_ctx = create_rand_ctx((u32) time(NULL)),
             *ctx = &rand_ctx;
     const u32 n = 100000;
 
-    //Teste para gerar valores 
-    //aleatorio a partir da funcao uniforme
+    // Teste para gerar valores pseudoaleatorios da uniforme
     SECTION("RANDC Uniform");
     Stats stat = new_stats();
 
@@ -123,7 +122,7 @@ int main() {
     log("   avg: %7.7lf,    var: %7.7lf\n", avgUni, varUni);
     log("uniavg: %7.7lf, univar: %7.7lf\n\n", uniavg, univar);
 
-    //Teste do rand a partir da fuuncao exponencial
+    // Teste para gerar valores pseudoaleatorios da exponencial
     SECTION("RANDC Exponential");
     stat = new_stats();
     const f64 lambda = 7.3f;
@@ -144,7 +143,7 @@ int main() {
 
     end_tests("Random RANDC");
 
-    //Teste da estrutura de tabela com valores pseudoaleatorios
+    // Teste da tabela para gerar valores pseudoaleatorios
     SECTION("Random Table");
     u32 table_len = 40;
     f64 table[table_len];
