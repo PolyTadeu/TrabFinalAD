@@ -307,6 +307,23 @@ A linguagem utilizada foi C.
 \subsection{Médias e Variância}
 \subsection{Máquina Utilizada e Tempo Total}
 
+\subsection{Considerações importantes}
+
+Devido ao uso de tipos com tamanho de bits fixo
+(\inlcode{i32} e \inlcode{u64}, por exemplo)
+e flags de compilação restritivas (\inlcode{-Wall -Wextra -Werror}),
+pode ser que não compile por padrão em outro computador
+devido aos \emph{warnings} da \inlcode{printf}.
+Por exemplo, em uma arquitetura,
+\inlcode{u64} vai ser um \inlcode{unsigned long}
+mas em outra pode ser \inlcode{unsigned long long},
+isso gera um \emph{warning} na outra arquitetura
+quando a string de format contém \verb."%lu"..
+Uma solução é alterar todos os
+\verb."%lu". para \verb."%llu".;
+outra, um pouco mais arriscada,
+é desligar o \inlcode{-Werror}.
+
 %\newpage
 \section{Testes de Correção}
 %\newpage
