@@ -88,16 +88,30 @@ um float de 64 bits.
 \subsection{Eventos}
 Foram escolhidos dois tipos de evento:
 \begin{itemize}
-    \item Evento de Chegada
+    \item \textbf{Evento de Chegada}
 
-    O primeiro evento de chegada é gerado na função \texttt{add\_first\_event()}.
-    Ele é criado e inserido na heap de eventos para a chegada no tempo 0.
-    Quando um evento de chegada é tratado, criamos um novo evento de chegada com tempo pseudoaleatório e inserimos na heap de eventos. Em seguida checamos se o servidor está ocioso ou não.
-    No caso do servidor estar ocupado, adicionamos o evento à fila de acordo com a disciplina da fila.
-    No caso do servidor estar ocioso, registramos o tempo de espera e criamos um evento de saída com tempo pseudoaleatório e colocamos na heap de eventos e colocamos o servidor como ocupado.
+        Também é o evento inicial do sistema,
+        gerado com tempo \(0\)
+        pela função \inlcode{add\_first\_event}.
+        Quando um evento de chegada é tratado,
+        criamos um novo evento de chegada
+        e inserimos na lista de eventos.
+        Em seguida observamos o estado do servidor;
+        se estiver ocupado, apenas
+        adicionamos o cliente que chegou
+        de acordo com a disciplina da fila.
+
+        Caso o servidor esteja ocioso,
+        registramos o tempo de espera
+        do cliente que acabou de chegar,
+        nesse caso sempre nulo,
+        colocamos um evento de saída na lista de eventos,
+        e marcamos o servidor como ocupado.
+
     \item Evento de Saída
 
-    O evento de saída, como descrito anteriormente é gerado quando um cliente encontra o servidor ocioso. Ao tratarmos o evento, checamos se a fila está vazia ou não. No caso dela estar vazia, apenas indicamos que o servidor está ocioso. Caso haja clientes na fila, registramos o tempo de espera na fila do próximo cliente a entrar em serviço e geramos um novo evento de saída para ele (colocando este na heap de eventos).
+        O evento de saída,
+        como descrito anteriormente é gerado quando um cliente encontra o servidor ocioso. Ao tratarmos o evento, checamos se a fila está vazia ou não. No caso dela estar vazia, apenas indicamos que o servidor está ocioso. Caso haja clientes na fila, registramos o tempo de espera na fila do próximo cliente a entrar em serviço e geramos um novo evento de saída para ele (colocando este na heap de eventos).
 \end{itemize}
 \subsection{Estrutura Interna}
 Utilizamos várias estruturas, sendo elas:
