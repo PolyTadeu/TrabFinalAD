@@ -327,7 +327,33 @@ nas duas sequência.
 Quando encontramos, é só com um valor
 e não com uma sequência de valores.
 
-\subsection{Cores}
+\subsection{Cores e Fim da Rodada}
+O conceito de cores foi implementado usando um \inlcode{u32},
+ao gerar um evento de chegada,
+o cliente recebe a cor atual do sistema,
+a cor do cliente é mantida até sair do sistema.
+
+O final de uma rodada é marcado pela \(k\)-ésima
+amostra do tempo de espera de
+um cliente da cor atual do sistema.
+Uma amostragem é feita quando um cliente da cor atual
+entra no servidor.
+Um cliente entra no servidor em dois momentos:
+quando chega no sistema e o servidor está vazio;
+está na frente da fila de espera e o servidor fica vazio.
+
+No início de uma nova rodada,
+subtraímos os tempos de todos os eventos e
+dos clientes armazenados nesses eventos
+pelo \emph{tempo atual} (o tempo que a rodada foi encerrado)
+permitindo começar a nova rodada contando a partir do tempo \(0\).
+Além disso, incrementamos a cor do cliente
+do próximo evento de chegada
+para que a próxima chegada seja da cor do sistema na próxima rodada.
+Então, incrementamos a cor do sistema e
+zeramos o \emph{tempo atual} e
+acumuladores de estatística.
+
 \subsection{Precisão IC}
 \subsection{Médias e Variância}
 \subsection{Máquina Utilizada e Tempo Total}
