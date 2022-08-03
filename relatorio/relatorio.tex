@@ -8,6 +8,8 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 
+\usepackage{verbatim}
+
 \usepackage{hyperref}
 
 \newcommand{\E}[1]{E\!\left[#1\right]}
@@ -171,51 +173,133 @@ Foram escolhidos dois tipos de evento:
 \end{itemize}
 
 \subsection{Estrutura Interna}
-Utilizamos várias estruturas, sendo elas:
+Vamos separar as estruturas por arquivos em ordem alfabética:
 \begin{itemize}
-    \item System
+    \item \arq{event.c} \par
+        Aqui descrevemos um \emph{evento} e \emph{cliente}.
+        \begin{verbatim}
+typedef f64 Time;
+typedef u32 Color;
 
-    Esta estrutura guarda todas as variáveis estruturas necessárias para o sistema. As estruturas são:
+typedef enum _EventType {
+    EVENT_arrival, EVENT_leave,
+} EventType;
 
-    \texttt{RandCtx, EventHeap, Queue,
-        Stats (Número de pessoas na fila e Tempo de espera)}
-    \item RandCtx
+typedef struct _Person {
+    Time arrived_time;
+    Color color;
+} Person;
 
-    Espaço de memória para guardar o contexto para gerar números pseudoaleatórios
+typedef struct _Event {
+    EventType type;
+    Time time;
+    Person person;
+} Event;
+        \end{verbatim}
+    \item \arq{event\_heap.c} \par
+        Descrevemos a \emph{lista de eventos}.
+        \begin{verbatim}
+typedef struct _EventHeap {
+    u32 size, len;
+    Event* events;
+} EventHeap;
+        \end{verbatim}
+    \item \arq{main.c} \par
+        Descrevemos as \emph{opções para a simulação},
+        sendo que o último campo é
+        para saber se o parsing dos argumentos foi feito com sucesso.
+        \begin{verbatim}
+typedef struct {
+    u64 seed;
+    u64 round_size;
+    f64 lambda;
+    f64 mu;
+    u64 round_count;
+    u8 lcfs;
+    u8 verbose;
+    u8 ARGS_valid;
+} Options;
+        \end{verbatim}
+    \item \arq{queue.c} \par
+        Descrevemos a \emph{fila de espera}.
+        \begin{verbatim}
+typedef enum _QueueType {
+    Queue_FCFS, Queue_LCFS,
+} QueueType;
 
-    \item RandTable
+typedef struct _Queue {
+    QueueType type;
+    u32 len;
+    u32 head;
+    u32 tail;
+    Person *people;
+} Queue;
+        \end{verbatim}
+    \item \arq{random.c} \par
+        Descrevemos a \emph{interface
+        do gerador de números pseudoaleatórios}
+        e um \emph{gerador determinístico}
+        (\inlcode{RandTable}).
+        \begin{verbatim}
+typedef enum _RandType {
+    RandType_RANDC,
+    RandType_Table,
+} RandType;
 
-    Em conjunto ao RandCtx, utilizamos uma tabela que guarda a sequência de valores pseudoaleatórios da uniforme.
+typedef struct _RandCtx {
+    f64 (*uniform)(struct _RandCtx *);
+    RandType type;
+} RandCtx;
 
-    \item EventHeap
+typedef struct _RandTable {
+    RandCtx ctx;
+    f64 *table;
+    u32 len;
+    u32 next;
+} RandTable;
+        \end{verbatim}
+    \item \arq{stats.c} \par
+        Descrevemos o \emph{acumulador de amostras},
+        \emph{intervalo de confiança} e
+        os \emph{resultados da amostragem}.
+        \begin{verbatim}
+typedef struct _Stats  {
+    u32 n;
+    f64 acc;
+    f64 sqr_acc;
+} Stats;
 
-    Utilizamos a estrutura da heap para ordenar os eventos baseado no tempo deles.
+typedef struct _CI {
+    f64 up;
+    f64 low;
+    f64 precision;
+} CI;
 
-    \item Queue
-
-    Uma estrutra de fila simples. Para a disciplina de FCFS utilizamos um buffer circular, pois tanto a head quanto a tail podem ser alterados e para LCFS apenas a calda é expandida.
-
-    \item Stats
-
-    Estrutura para auxiliar as estatisticas. Nela tem n, que é o número de amostras e acc e sqr\_acc que são seus incrementador e incrementador ao quadrado, respectivamente.
-
-    \item CI
-
-    No arquivo de status.c também utilizamos a estrutura CI para calcular o intervalo de confiança. Nela contem o valor superior, o inferior e a precisão do IC.
-
-    \item CachedStats
-
-    Uma estrutura também no arquivo status.c para guardar os valores de média, variança e os intervalos de IC obtidos com o uso da Tstudent e Chi square.
-
-    \item Person
-
-    Estrutura utilizada no arquivo event.c para salvar a cor da pessoa e o tempo de chegada dela no sistema.
-
-    \item Event
-
-    Estrutura utilizada no arquivo event.c para salvar informações como o tipo do evento, a pessoa envolvida e o seu tempo.
-
+typedef struct _CachedStats {
+    f64 avg;
+    f64 var;
+    CI tstudent;
+    CI chi;
+} CachedStats;
+        \end{verbatim}
+    \item \arq{system.c} \par
+        Descrevemos o \emph{sistema} (a fila M/M/1).
+        \begin{verbatim}
+typedef struct _System {
+    RandCtx *rand;
+    f64 lambda;
+    f64 mu;
+    EventHeap *events;
+    Queue *queue;
+    b32 busy;
+    Color color;
+    Time curr_time;
+    Stats nq_stat;
+    Stats wt_stat;
+} System;
+        \end{verbatim}
 \end{itemize}
+
 \subsection{Linguagem Utilizada e Geração das Variáveis Aleatórias}
 A linguagem utilizada foi C.
 \subsection{Cores}
