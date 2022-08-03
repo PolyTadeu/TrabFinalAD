@@ -6,6 +6,7 @@
 #include "event_heap.c"
 #include "queue.c"
 
+//Estrutura para o  sistema
 typedef struct _System {
     RandCtx *rand;
     f64 lambda;
@@ -43,6 +44,7 @@ Event handle_next_event(System *s);
 #define QUEUE_IMPL
 #include "queue.c"
 
+//Cria uma estrutura sistema
 System init_system(RandCtx *rand, f64 lambda, f64 mu, EventHeap *eh, Queue *q, Color color) {
     const System ret = {
         .rand = rand,
@@ -59,11 +61,14 @@ System init_system(RandCtx *rand, f64 lambda, f64 mu, EventHeap *eh, Queue *q, C
     return ret;
 }
 
+//Destroi o sistema
+//Abrindo a memoria da heap de evento e da fila de espera
 void deinit_system(System *s) {
     deinit_heap(s->events);
     deinit_queue(s->queue);
 }
 
+//Funcao para checar se o sistema esta vazio
 b32 is_empty_system(const System *s) {
     return is_empty_heap(s->events)
         && is_empty_queue(s->queue)
@@ -72,12 +77,14 @@ b32 is_empty_system(const System *s) {
         && s->wt_stat.n == 0;
 }
 
+//Cria oo primeiro evento do sistema
 void add_first_event(System *s) {
     assert( is_empty_system(s) );
     const Event e_arr = create_event_arrival(0.0, s->color);
     insert_heap(s->events, e_arr);
 }
 
+//Funcao para gerar proxima rodada
 void next_batch(System *s) {
     assert( s->color + 1 != 0 );
     offset_heap_events_by(s->events, s->curr_time);
@@ -97,6 +104,7 @@ void next_batch(System *s) {
     *s = new_sys;
 }
 
+//Registra o tempo de espera de um cliente
 void record_wait_time(Stats *stat,
         const Color color, const Time now, const Person p) {
     if ( p.color == color ) {
@@ -105,12 +113,13 @@ void record_wait_time(Stats *stat,
         acc_and_update(stat, val, 1);
     }
 }
-
+//Registra o tamanho da fila de espera
 void record_queue_size(Stats *stat,
         const Time now, Time last_time, u32 qsize) {
     acc_and_update(stat, qsize, (now - last_time));
 }
 
+//Funcao para tratar o proximo evento na heap de eventos
 Event handle_next_event(System *s) {
     const Event e = remove_heap(s->events);
     const Time now = e.time;
@@ -118,6 +127,9 @@ Event handle_next_event(System *s) {
     assert( last_time <= now );
     const Person p = e.person;
     record_queue_size(&(s->nq_stat), now, last_time, size_queue(s->queue));
+
+    //Switch para os possiveis eventos
+    //Tratamento dos eventos descrito no relatorio
     switch ( e.type ) {
         case EVENT_arrival: {
             assert( now == p.arrived_time );
@@ -162,6 +174,8 @@ Event handle_next_event(System *s) {
 
 const char *event_type_name[] = { "arrival", "leave", };
 
+
+//Funcao para printar os eventos e a fila de espera
 void log_system(const System *s) {
     log("\nEvents:");
     {
@@ -190,6 +204,7 @@ void log_system(const System *s) {
     log("\n");
 }
 
+//Funcao de teste do sistema
 void test_system(System *s, const u32 leaves_to_count) {
     f64 last_time = s->curr_time;
     b32 last_busy = s->busy;
@@ -271,6 +286,7 @@ void test_system(System *s, const u32 leaves_to_count) {
     }
 }
 
+//Teste da proxima rodada
 void test_next_batch(System *s) {
     const System snapshot = *s;
     next_batch(s);
@@ -298,6 +314,7 @@ void test_next_batch(System *s) {
             0.0, s->wt_stat.sqr_acc, 0.0);
 }
 
+//Funcao para printar as estatisticas do sistema
 void check_stats(const System *s,
         const f64 expected_wt_avg, const f64 expected_wt_var,
         const f64 expected_qs_avg, const f64 expected_qs_var) {
@@ -326,6 +343,7 @@ void check_stats(const System *s,
             expected_qs_var, qs_var);
 }
 
+//Funcao para rodar os testes do sistema
 int main() {
     SECTION("System 2*lambda = mu (randExp = 1) test");
 

@@ -51,6 +51,7 @@ RandCtx create_rand_ctx(u32 t) {
     return ret;
 }
 
+//Retorna proximo valor aleatorio da tabela
 f64 table_uni(RandCtx *ctx) {
     assert( ctx->uniform == table_uni );
     assert( ctx->type == RandType_Table );
@@ -96,11 +97,14 @@ f64 randExp(RandCtx *ctx, f64 lambda) {
 
 #include "test.c"
 
+//main para testar os valores pseudoaleatorios
 int main() {
     RandCtx rand_ctx = create_rand_ctx((u32) time(NULL)),
             *ctx = &rand_ctx;
     const u32 n = 100000;
 
+    //Teste para gerar valores 
+    //aleatorio a partir da funcao uniforme
     SECTION("RANDC Uniform");
     Stats stat = new_stats();
 
@@ -119,6 +123,7 @@ int main() {
     log("   avg: %7.7lf,    var: %7.7lf\n", avgUni, varUni);
     log("uniavg: %7.7lf, univar: %7.7lf\n\n", uniavg, univar);
 
+    //Teste do rand a partir da fuuncao exponencial
     SECTION("RANDC Exponential");
     stat = new_stats();
     const f64 lambda = 7.3f;
@@ -139,7 +144,7 @@ int main() {
 
     end_tests("Random RANDC");
 
-
+    //Teste da estrutura de tabela com valores pseudoaleatorios
     SECTION("Random Table");
     u32 table_len = 40;
     f64 table[table_len];

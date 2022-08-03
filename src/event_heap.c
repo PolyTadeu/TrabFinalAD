@@ -3,11 +3,13 @@
 #include "types.h"
 #include "event.c"
 
+//Estrutura da heap
 typedef struct _EventHeap {
     u32 size, len;
     Event* events;
 } EventHeap;
 
+//Nomeando Funcoes e Variaveis
 EventHeap init_heap();
 void deinit_heap(EventHeap *q);
 u32 size_heap(const EventHeap *q);
@@ -35,18 +37,22 @@ EventHeap init_heap() {
     return ret;
 }
 
+//Liberar Heap
 void deinit_heap(EventHeap *q) {
     free(q->events);
 }
 
+//Retornar tamanho da Heap
 u32 size_heap(const EventHeap *q) {
     return q->size;
 }
 
+//Checar se a Heap está vazia
 b32 is_empty_heap(const EventHeap *q) {
     return q->size == 0;
 }
 
+//Defines auxiliares
 #define MIN(a, b)   (((a) <= (b) ? (a) : (b)))
 #define PARENT(i)   (((i) - 1) / 2)
 #define LEFT(i)     ((i) * 2 + 1)
@@ -106,6 +112,7 @@ Event remove_heap(EventHeap *q) {
     return ret;
 }
 
+//Aproximar eventos de acordo com um offset
 void offset_heap_events_by(EventHeap *q, f64 offset) {
     assert( offset >= 0 );
     for ( u32 i = 0; i < q->size; i++ ) {
@@ -115,6 +122,8 @@ void offset_heap_events_by(EventHeap *q, f64 offset) {
     }
 }
 
+//Pega proximo evento de chegada
+//Incrementa a cor da pessoa
 void inc_next_arrival_event_color(EventHeap *q) {
     for ( u32 i = 0; i < q->size; i++ ) {
         Event *e = &(q->events[i]);
@@ -131,6 +140,8 @@ void inc_next_arrival_event_color(EventHeap *q) {
 
 #include "test.c"
 
+//Os paddings sao funcoes 
+//auxiliares para printar Heap 
 void half_padd_x() {
     log("  ");
 }
@@ -147,6 +158,7 @@ void padd_y(u32 dim) {
     }
 }
 
+//Printar a heap
 void log_heap(EventHeap *q) {
     u32 depth = 0;
     u32 size = q->size;
@@ -182,6 +194,7 @@ void log_heap(EventHeap *q) {
     log("\n");
 }
 
+//Funçao para realizar teste da heap
 void heap_expect_ok(const EventHeap *q) {
     const Event *events = q->events;
     for ( u32 i = 0; i < q->size; i++ ) {
@@ -196,7 +209,9 @@ void heap_expect_ok(const EventHeap *q) {
     }
 }
 
+//main para testar heap
 int main() {
+    //Inserir na heap
     SECTION("Heap Insert");
     EventHeap eq = init_heap(), *q = &eq;
     const u32 arr_len = 7;
@@ -212,7 +227,7 @@ int main() {
         u32_expect_equal("Heap inserting increases size",
                 i+1, size_heap(q));
     }
-
+    //Remover da heap
     SECTION("Heap Remove");
     u32 removed_cnt = 0;
     while ( size_heap(q) ) {
