@@ -109,10 +109,10 @@ void record_wait_time(Stats *stat,
         const Color color, const Time now, const Person p) {
     if ( p.color == color ) {
         const f64 val = now - p.arrived_time;
+        assert( val >= 0 );
         acc_and_update(stat, val, 1);
     }
 }
-
 //Registra o tamanho da fila de espera
 void record_queue_size(Stats *stat,
         const Time now, Time last_time, u32 qsize) {
@@ -389,7 +389,7 @@ int main() {
     s->lambda = 2.0 * mu;
 
     test_system(s, 2 * leaves_to_count);
-    check_stats(s, 2.25, 2.2916666666666667, 4.05, 22.80975);
+    check_stats(s, 2.25, 2.2916666666666667, 4.05, 8.0475);
     log_system(s);
 
     end_tests("System lambda = 2*mu");
@@ -400,7 +400,7 @@ int main() {
     s->lambda = lambda;
 
     test_system(s, leaves_to_count);
-    check_stats(s, 7.0, 2.5, 5.769230769230769, 34.285844333181607);
+    check_stats(s, 7.0, 2.5, 5.769230769230769, 3.5621301775147954);
     log_system(s);
 
     end_tests("System 2*lambda = mu (2)");

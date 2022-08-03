@@ -1,172 +1,258 @@
-#ifndef RAND_HEADER
-#define RAND_HEADER
+#ifndef EVENT_HEAP_HEADER
+#define EVENT_HEAP_HEADER
 #include "types.h"
+#include "event.c"
 
-typedef enum _RandType {
-    RandType_RANDC,
-    RandType_Table,
-} RandType;
+//Estrutura da heap
+typedef struct _EventHeap {
+    u32 size, len;
+    Event* events;
+} EventHeap;
 
-// contexto necessário para gerar uniforme
-typedef struct _RandCtx {
-    f64 (*uniform)(struct _RandCtx *);
-    RandType type;
-} RandCtx;
+//Nomeando Funcoes e Variaveis
+EventHeap init_heap();
+void deinit_heap(EventHeap *q);
+u32 size_heap(const EventHeap *q);
+b32 is_empty_heap(const EventHeap *q);
+void insert_heap(EventHeap *q, Event e);
+Event remove_heap(EventHeap *q);
 
-// contexto necessário para gerar uniforme
-typedef struct _RandTable {
-    RandCtx ctx;
-    f64 *table;
-    u32 len;
-    u32 next;
-} RandTable;
+void offset_heap_events_by(EventHeap *q, f64 offset);
+void inc_next_arrival_event_color(EventHeap *q);
 
-RandCtx create_rand_ctx(u32 t);
-RandTable create_table_ctx(f64 *table, u32 len);
-f64 randUniform(RandCtx *ctx);
-f64 randExp(RandCtx *ctx, f64 lambda);
+#endif // EVENT_HEAP_HEADER
 
-#endif // RAND_HEADER
-
-#ifdef RAND_IMPL
-#undef RAND_IMPL
+#ifdef EVENT_HEAP_IMPL
+#undef EVENT_HEAP_IMPL
 #include <stdlib.h>
-#include <math.h>
 #include <assert.h>
 
-// gera um uniforme a partir da biblioteca de C (rand)
-f64 rand_uni(RandCtx *ctx) {
-    assert( ctx->uniform == rand_uni );
-    assert( ctx->type == RandType_RANDC );
-    return ((f64) rand()) / ((f64) RAND_MAX);
-}
-
-// cria um contexto de random do c
-RandCtx create_rand_ctx(u32 t) {
-    srand(t);
-    RandCtx ret = {
-        .uniform = rand_uni,
-        .type = RandType_RANDC,
+// inicializa a lista de eventos
+EventHeap init_heap() {
+    EventHeap ret = {
+        .size = 0,
+        .len = 0,
+        .events = 0,
     };
     return ret;
 }
 
-//Retorna proximo valor aleatorio da tabela
-f64 table_uni(RandCtx *ctx) {
-    assert( ctx->uniform == table_uni );
-    assert( ctx->type == RandType_Table );
-    RandTable *tctx = (RandTable *) ctx;
-    f64 ret = tctx->table[tctx->next];
-    tctx->next = (tctx->next + 1) % tctx->len;
+//Liberar Heap
+void deinit_heap(EventHeap *q) {
+    free(q->events);
+}
+
+//Retornar tamanho da Heap
+u32 size_heap(const EventHeap *q) {
+    return q->size;
+}
+
+//Checar se a Heap está vazia
+b32 is_empty_heap(const EventHeap *q) {
+    return q->size == 0;
+}
+
+//Defines auxiliares
+#define MIN(a, b)   (((a) <= (b) ? (a) : (b)))
+#define PARENT(i)   (((i) - 1) / 2)
+#define LEFT(i)     ((i) * 2 + 1)
+#define RIGHT(i)    ((i) * 2 + 2)
+
+// função utilizada para ordenar a lista quando há uma inserção 
+void bubbleUp(EventHeap *q, u32 i) {
+    Event *events = q->events;
+    while (i > 0 && events[PARENT(i)].time > events[i].time ) {
+       const Event tmp = events[PARENT(i)];
+       events[PARENT(i)] =  events[i];
+       events[i] = tmp;
+       i = PARENT(i);
+    }
+}
+
+// função utilizada para ordenar a lista quando há uma remoção
+void bubbleDown(EventHeap *q, u32 i) {
+    Event *events = q->events;
+    assert( i < q->size );
+    while ( ( LEFT(i) < q->size && events[LEFT(i)].time < events[i].time ) || ( RIGHT(i) < q->size && events[RIGHT(i)].time < events[i].time ) ) {
+        if ( RIGHT(i) >= q->size || events[LEFT(i)].time < events[RIGHT(i)].time ) {
+            const Event tmp = events[LEFT(i)];
+            events[LEFT(i)] = events[i];
+            events[i] = tmp;
+            i = LEFT(i);
+        } else {
+            const Event tmp = events[RIGHT(i)];
+            events[RIGHT(i)] = events[i];
+            events[i] = tmp;
+            i = RIGHT(i);
+        }
+    }
+}
+
+// insere evento na lista
+void insert_heap(EventHeap *q, Event e) {
+    if ( q->size + 1 > q->len ) {
+        assert( q->size == q->len );
+        q->len = (q->len) ? (q->len * 2) : 4;
+        q->events = realloc(q->events, sizeof(*(q->events))*q->len);
+        assert( q->events );
+    }
+    q->events[q->size] = e;
+    bubbleUp(q, q->size);
+    q->size += 1;
+}
+
+// remove evento da lista
+Event remove_heap(EventHeap *q) {
+    assert( q->size );
+    const Event ret = q->events[0];
+    q->size -= 1;
+    q->events[0] = q->events[q->size];
+    if ( q->size )
+        bubbleDown(q, 0);
     return ret;
 }
 
-// cria um contexto de random de tabela
-RandTable create_table_ctx(f64 *table, u32 len) {
-    RandTable ret = {
-        .ctx = {
-            .uniform = table_uni,
-            .type = RandType_Table,
-        },
-        .table = table,
-        .len = len,
-        .next = 0,
-    };
-    return ret;
+//Aproximar eventos de acordo com um offset
+void offset_heap_events_by(EventHeap *q, f64 offset) {
+    assert( offset >= 0 );
+    for ( u32 i = 0; i < q->size; i++ ) {
+        assert( q->events[i].time >= offset );
+        q->events[i].time -= offset;
+        q->events[i].person.arrived_time -= offset;
+    }
 }
 
-// função que uniforme apartir de qualquer RandCtx
-f64 randUniform(RandCtx *ctx) {
-    return ctx->uniform(ctx);
+//Pega proximo evento de chegada
+//Incrementa a cor da pessoa
+void inc_next_arrival_event_color(EventHeap *q) {
+    for ( u32 i = 0; i < q->size; i++ ) {
+        Event *e = &(q->events[i]);
+        if ( e->type == EVENT_arrival ) {
+            e->person.color += 1;
+            return;
+        }
+    }
+    assert( 0 && "arrival_event not found" );
 }
 
-// função que uniforme apartir de qualquer RandCtx
-f64 randExp(RandCtx *ctx, f64 lambda) {
-    assert( lambda > 0 );
-    f64 val = randUniform(ctx);
-    return -1.0f * (log(val) / lambda);
-}
-
-#ifdef RAND_MAIN
-#undef RAND_MAIN
-
-#include <time.h>
-
-#define STATS_IMPL
-#include "stats.c"
+#ifdef EVENT_HEAP_MAIN
+#undef EVENT_HEAP_MAIN
 
 #include "test.c"
 
-//main para testar os valores pseudoaleatorios
-int main() {
-    RandCtx rand_ctx = create_rand_ctx((u32) time(NULL)),
-            *ctx = &rand_ctx;
-    const u32 n = 100000;
+//Os paddings sao funcoes 
+//auxiliares para printar Heap 
+void half_padd_x() {
+    log("  ");
+}
 
-    //Teste para gerar valores 
-    //aleatorio a partir da funcao uniforme
-    SECTION("RANDC Uniform");
-    Stats stat = new_stats();
+void padd_x() {
+    half_padd_x();
+    half_padd_x();
+}
 
-    for ( u32 i = 0; i < n; i++ ) {
-        const f64 val = randUniform(ctx);
-        acc_and_update(&stat, val, 1);
+void padd_y(u32 dim) {
+    for ( u32 i = 0; i < dim; i++ ) {
+        log("   ");
+        half_padd_x();
+    }
+}
+
+//Printar a heap
+void log_heap(EventHeap *q) {
+    u32 depth = 0;
+    u32 size = q->size;
+    u32 dim_pad = 0;
+    while ( size ) {
+        size /= 2;
+        depth += 1;
+        dim_pad = dim_pad * 2 + 1;
     }
 
-    const f64 avgUni = discrete_average(stat),
-          varUni = discrete_variance(stat);
-    const f64 uniavg = 0.5f, univar = 1.0f / 12.0f;
-    f64_expect_equal_tol("RANDC uniform average",
-            uniavg, avgUni, 0.01);
-    f64_expect_equal_tol("RANDC uniform variance",
-            univar, varUni, 0.01);
-    log("   avg: %7.7lf,    var: %7.7lf\n", avgUni, varUni);
-    log("uniavg: %7.7lf, univar: %7.7lf\n\n", uniavg, univar);
-
-    //Teste do rand a partir da fuuncao exponencial
-    SECTION("RANDC Exponential");
-    stat = new_stats();
-    const f64 lambda = 7.3f;
-    for ( u32 i = 0; i < n; i++ ) {
-        const f64 val = randExp(ctx, lambda);
-        acc_and_update(&stat, val, 1);
-    }
-
-    const f64 avgExp = discrete_average(stat),
-          varExp = discrete_variance(stat);
-    const f64 expavg = 1 / lambda, expvar = expavg * expavg;
-    f64_expect_equal_tol( "RANDC exponential average",
-            expavg, avgExp, 0.01);
-    f64_expect_equal_tol("RANDC exponential variance",
-            expvar, varExp, 0.01);
-    log("   avg: %7.7lf,    var: %7.7lf\n", avgExp, varExp);
-    log("expavg: %7.7lf, expvar: %7.7lf\n\n", expavg, expvar);
-
-    end_tests("Random RANDC");
-
-    //Teste da estrutura de tabela com valores pseudoaleatorios
-    SECTION("Random Table");
-    u32 table_len = 40;
-    f64 table[table_len];
-    for ( u32 i = 0; i < table_len; i++ ) {
-        table[i] = ((f64) i) / table_len;
-    }
-    RandTable rand_table = create_table_ctx(table, table_len);
-    RandCtx *tctx = (RandCtx *) &rand_table;
-    log("table output:");
-    for ( u32 i = 0; i < 2 * table_len; i++ ) {
-        const f64 expected = ((f64) (i % table_len)) / table_len;
-        const f64 val = randUniform(tctx);
-        f64_expect_equal("Table", expected, val);
-        if ( i % 4 == 0 ) {
-            log("\n");
+    u32 next_start = 0;
+    u32 line = 1;
+    u32 next_line = 0;
+    dim_pad /= 2;
+    for ( u32 i = 0; i < q->size; i++ ) {
+        if ( next_start != i ) {
+            padd_x();
+        } else {
+            next_start += line;
         }
-        log(" %7.7lf", val);
+        padd_y(dim_pad);
+
+        log("%6.2lf", q->events[i].time);
+        if ( next_line == i ) {
+            log("\n");
+            line *= 2;
+            next_line += line;
+            dim_pad /= 2;
+        } else {
+            padd_y(dim_pad);
+        }
     }
     log("\n");
-
-    end_tests("Random Table");
-
 }
-#endif // RAND_MAIN
-#endif // RAND_IMPL
+
+//Funçao para realizar teste da heap
+void heap_expect_ok(const EventHeap *q) {
+    const Event *events = q->events;
+    for ( u32 i = 0; i < q->size; i++ ) {
+        if ( LEFT(i) < q->size ) {
+            f64_expect_less_eq("Heap root <= left",
+                    events[i].time, events[LEFT(i)].time);
+        }
+        if ( RIGHT(i) < q->size ) {
+            f64_expect_less_eq("Heap root <= right",
+                    events[i].time, events[RIGHT(i)].time);
+        }
+    }
+}
+
+//main para testar heap
+int main() {
+    //Inserir na heap
+    SECTION("Heap Insert");
+    EventHeap eq = init_heap(), *q = &eq;
+    const u32 arr_len = 7;
+    f64 arr[] = { 5, 9, 14, 17, 1, 3, 7 };
+    for ( u32 i = 0; i < arr_len; i++ ) {
+        const Event e = {
+            .time = arr[i],
+        };
+        log("\ninserting: %4.2lf\n", e.time);
+        insert_heap(q, e);
+        log_heap(q);
+        heap_expect_ok(q);
+        u32_expect_equal("Heap inserting increases size",
+                i+1, size_heap(q));
+    }
+    //Remover da heap
+    SECTION("Heap Remove");
+    u32 removed_cnt = 0;
+    while ( size_heap(q) ) {
+        const Event e = remove_heap(q);
+        removed_cnt += 1;
+        log("\nremoved: %4.2lf\n", e.time);
+        log_heap(q);
+        heap_expect_ok(q);
+        u32_expect_equal("Heap removing decreases size",
+                arr_len - removed_cnt, size_heap(q));
+    }
+    u32_expect_equal("Heap removed all that was put",
+            arr_len, removed_cnt);
+    u32_expect_equal("Heap is empty",
+            0, size_heap(q));
+    deinit_heap(q);
+
+    end_tests("Heap");
+}
+
+#endif // EVENT_HEAP_MAIN
+
+#endif // EVENT_HEAP_IMPL
+
+#undef MIN
+#undef PARENT
+#undef LEFT
+#undef RIGHT

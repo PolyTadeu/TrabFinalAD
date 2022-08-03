@@ -1,4 +1,4 @@
-//Arquivo template
+//Arquivo Template
 #ifndef TEMPLATE_HEADER
 #define TEMPLATE_HEADER
 #include "types.h"
