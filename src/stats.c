@@ -83,15 +83,15 @@ f64 continuous_variance(Stats stat, f64 t) {
 }
 
 #define TCONST      1.960
-#define CHI_HIGH    0.025
-#define CHI_LOW     0.975
+#define CHI_HIGH    3069.559
+#define CHI_LOW     3332.715
 
 CachedStats cache_stats(const Stats stat) {
     assert( stat.n >= 30 );
     const f64 avg = discrete_average(stat);
     const f64 var = discrete_variance(stat);
     const f64 diff_t = TCONST * sqrt(var / ((f64) stat.n));
-    const f64 chi_const = ((f64) (stat.n - 1)) * var;
+    const f64 chi_const = ((f64) (stat.n - 1)) * avg;
     CachedStats ret = {
         .avg = avg,
         .var = var,

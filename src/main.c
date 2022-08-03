@@ -14,36 +14,52 @@ ARGS_ArgOption options[] = {
     [0] = {
         .small = "s",
         .big = "seed",
+        .description = "Chooses the initial seed,"
+            " (default: current time)",
         .type = ARGS_uint,
     },
     [1] = {
         .small = "k",
         .big = "round-size",
+        .description = "Chooses the size of the round (K),"
+            " (default: 100)",
         .type = ARGS_uint,
     },
     [2] = {
         .small = "l",
         .big = "lambda",
+        .description = "Chooses the rate of arrival (lambda),"
+            " (default: 0.5)",
         .type = ARGS_float,
     },
     [3] = {
         .small = "m",
         .big = "mu",
+        .description = "Chooses the rate of service (mu),"
+            " (default: 1)",
         .type = ARGS_float,
     },
     [4] = {
         .small = "n",
         .big = "round-count",
+        .description = "Chooses the number of rounds (N),"
+            " (default: 3200)"
+            "\nNote: the CI calculation is"
+            " hardcoded to work with 3200",
         .type = ARGS_uint,
     },
     [5] = {
         .small = "",
         .big = "lcfs",
+        .description = "Sets the queue behavior to LCFS,"
+            " (default: FCFS)",
         .type = ARGS_flag,
     },
     [6] = {
         .small = "v",
         .big = "verbose",
+        .description = "Tells the program to print statistics"
+            " after each round",
         .type = ARGS_flag,
     },
 };
