@@ -42,6 +42,14 @@ test_system: $($(SRC){event_heap.c, event.c, queue.c, random.c, stats.c, system.
 	@$(CC) $(CFLAGS) $(MATHLIB) $(call DEF, SYSTEM) $(SRC)system.c
 	@./a.out
 
+test_seed_v: $($(SRC){seed.c, test.c, types.h})
+	$(CC) $(CFLAGS) $(MATHLIB) $(call DEF, SYSTEM) $(VERB) $(SRC)seed.c
+	./a.out
+
+test_seed: $($(SRC){seed.c, test.c, types.h})
+	@$(CC) $(CFLAGS) $(MATHLIB) $(call DEF, SYSTEM) $(SRC)seed.c
+	@./a.out
+
 main_exe: $($(SRC){args.c, main.c, event_heap.c, event.c, queue.c, random.c, stats.c, system.c, types.h})
 	$(CC) $(CFLAGS) $(MATHLIB) $(SRC)main.c -o main
 

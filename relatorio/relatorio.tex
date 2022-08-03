@@ -123,9 +123,11 @@ Alí está descrito como funciona a fase transiente e
 coleta de informação no final das rodadas.
 
 Também foram usados alguns arquivos extras:
-\arq{args.c}, \arq{test.c}, \arq{template.c}, \arq{types.h}.
+\arq{args.c}, \arq{seed.c},
+\arq{test.c}, \arq{template.c}, \arq{types.h}.
 Eles têm o propósito de, respectivamente:
 ler e fazer parsing dos argumentos de entrada;
+garantir a independência da semente;
 ajudar a testar outras funções;
 ser um arquivo base para o código; e
 disponibilizar tipos com tamanho de bits já definido.
@@ -300,8 +302,31 @@ typedef struct _System {
         \end{verbatim}
 \end{itemize}
 
-\subsection{Linguagem Utilizada e Geração das Variáveis Aleatórias}
-A linguagem utilizada foi C.
+\subsection{Linguagem e Gerador de Números Pseudoaleatórios}
+A linguagem utilizada foi \lang{C}.
+Ela oferece as funções \inlcode{void srand(unsigned int)},
+que escolhe uma \emph{seed} para o gerador da biblioteca,
+e \inlcode{int rand(void)}, que gera um inteiro entre
+\inlcode{0} e \inlcode{RAND\_MAX},
+na máquina que o simulador rodou
+\inlcode{RAND\_MAX} é \inlcode{2147483647}.
+
+Por padrão, o simulador usa
+o tempo inicial de execução (\inlcode{time(NULL)})
+como semente inicial,
+mas é possível especificar uma semente com a flag
+\inlcode{-s} ou \inlcode{-{}-seed}.
+
+Para garantir a independência da semente,
+geramos um teste que gera duas sequências,
+cada uma com tamanho de \inlcode{0x10000},
+e depois comparamos as sequências.
+Rodando várias vezes com sementes diferentes,
+geralmente não temos nenhum valor em comum
+nas duas sequência.
+Quando encontramos, é só com um valor
+e não com uma sequência de valores.
+
 \subsection{Cores}
 \subsection{Precisão IC}
 \subsection{Médias e Variância}
