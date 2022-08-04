@@ -424,9 +424,100 @@ Uma solução é alterar todos os
 outra, um pouco mais arriscada,
 é desligar o \inlcode{-Werror}.
 
-%\newpage
+\newpage
 \section{Testes de Correção}
-%\newpage
+O programa foi escrito com vários \inlcode{asserts}
+espalhados pelo código
+e cada arquivo moderadamente complexo é acompanhado
+de uma \inlcode{main} com testes relevantes para o arquivo.
+O \inlcode{assert} é uma função que recebe uma condição,
+caso a condição seja falsa,
+instantanêamente aborta o programa com uma mensagem
+atrativa para desenvolvedores;
+e não faz nada caso contrário.
+O uso dessa função em diversos lugares ajuda a
+manter a confiança de que o programa está correto.
+É inviável listar todas as posições no código
+que possui uma chamada para \inlcode{assert},
+então apenas mencionamos que foi usado.
+
+Os testes podem estar divididos em \emph{seções},
+que são simplesmente uma separação artificial
+de uma sequência de testes.
+Na raiz do projeto há um arquivo \arq{Makefile} que descreve
+como rodar compilar e rodar os testes.
+Cada teste tem dois modos:
+\emph{normal} e \emph{verbose}.
+O modo \emph{normal} apenas printa
+``Ok'' ou ``Falha'', o motivo e o teste que falhou.
+O modo \emph{verbose} além de printar tudo que o \emph{normal}
+também printa informações adicionais
+como ``desenho'' de uma estrutura de dados após cada passo,
+o que aconteceu com o sistema após tratar um evento, entre outros.
+Para indicar que vai rodar a versão \emph{verbose},
+basta adicionar um \inlcode{\_v} no final do nome do teste.
+
+\begin{itemize}
+    \item \inlcode{test\_all} e \inlcode{test\_all\_v} \par
+        Roda todos os testes do mesmo modo em sequência,
+        com exceção do \inlcode{test\_seed},
+        pois demora consideravelmente mais do que os outros.
+    \item \inlcode{test\_rand} e \inlcode{test\_rand\_v} \par
+        \begin{enumerate}
+            \item \textbf{RANDC Uniform} \par
+                Cria um contexto aleatório \inlcode{RANDC}
+                com uma seed baseada no tempo,
+                gera 100000 valores uniformes
+                a partir desse contexto
+                e confima se a média e variância das amostras
+                está próxima o suficiente do esperado.
+                A tolerância é de \(0.01\).
+            \item \textbf{RANDC Exponential} \par
+                Bem similar ao anterior,
+                aproveita o contexto gerado na seção anterior
+                e gera 100000 valores exponeciais com taxa \(7.3\)
+                e confima se a média e variância das amostras
+                está próxima o suficiente do esperado.
+                A tolerância é de \(0.01\).
+            \item \textbf{Random Table} \par
+                Gera um contexto aleatório \inlcode{Table}
+                com uma tabela de 40 posições com valores
+                crescentes uniformemente espaçados entre 0 e 1,
+                então pede 80 valores de uniforme e
+                garante que a sequência retornada é
+                a sequência dos valores inseridos na tabela
+                (voltando a contar do 0 quando chega a 40).
+        \end{enumerate}
+    \item \inlcode{test\_event\_heap} e \inlcode{test\_event\_heap\_v}
+        \begin{enumerate}
+            \item \textbf{Heap Insert} \par
+                Inicializa uma heap vazia e
+                insere eventos com os tempos,
+                na seguinte ordem: 5, 9, 14, 17, 1, 3, 7.
+                Note que como a ordenação é feita a partir do tempo,
+                todos os outros campos de \inlcode{Event}
+                são irrelevantes para esse teste.
+                Após cada inserção, mostra um ``desenho'' da heap
+                (apenas para o modo \emph{verbose}),
+                então checa se todos os nós da heap mantém
+                a sua propriedade de os filhos serem maiores
+                que o pai ou nulos
+                e que o tamanho aumentou.
+            \item \textbf{Heap Remove} \par
+                Aproveita o estado do teste anterior
+                e remove os elementos até que a heap esteja vazia.
+                Após cada remoção, também
+                mostra o ``desenho'' da heap
+                (caso modo \emph{verbose})
+                e garante que a propriedade de heap se mantém
+                e que o tamanho diminuiu.
+        \end{enumerate}
+    \item \inlcode{test\_queue} e \inlcode{test\_queue\_v}
+    \item \inlcode{test\_system} e \inlcode{test\_system\_v}
+    \item \inlcode{test\_seed} e \inlcode{test\_seed\_v}
+\end{itemize}
+
+\newpage
 \section{Estimativa da Fase Transiente}
 
 \newpage

@@ -122,10 +122,12 @@ int main() {
     log("   avg: %7.7lf,    var: %7.7lf\n", avgUni, varUni);
     log("uniavg: %7.7lf, univar: %7.7lf\n\n", uniavg, univar);
 
+    end_tests("RANDC Uniform");
+
     // Teste para gerar valores pseudoaleatorios da exponencial
     SECTION("RANDC Exponential");
     stat = new_stats();
-    const f64 lambda = 7.3f;
+    const f64 lambda = 7.3;
     for ( u32 i = 0; i < n; i++ ) {
         const f64 val = randExp(ctx, lambda);
         acc_and_update(&stat, val, 1);
@@ -141,7 +143,7 @@ int main() {
     log("   avg: %7.7lf,    var: %7.7lf\n", avgExp, varExp);
     log("expavg: %7.7lf, expvar: %7.7lf\n\n", expavg, expvar);
 
-    end_tests("Random RANDC");
+    end_tests("RANDC Exponential");
 
     // Teste da tabela para gerar valores pseudoaleatorios
     SECTION("Random Table");
