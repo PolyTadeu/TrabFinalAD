@@ -22,6 +22,7 @@ typedef struct _System {
 
 System init_system(RandCtx *rand, f64 lambda, f64 mu, EventHeap *eh, Queue *q, Color color);
 void deinit_system(System *s);
+u32 people_in_system(const System *s);
 b32 is_empty_system(const System *s);
 void add_first_event(System *s);
 void next_batch(System *s);
@@ -65,6 +66,11 @@ System init_system(RandCtx *rand, f64 lambda, f64 mu, EventHeap *eh, Queue *q, C
 void deinit_system(System *s) {
     deinit_heap(s->events);
     deinit_queue(s->queue);
+}
+
+// Conta a quantidade de pessoas no sistema
+u32 people_in_system(const System *s) {
+    return s->busy + size_queue(s->queue);
 }
 
 // Checa se o sistema esta vazio

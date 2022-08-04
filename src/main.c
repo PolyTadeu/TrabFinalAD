@@ -65,6 +65,16 @@ ARGS_ArgOption options[] = {
         .type = ARGS_flag,
     },
     [7] = {
+        .small = "",
+        .big = "transient-only",
+        .description = "Sets the program to only run the transient"
+            " fase and say the average and variance of the"
+            " number of clients per event handled in files:"
+            " 'avg.txt' and 'var.txt',"
+            " (default: false)",
+        .type = ARGS_flag,
+    },
+    [8] = {
         .small = "v",
         .big = "verbose",
         .description = "Tells the program to print statistics"
@@ -88,6 +98,7 @@ typedef struct {
     u64 round_count;
     u64 transient_size;
     u8 lcfs;
+    u8 transient_only;
     u8 verbose;
     u8 ARGS_valid;
 } Options;
@@ -139,6 +150,7 @@ int main(const int argc, const char **argv) {
         .round_count = 3200,
         .transient_size = 1000000,
         .lcfs = 0,
+        .transient_only = 0,
         .verbose = 0,
     };
     ARGS_parse(spec, (void*) &opts, sizeof(opts), argc, argv);
@@ -160,6 +172,32 @@ int main(const int argc, const char **argv) {
           nq_mu_hat = new_stats(),
           nq_sigma_hat = new_stats();
     add_first_event(s);
+
+    if ( opts.transient_only ) {
+        FILE *favg = fopen("avg.txt", "w");
+        FILE *fvar = fopen("var.txt", "w");
+        if ( !favg || !fvar ) {
+            fprintf(stderr, "Could not open files to write\n");
+        }
+        Stats n_since_start = new_stats();
+        f64 last_time = 0;
+        for ( u64 i = 0; i < opts.transient_size; i++) {
+            const Event e = handle_next_event(s);
+            acc_and_update(&n_since_start,
+                    people_in_system(s), e.time - last_time);
+            last_time = e.time;
+            const f64 avg =
+                continuous_average(n_since_start, last_time);
+            const f64 var =
+                continuous_variance(n_since_start, last_time);
+            fprintf(favg, "%lf\n", avg);
+            fprintf(fvar, "%lf\n", var);
+            if ( opts.verbose ) {
+                printf("i: %lu, avg: %lf, var: %lf\n", i, avg, var);
+            }
+        }
+        return 0;
+    }
 
     clock_t clock1 = clock(), clock2 = clock1;
     // Fase Transiente
