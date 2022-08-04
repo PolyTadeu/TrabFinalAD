@@ -22,54 +22,33 @@
   Avaliação e Desempenho - 2022.1}
 \author{Daniel Kiyoshi Hashimoto Vouzella de Andrade - 119025937
   \\
-Polyana Tadeu -
-  \\
 Gustavo Muzy Fraga -
+  \\
+Polyana Tadeu -
 }
 \date{}
 
 \begin{document}
 \maketitle
 
-\section*{Lembretes}
+\vfill
+
+Participação principal de cada integrante:
 \begin{itemize}
-    \item Tempo médio de serviço é 1 segundo
-    \item Disciplinas de fila: FCFS, LCFS
-    \item Utilizações/\(\lambda\)s:
-    \begin{itemize}
-        \item \(0.2\)
-        \item \(0.4\)
-        \item \(0.6\)
-        \item \(0.8\)
-        \item \(0.9\)
-    \end{itemize}
-    \item Definir método para término da fase transiente,
-        para cada utilização e disciplina
-    \item IC de \(95\%\) e com precisão de \(5\%\),
-        ou seja, o tamanho do intervalo deverá ser no máximo
-        \(10\%\) do valor do centro do intervalo
-    \item \(N = 3200\), número de rodadas
-    \item Tem que usar Chi-quadrado e t-Student
-    \item Temos que escolher um \(k\), número de saídas registradas,
-        mais adequado (vide apostila/slides)
-    \begin{itemize}
-        \item Pode ser que a precisão da variância
-            seja de \(5\%\),
-            mas o resultado analíco não esteja dentro do intervalo
-            pois \(k\) é muito pequeno e não se aproxima da normal
-    \end{itemize}
-    \item Métricas, para cada disciplina de fila e utilização:
-    \begin{itemize}
-        \item Tempo médio de espera na fila
-        \item Variância do tempo de espera na fila
-        \item Número médio de pessoas na fila de espera
-        \item Variância do número médio de pessoas na fila de espera
-    \end{itemize}
-    \item Na página de rosto descreva
-        a participação de cada integrante
+    \item Daniel: \par
+        Arquitetou e implementou o simulador,
+        escreveu principalmente
+        as seções 1 (exceção 1.6 e 1.7), 2 e 7.
+    \item Gustavo: \par
+        Escreveu a versão rascunho do relatório.
+    \item Polyana: \par
+        Deduziu os valores analíticos,
+        rodou o simulador para coletar os resultados
+        escreveu principalmente
+        as seções 4 e 5.
 \end{itemize}
 
-%\newpage
+\newpage
 \section{Introdução}
 \subsection{Funcionamento Geral do Simulador}
 De forma geral,
@@ -759,61 +738,71 @@ Derivando \(N(z)\) pela terceira vez vamos obter:
 \end{align*} \begin{align*}
     N'''(z) \; (K(z) - z) + 3 \; N''(z) \; (K'(z) - 1)
         + 3 \; N'(z) \; K''(z) \\
-        + N(z) \; K'''(z) \\
+        + N(z) \; K'''(z)
         = (1 - \rho) \; (-3 \; K''(z) + (1 - z) \; K'''(z))
 \end{align*}
 Fazendo \(z = 1\):
 \begin{align*}
-    &3 \; N''(1) \; (K'(1) - 1)
+    3 \; N''(1) \; (K'(1) - 1)
         + 3 \; N'(1) \; K''(1) + K'''(1)
-        = (1 - \rho) \; (-3 \; K''(1)) \\
-    &3 \; N''(1) \; (1 - \lambda \; \E{X})
+        = (1 - \rho) \; (-3 \; K''(1))
+\end{align*} \begin{align*}
+    3 \; N''(1) \; (1 - \lambda \; \E{X})
         - 3 \; N'(1) \; (\lambda^2 \; \E{X^2})
-        - \lambda^3 \; \E{X^3}
-        = (1 - \rho) \; (3 \; \lambda^2 \; \E{X^2}) \\
-    &3 \; N''(1) \; (1 - \lambda \; \E{X})
+        - \lambda^3 \; \E{X^3} \\
         = (1 - \rho) \; (3 \; \lambda^2 \; \E{X^2})
-        + 3 \; N'(1) \; (\lambda^2 \; \E{X^2})
-        + \lambda^3 \; \E{X^3} \\
-    &3 \; N''(1) \; (1 - \lambda \; \E{X})
-        = (1 - \rho) \; (3 \; \lambda^2 \; \E[X^2])
+\end{align*} \begin{align*}
+    3 \; N''(1) \; (1 - \lambda \; \E{X})
+        = (1 - \rho) \; (3 \; \lambda^2 \; \E{X^2})
+        + 3 \; N'(1) \; (\lambda^2 \; \E{X^2}) \\
+        + \lambda^3 \; \E{X^3}
+\end{align*} \begin{align*}
+    3 \; N''(1) \; (1 - \lambda \; \E{X})
+        = (1 - \rho) \; (3 \; \lambda^2 \; \E{X^2}) \\
         + \frac{3 \; (\lambda^2 \; \E{X^2}) \;
-        ((1 - \rho) \; (2 \; \lambda \; \E{X})
-        + \lambda^2 \; \E{X^2})}{2 \; (1 - \lambda \; \E{X})}\\
+            ((1 - \rho) \; (2 \; \lambda \; \E{X})
+        + \lambda^2 \; \E{X^2})}{2 \; (1 - \lambda \; \E{X})}
         &+ \lambda^3 \; \E{X^3} \\
-\end{align*}
-\begin{align*}
-    &3\;N^{''}(1)\;(1-\lambda E[X]) = \\
-    &\frac{6 \; (1 - \rho) \; (\lambda^2 \; \E{X^2}) \;
-        (1 - \lambda \; \E{X}) + 3 \; (\lambda^2 \; \E{X^2})
-        \; ((1 - \rho) \; (2 \; \lambda \; \E{X})
-        + \lambda^2 \; \E{X^2})}{2 \; (1 - \lambda \; \E{X})}\\
-        &+\frac{2 \; (1 - \lambda \; \E{X})
-        \;(\lambda^3 \; \E{X^3})}{2 \; (1 - \lambda \; \E{X})}
-\end{align*}
-\begin{align*}
-    &N''(1) = \\
-    &\frac{6 \; (1 - \rho) \; (\lambda^2 \; \E{X^2})
-        \; (1 - \lambda \; \E{X})
-        + 3 \; (\lambda^2 \; \E{X^2}) \; ((1 - \rho)
-        \; (2 \; \lambda \; \E[X]) + \lambda^2 \; \E{X^2})
-        }{6 \; (1 - \lambda \; \E{X})^2}\\
-        &+\frac{2 \; (1 - \lambda \; \E{X}) \; \lambda^3
-        \; \E[X^3]}{6 \; (1 - \lambda \; \E{X})^2}
+\end{align*} \begin{align*}
+    3 \; N''(1) \; (1 - \lambda \E{X})
+        = \biggl[
+            6 \; (1 - \rho) \; (\lambda^2 \; \E{X^2})
+                \; (1 - \lambda \; \E{X}) \\
+            + 3 \; (\lambda^2 \; \E{X^2}) \; ((1 - \rho)
+                \; (2 \; \lambda \; \E{X}) + \lambda^2 \; \E{X^2}) \\
+            + 2 \; (1 - \lambda \; \E{X}) \; (\lambda^3 \; \E{X^3})
+        \biggr]
+        \; \frac{1}{2 \; (1 - \lambda \; \E{X})}
+\end{align*} \begin{align*}
+    N''(1) = \biggl[
+        6 \; (1 - \rho) \; (\lambda^2 \; \E{X^2})
+            \; (1 - \lambda \; \E{X}) \\
+        + 3 \; (\lambda^2 \; \E{X^2})
+            \; ((1 - \rho) \; (2 \; \lambda \; \E{X})
+        + \lambda^2 \; \E{X^2}) \\
+        + 2 \; (1 - \lambda \; \E{X}) \; \lambda^3 \; \E{X^3}
+    \biggr]
+    \; \frac{1}{6 \; (1 - \lambda \; \E{X})^2}
 \end{align*}
 Logo \(\E{N^2} = N''(1) + N'(1)\)
 para uma fila M/M/1, pode ser dado por:
 \begin{align*}
-    &\frac{12 \; (1 - \rho)^2 \; \rho^2
+    \biggl[
+        12 \; (1 - \rho)^2 \; \rho^2
         + 6 \; \rho^2 \; ((1 - \rho) \; 2 \; \rho
-        + 2 \; \rho^2) + 12 \; (1 - \rho) \; \rho^3
+        + 2 \; \rho^2) + 12 \; (1 - \rho) \; \rho^3 \\
         + 3 \; (1 - \rho) \; (2 \; \rho (1 - \rho)
-        + 2 \; \rho^2)}{6 \; (1 - \rho)^2} \\
-    &\frac{6 \; \rho - 6 \; \rho^2 + 12 \; \rho^2
+        + 2 \; \rho^2)
+    \biggr] \; \frac{1}{6 \; (1 - \rho)^2}
+\end{align*} \begin{align*}
+    \biggl[
+        6 \; \rho - 6 \; \rho^2 + 12 \; \rho^2
         - 24 \; \rho^3 + 12 \; \rho^4 + 12 \; \rho^3
-        + 12 \; \rho^3 - 12 \; \rho^4}{6 \; (1 - \rho)^2} \\
-    &\frac{6 \; \rho^2 + 6 \; \rho}{6 \; (1 - \rho)^2} \\
-    &\frac{\rho^2 + \rho}{(1 - \rho)^2}
+        + 12 \; \rho^3 - 12 \; \rho^4
+    \biggr] \; \frac{1}{6 \; (1 - \rho)^2}
+\end{align*} \begin{align*}
+    \frac{6 \; \rho^2 + 6 \; \rho}{6 \; (1 - \rho)^2} \\
+    \frac{\rho^2 + \rho}{(1 - \rho)^2}
 \end{align*}
 Agora podemos calcular \(E[N_q^{2}]\)
 \begin{align*}
@@ -906,17 +895,18 @@ Assim sendo, derivando \(W^*(s)\) pela terceira vez:
 \begin{align*}
     {W^*}''(s) \; (s - \lambda + \lambda \; X^*(s))
         + {W^*}'(s) \; (1 + \lambda \; {X^*}'(s))
-        + {W^*}'(s) \; (1 + \lambda \; {X^*}'(s))
+        + {W^*}'(s) \; (1 + \lambda \; {X^*}'(s)) \\
         + W^*(s)(\lambda \; {X^*}''(s)) = 0 \\
+\end{align*} \begin{align*}
     {W^*}'''(s) \; (s - \lambda + \lambda \; X^*(s))
         + {W^*}''(s) \; (1 + \lambda \; {X^*}'(s))
+        + {W^*}''(s) \; (1 + \lambda \; {X^*}'(s)) \\
+        + {W^*}'(s) \; (\lambda \; {X^*}''(s))
         + {W^*}''(s) \; (1 + \lambda \; {X^*}'(s))
         + {W^*}'(s) \; (\lambda \; {X^*}''(s)) \\
-        + {W^*}''(s) \; (1 + \lambda \; {X^*}'(s))
-        + {W^*}'(s) \; (\lambda \; {X^*}''(s))
         + {W^*}'(s) \; (\lambda \; {X^*}''(s))
         + W^*(s) \; (\lambda \; {X^*}'''(s)) = 0
-    \end{align*}
+\end{align*}
 Fazendo \(s = 0\):
 \[
     3 \; {W^*}''(0) \; (1 + \lambda {X^*}''(s))
@@ -986,7 +976,7 @@ O serviço médio pendente neste instante  é dado
 por \(\E{U_0} = \E{N_q}\;\E{X} + \E{N_s}\;\E{Xr}\), com \(\E{N_q} = \lambda\;\E{W}\).
 
 Deste serviço pendente, a parte \(\E{W_0} = \E{N_s}\;\E{Xr} = \rho\;\E{Xr}\)
-ser;a executada antes da entrada do freguês típico em serviço.
+será executada antes da entrada do freguês típico em serviço.
 Caso novas chegadas nãpo ocorressem após a chegada
 do freguês típico, o tempo médio de espera seria dado simplesmente
 pelo atraso \(\E{W_0}\). A expressão para \(\E{W_0}\) pode ser também
@@ -995,8 +985,8 @@ encontrado ao chegar:
 \[
     \E{W_0} = \E{W_0|ocupado} \; P(ocupado) + \E{W_0|ociso} \; P(ocioso) = \rho\;\E{Xr}
 \]
-Se a fila  é encontrada ociosa o atraso até entrada em serviço  é zero e se o servidor
-está ocupado o serviço residual  é o atraso mínimo a ser observado.
+Se a fila é encontrada ociosa o atraso até entrada em serviço é zero e se o servidor
+está ocupado o serviço residual é o atraso mínimo a ser observado.
 Entretanto, toda nova chegada que ocorre enquanto o fregues típico
 ainda está na fila deespera será servida antes do freguês típico.
 O tempo médio de espera na fila pode ser visto
@@ -1005,7 +995,8 @@ como um período ocupado diferenciado iniciado por \(\E{W_0}\), logo:
     \E{W_{LCFS}} = \frac{ \E{W_0}}{ 1-\rho} = \frac{ \rho\;\E{Xr}}{ 1-\rho},\;\rho < 1
 \]
 Como na fila M/M/1 \(\E{Xr} = \E{X}\), pela propriedade da falta de memória, e  \(\E{X} =1s\)
-\(\E{W_LCFS}\) pode ser escrito como \(\E{W_{LCFS}} =  \frac{ \rho}{ 1-\rho}\), que
+\(\E{W_LCFS}\) pode ser escrito como
+\(\E{W_{LCFS}} = \frac{\rho}{1 - \rho}\), que
 é o mesmo tempo médio de espera em uma fila FCFS, como esperado e discutido em aula.
 \subsection{Variância do tempo de espera em uma fila LCFS}
 Para calcular a variância do tempo de espera em uma fila LCFS, precisamos obter
@@ -1013,42 +1004,49 @@ a sua transfromada \(W_{LCFS}^*(s)\), que pode ser obtida diretamente da T.L
 do período ocupado, condicionando no estado ocupado ou ocioso que a fila  é encontrada pelo freguês tépico.
 Quando o sistema é encontrado ocupado, o serviço inicial do período ocupado  é dado pela vida residual do
 serviço, que no caso da fila M/M/1 é o proprio serviço.
+Assim, \(W_{LCFS}^*(s)\) é dado por:
 \begin{align*}
-    W_{LCFS}^*(s) &= \E{e^{s\;W_{LCFS}}|ocupado} \; P(ocupado) + \E{e^{s\;W_{LCFS}}|ocioso} \; P(ocioso)\\
-    &= \rho\;  X^*(s+\lambda- \lambda\;G^*(s)) + (1-\rho)\\
-    &=  \rho\; G^*(s) + (1-\rho)
+    \E{e^{s \; W_{LCFS}} \;|\; ocupado} \; P(ocupado)
+        + \E{e^{s \; W_{LCFS}} \;|\; ocioso} \; P(ocioso) \\
+    \rho \; X^*(s + \lambda - \lambda \; G^*(s)) + (1 - \rho) \\
+    \rho \; G^*(s) + (1 - \rho)
 \end{align*}
 Derivando uma vez e fazendo s = 0 obetmos o primeiro momento:
 \[
-{W_{LCFS}^*}'(0) =  \rho\; {G^*}'(0) = \frac{ \rho\;\E{X}}{ 1-\rho}
+    {W_{LCFS}^*}'(0)
+        = \rho \; {G^*}'(0) = \frac{\rho \; \E{X}}{1 - \rho}
 \]
 Como esperado e visto anteriormente. Agora derivamos novamente, para achar o segundo momento:
 \[
-{W_{LCFS}^*}''(0) =  \rho\; {G^*}''(0) = \frac{ \rho\;\E{X^2}}{(1-\rho)^3}
+    {W_{LCFS}^*}''(0)
+        = \rho \; {G^*}''(0)
+        = \frac{\rho \; \E{X^2}}{(1 - \rho)^3}
 \]
-Para achar a variância :
+Para achar a variância:
 \begin{align*}
-V(W_{LCFS})&= \frac{ \rho\;\E{X^2}}{(1-\rho)^3} - (\frac{ \rho\;\E{X}}{ 1-\rho})^2\\
-&= \frac{ 2\; \rho}{(1-\rho)^3} - (\frac{ \rho}{ 1-\rho})^2\\
-&=\frac{ 2\; \rho -\rho^2 + \rho^3}{(1-\rho)^3}
+    V(W_{LCFS}) &=
+        \frac{\rho \; \E{X^2}}{(1 - \rho)^3}
+        - \left( \frac{\rho \; \E{X}}{1-\rho} \right)^2 \\
+    &= \frac{2 \; \rho}{(1 - \rho)^3}
+        - \left( \frac{\rho}{1 - \rho} \right)^2 \\
+    &= \frac{2 \; \rho - \rho^2 + \rho^3}{(1 - \rho)^3}
 \end{align*}
 
 Ao final obtivemos os seguintes valores analíticos:
-
 \begin{table}[h]
 \centering
+    \begin{tabular}{|c|cc|}\hline
+        Variável & Média & Variância \\\hline
+        $ W_{LCFS} $&$ \frac{\rho}{1-\rho} $&$
+            \frac{2 \; \rho - \rho^2 + \rho^3}{(1-\rho)^3} $\\&&\\
+        $ W_{FCFS} $&$ \frac{\rho}{1-\rho} $&$
+            \frac{2 \; \rho - \rho^2}{(1 - \rho)^2} $\\&&\\
+        $ N_q      $&$ \frac{\rho^2}{1 - \rho} $&$
+            \frac{\rho^2 + \rho^3 - \rho^4}{(1 - \rho)^2} $\\\hline
+    \end{tabular}
 \caption{Valores analíticos}
-\vspace{0.9cm}
-\begin{tabular}{r|lr}
-
-Variável & Média & Variância \\ % Note a separação de col. e a quebra de linhas
-\hline                               % para uma linha horizontal
-\(W_{LCFS}\) & \(\frac{ \rho}{ 1-\rho}\)  & \(\frac{ 2\; \rho -\rho^2 + \rho^3}{(1-\rho)^3}\) \\
-\(W_{FCFS}\) & \(\frac{ \rho}{ 1-\rho}\)  & \(\frac{2 \; \rho -\rho^2 }{(1 - \rho)^2}\) \\
-\(N_q\)      & \(\frac{ \rho^2}{ 1-\rho}\)& \(\frac{\rho^2 + \rho^3 - \rho^4}{(1 - \rho)^2}\) \\
-
-\end{tabular}
 \end{table}
+
 \newpage
 \section{Tabelas com Resultados}
 %\newpage
