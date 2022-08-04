@@ -94,7 +94,7 @@ um float de 64 bits.
 
 A fila de clientes (\arq{queue.c})
 é implementada usando um buffer circular extensível,
-um array,
+um array que pode crescer,
 e suporta tanto a disciplina de FCFS quanto de LCFS.
 
 A geração de números pseudoaleatórios (\arq{random.c})
@@ -458,6 +458,13 @@ o que aconteceu com o sistema após tratar um evento, entre outros.
 Para indicar que vai rodar a versão \emph{verbose},
 basta adicionar um \inlcode{\_v} no final do nome do teste.
 
+Na pasta \arq{tests-out} tem um arquivo
+para cada saída dos testes
+em modo \emph{verbose}.
+Eles não estão no relatório,
+pois alguns são muito longos
+e iria gastar muitas páginas no relatório.
+
 \begin{itemize}
     \item \inlcode{test\_all} e \inlcode{test\_all\_v} \par
         Roda todos os testes do mesmo modo em sequência,
@@ -514,8 +521,61 @@ basta adicionar um \inlcode{\_v} no final do nome do teste.
                 e que o tamanho diminuiu.
         \end{enumerate}
     \item \inlcode{test\_queue} e \inlcode{test\_queue\_v}
-    \item \inlcode{test\_system} e \inlcode{test\_system\_v}
-    \item \inlcode{test\_seed} e \inlcode{test\_seed\_v}
+        \begin{enumerate}
+            \item \textbf{Queue FCFS} \par
+                Testa inserção e depois remoção de elementos
+                da versão FCFS
+                duas vezes para garantir
+                que a expansão do buffer ``desalinhado''
+                continua funcionando,
+                garante que o tamanho é atualizado de acordo.
+            \item \textbf{Queue LCFS} \par
+                Similar ao seção anterior,
+                mas para a versão LCFS
+                e só testa uma vez,
+                já que não tem como desalinhar o buffer.
+        \end{enumerate}
+    \item \inlcode{test\_system} e \inlcode{test\_system\_v} \par
+        Inicializa o sistema com um random de tabela com
+        apenas um valor de \(e^{-1}\) para que
+        os valores pseudoaleatórios exponenciais
+        sejam sempre iguais a taxa da exponencial,
+        na pratica, isso torna a fila determinística.
+        O mu (taxa do serviço) nos testes é sempre 1.
+
+        Cada seção é similar a anterior,
+        alterando apenas o número de coletas,
+        o lambda (taxa de chegada) e
+        o estado do sistema (herdado da seção anterior).
+        Todas as seções
+        checam as estatísticas no final de cada rodada
+        e, em modo \emph{verbose},
+        mostram o que aconteceu com o sistema após tratar um evento,
+        as estatísticas acumuladas e esperadas e
+        o estado final do sistema.
+
+        O teste é determinístico, então
+        calculamos as métricas esperadas
+        por meios externos e
+        as deixamos como constantes no teste.
+        \begin{enumerate}
+            \item \textbf{System 2*lambda = mu} \par
+                São colhidas 5 saídas da fila de espera
+                e \(\lambda = 0.5\).
+            \item \textbf{System lambda = mu} \par
+                São colhidas 5 saídas da fila de espera
+                e \(\lambda = 1\).
+            \item \textbf{System lambda = 2*mu} \par
+                São colhidas 10 saídas da fila de espera
+                e \(\lambda = 2\).
+            \item \textbf{System 2*lambda = mu (2)} \par
+                São colhidas 5 saídas da fila de espera
+                e \(\lambda = 0.5\).
+        \end{enumerate}
+    \item \inlcode{test\_seed} e \inlcode{test\_seed\_v} \par
+        O teste é o mesmo descrito
+        na seção \textbf{1.4} do relatório,
+        usado para garantir a independência da semente.
 \end{itemize}
 
 \newpage
