@@ -386,7 +386,13 @@ e as fórmulas abaixo para calcular a média e variância:
 \]
 
 \subsection{Máquina Utilizada e Tempo Total}
-O programa foi rodado num MacBook
+O programa foi rodado num MacBook com configurações:
+\begin{itemize}
+    \item Processador 2Ghz intel Core i5 Quad-Core
+    \item Memória Ram 16 GB
+    \item Placa de Vídeo Intel Iris Plus Graphics de 1536 Mb 
+\end{itemize}
+
 
 É importante informar que os tempos na tabela são apenas o tempo da simulação. O tempo gasto para realizar as contas são desprezíveis para o tempo total, visto que as contas são calculadas de forma incremental.
 
@@ -585,7 +591,9 @@ e iria gastar muitas páginas no relatório.
 
 \newpage
 \section{Estimativa da Fase Transiente}
+Para a estimativa da fase transiente, não podemos apenas pegar uma das métricas e esperar que esta chegue ao equilíbrio. Sendo assim, teriamos que checar a métrica que mais demora a chegar ao equilíbrio. Também poderiamos deixar o sistema rodando por um longo tempo para analisarmos quando chegamos em equilíbrio. Esta foi exatamente a estratégia que utilizamos, deixamos o sistema rodar 1000000 eventos e com isso observamos que ele chega ao equilíbrio depois disso. Ao invés de rodarmos novamente com um valor menor para acharmos uma estimativa, utilizamos essa 1000000 para todas as utilizações. Como as métricas tendem a estabilizar, sempre teremos um sistema em equilíbrio após a fase transiente. Podemos ver no gráfico abaixo os valores da média ao longo dos testes da fase transiente.
 
+%Colocar grafico aqui
 \newpage
 \section{Dedução dos Valores Analíticos}
 \subsection{Número médio de pessoas na fila}
