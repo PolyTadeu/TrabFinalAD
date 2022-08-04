@@ -174,7 +174,7 @@ Foram escolhidos dois tipos de evento:
         (inserindo esse na lista de eventos).
 \end{itemize}
 
-\subsection{Estrutura Interna}
+\subsection{Estruturas Internas}
 Vamos separar as estruturas por arquivos em ordem alfabética:
 \begin{itemize}
     \item \arq{event.c} \par
@@ -188,8 +188,7 @@ typedef enum _EventType {
 } EventType;
 
 typedef struct _Person {
-    Time arrived_time;
-    Color color;
+    Time arrived_time; Color color;
 } Person;
 
 typedef struct _Event {
@@ -202,8 +201,7 @@ typedef struct _Event {
         Descrevemos a \emph{lista de eventos}.
         \begin{verbatim}
 typedef struct _EventHeap {
-    u32 size, len;
-    Event* events;
+    u32 size, len; Event* events;
 } EventHeap;
         \end{verbatim}
     \item \arq{main.c} \par
@@ -212,14 +210,12 @@ typedef struct _EventHeap {
         para saber se o parsing dos argumentos foi feito com sucesso.
         \begin{verbatim}
 typedef struct {
-    u64 seed;
-    u64 round_size;
-    f64 lambda;
-    f64 mu;
+    u64 seed; u64 round_size;
+    f64 lambda; f64 mu;
     u64 round_count;
-    u8 lcfs;
-    u8 verbose;
-    u8 ARGS_valid;
+    u64 transient_size;
+    u8 lcfs; u8 transient_only;
+    u8 verbose; u8 ARGS_valid;
 } Options;
         \end{verbatim}
     \item \arq{queue.c} \par
@@ -231,9 +227,7 @@ typedef enum _QueueType {
 
 typedef struct _Queue {
     QueueType type;
-    u32 len;
-    u32 head;
-    u32 tail;
+    u32 len; u32 head; u32 tail;
     Person *people;
 } Queue;
         \end{verbatim}
@@ -244,8 +238,7 @@ typedef struct _Queue {
         (\inlcode{RandTable}).
         \begin{verbatim}
 typedef enum _RandType {
-    RandType_RANDC,
-    RandType_Table,
+    RandType_RANDC, RandType_Table,
 } RandType;
 
 typedef struct _RandCtx {
@@ -255,9 +248,7 @@ typedef struct _RandCtx {
 
 typedef struct _RandTable {
     RandCtx ctx;
-    f64 *table;
-    u32 len;
-    u32 next;
+    f64 *table; u32 len; u32 next;
 } RandTable;
         \end{verbatim}
     \item \arq{stats.c} \par
@@ -266,22 +257,16 @@ typedef struct _RandTable {
         os \emph{resultados da amostragem}.
         \begin{verbatim}
 typedef struct _Stats  {
-    u32 n;
-    f64 acc;
-    f64 sqr_acc;
+    u32 n; f64 acc; f64 sqr_acc;
 } Stats;
 
 typedef struct _CI {
-    f64 up;
-    f64 low;
-    f64 precision;
+    f64 up; f64 low; f64 precision;
 } CI;
 
 typedef struct _CachedStats {
-    f64 avg;
-    f64 var;
-    CI tstudent;
-    CI chi;
+    f64 avg; f64 var;
+    CI tstudent; CI chi;
 } CachedStats;
         \end{verbatim}
     \item \arq{system.c} \par
@@ -289,15 +274,11 @@ typedef struct _CachedStats {
         \begin{verbatim}
 typedef struct _System {
     RandCtx *rand;
-    f64 lambda;
-    f64 mu;
+    f64 lambda; f64 mu;
     EventHeap *events;
-    Queue *queue;
-    b32 busy;
-    Color color;
-    Time curr_time;
-    Stats nq_stat;
-    Stats wt_stat;
+    Queue *queue; b32 busy;
+    Color color; Time curr_time;
+    Stats nq_stat; Stats wt_stat;
 } System;
         \end{verbatim}
 \end{itemize}
