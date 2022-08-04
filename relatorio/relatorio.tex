@@ -1045,7 +1045,47 @@ Variável & Média & Variância \\ % Note a separação de col. e a quebra de li
 \section{Tabelas com Resultados}
 %\newpage
 \section{Conclusão}
-%\newpage
+\newpage
 \section{Documentação do Programa}
+O repositório do projeto se encontra em \par
+\url{https://github.com/PolyTadeu/TrabFinalAD}
+
+Para compilar o código é necessário apenas
+um compilador de \lang{C}
+e \inlcode{make} é um facilitador.
+Partindo do diretório raíz do projeto,
+a instrução para compilar usando \inlcode{make}:
+\begin{verbatim}
+    $ make
+\end{verbatim}
+Ou caso queira usar um compilador específico:
+\begin{verbatim}
+    $ CC=COMPILADOR make
+\end{verbatim}
+Caso não tenha \inlcode{make} instalado:
+\begin{verbatim}
+    $ COMPILADOR -Wall -Wextra -Werror -lm src/main -o main
+\end{verbatim}
+Onde nos dois últimos comandos,
+\verb.COMPILADOR. deve ser substituído
+pelo o compilador que deseja utilizar
+(\inlcode{gcc} é um exemplo).
+
+O executável (\inlcode{main}, por padrão)
+pode receber flags adicionais para alterar valores padrão,
+como: semente utilizada, tamanho da rodada,
+taxa de chegada
+(vai ser igual a utilização quando taxa de saída for 1),
+entre outros.
+Note que a ordem da especificação das flags não importa,
+desde que o valor numérico siga imediatamente após
+a flag especificada.
+Para saber todas as flags e seus valores padrão
+rode \inlcode{./main -{}-help}.
+Um exemplo de execução para semente inicial \(40\),
+tamanho da rodada \(150\) e utilização \(0.9\):
+\begin{verbatim}
+    $ ./main -k 150 --seed 40 --lambda 0.9
+\end{verbatim}
 
 \end{document}
