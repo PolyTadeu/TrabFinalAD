@@ -50,13 +50,21 @@ ARGS_ArgOption options[] = {
         .type = ARGS_uint,
     },
     [5] = {
+        .small = "t",
+        .big = "transient-size",
+        .description = "Chooses the number of events to be handled"
+            " before finishing the transient fase,"
+            " (default: 1000000)",
+        .type = ARGS_uint,
+    },
+    [6] = {
         .small = "",
         .big = "lcfs",
         .description = "Sets the queue behavior to LCFS,"
             " (default: FCFS)",
         .type = ARGS_flag,
     },
-    [6] = {
+    [7] = {
         .small = "v",
         .big = "verbose",
         .description = "Tells the program to print statistics"
@@ -78,6 +86,7 @@ typedef struct {
     f64 lambda;
     f64 mu;
     u64 round_count;
+    u64 transient_size;
     u8 lcfs;
     u8 verbose;
     u8 ARGS_valid;
@@ -97,6 +106,7 @@ void print_opts(const Options opts) {
     printf("Round count: %lu\n", opts.round_count);
     printf("Lambda     : %lf\n", opts.lambda);
     printf("Mu         : %lf\n", opts.mu);
+    printf("Transi size: %lu\n", opts.transient_size);
     printf("Queue type : %s\n\n", qtype_name[opts.lcfs]);
 }
 
@@ -127,6 +137,7 @@ int main(const int argc, const char **argv) {
         .lambda = 0.5,
         .mu = 1,
         .round_count = 3200,
+        .transient_size = 1000000,
         .lcfs = 0,
         .verbose = 0,
     };
@@ -152,7 +163,7 @@ int main(const int argc, const char **argv) {
 
     clock_t clock1 = clock(), clock2 = clock1;
     // Fase Transiente
-    for ( ; s->wt_stat.n < 1000000; ) {
+    for ( ; s->wt_stat.n < opts.transient_size; ) {
         handle_next_event(s);
     }
     if ( opts.verbose ) {
