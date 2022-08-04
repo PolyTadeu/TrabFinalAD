@@ -22,54 +22,33 @@
   Avaliação e Desempenho - 2022.1}
 \author{Daniel Kiyoshi Hashimoto Vouzella de Andrade - 119025937
   \\
-Polyana Tadeu -
-  \\
 Gustavo Muzy Fraga -
+  \\
+Polyana Tadeu -
 }
 \date{}
 
 \begin{document}
 \maketitle
 
-\section*{Lembretes}
+\vfill
+
+Participação principal de cada integrante:
 \begin{itemize}
-    \item Tempo médio de serviço é 1 segundo
-    \item Disciplinas de fila: FCFS, LCFS
-    \item Utilizações/\(\lambda\)s:
-    \begin{itemize}
-        \item \(0.2\)
-        \item \(0.4\)
-        \item \(0.6\)
-        \item \(0.8\)
-        \item \(0.9\)
-    \end{itemize}
-    \item Definir método para término da fase transiente,
-        para cada utilização e disciplina
-    \item IC de \(95\%\) e com precisão de \(5\%\),
-        ou seja, o tamanho do intervalo deverá ser no máximo
-        \(10\%\) do valor do centro do intervalo
-    \item \(N = 3200\), número de rodadas
-    \item Tem que usar Chi-quadrado e t-Student
-    \item Temos que escolher um \(k\), número de saídas registradas,
-        mais adequado (vide apostila/slides)
-    \begin{itemize}
-        \item Pode ser que a precisão da variância
-            seja de \(5\%\),
-            mas o resultado analíco não esteja dentro do intervalo
-            pois \(k\) é muito pequeno e não se aproxima da normal
-    \end{itemize}
-    \item Métricas, para cada disciplina de fila e utilização:
-    \begin{itemize}
-        \item Tempo médio de espera na fila
-        \item Variância do tempo de espera na fila
-        \item Número médio de pessoas na fila de espera
-        \item Variância do número médio de pessoas na fila de espera
-    \end{itemize}
-    \item Na página de rosto descreva
-        a participação de cada integrante
+    \item Daniel: \par
+        Arquitetou e implementou o simulador,
+        escreveu principalmente
+        as seções 1 (exceção 1.6 e 1.7), 2 e 7.
+    \item Gustavo: \par
+        Escreveu a versão rascunho do relatório.
+    \item Polyana: \par
+        Deduziu os valores analíticos,
+        rodou o simulador para coletar os resultados
+        escreveu principalmente
+        as seções 4 e 5.
 \end{itemize}
 
-%\newpage
+\newpage
 \section{Introdução}
 \subsection{Funcionamento Geral do Simulador}
 De forma geral,
