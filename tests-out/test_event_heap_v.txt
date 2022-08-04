@@ -1,0 +1,75 @@
+cc -Wall -Wextra -Werror -D EVENT_HEAP_IMPL -D EVENT_HEAP_MAIN -D VERBOSE src/event_heap.c -o ./a.out
+./a.out
+
+==== Heap Insert ====
+
+
+inserting: 5.00
+  5.00
+
+
+inserting: 9.00
+       5.00
+  9.00
+
+inserting: 14.00
+       5.00
+  9.00     14.00
+
+
+inserting: 17.00
+                 5.00
+       9.00               14.00
+ 17.00
+
+inserting: 1.00
+                 1.00
+       5.00               14.00
+ 17.00      9.00
+
+inserting: 3.00
+                 1.00
+       5.00                3.00
+ 17.00      9.00     14.00
+
+inserting: 7.00
+                 1.00
+       5.00                3.00
+ 17.00      9.00     14.00      7.00
+
+
+==== Heap Remove ====
+
+
+removed: 1.00
+                 3.00
+       5.00                7.00
+ 17.00      9.00     14.00
+
+removed: 3.00
+                 5.00
+       9.00                7.00
+ 17.00     14.00
+
+removed: 5.00
+                 7.00
+       9.00               14.00
+ 17.00
+
+removed: 7.00
+       9.00
+ 17.00     14.00
+
+
+removed: 9.00
+      14.00
+ 17.00
+
+removed: 14.00
+ 17.00
+
+
+removed: 17.00
+
+
+Heap: Ok!

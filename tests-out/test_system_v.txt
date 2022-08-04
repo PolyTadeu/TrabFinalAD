@@ -1,0 +1,597 @@
+cc -Wall -Wextra -Werror -lm -D SYSTEM_IMPL -D SYSTEM_MAIN -D VERBOSE src/system.c -o ./a.out
+./a.out
+
+==== System 2*lambda = mu (randExp = 1) test ====
+
+Before event 0
+Handled event: arrival (0.0000)
+Person: arrived (0.0000) color (0)
+Curr time    : 0.0000 -> 0.0000
+Busy         : 0 -> 1
+Queue size   : 0 -> 0
+Events size  : 1 -> 2
+
+Before event 1
+Handled event: leave (1.0000)
+Person: arrived (0.0000) color (0)
+Curr time    : 0.0000 -> 1.0000
+Busy         : 1 -> 0
+Queue size   : 0 -> 0
+Events size  : 2 -> 1
+
+Before event 2
+Handled event: arrival (2.0000)
+Person: arrived (2.0000) color (0)
+Curr time    : 1.0000 -> 2.0000
+Busy         : 0 -> 1
+Queue size   : 0 -> 0
+Events size  : 1 -> 2
+
+Before event 3
+Handled event: leave (3.0000)
+Person: arrived (2.0000) color (0)
+Curr time    : 2.0000 -> 3.0000
+Busy         : 1 -> 0
+Queue size   : 0 -> 0
+Events size  : 2 -> 1
+
+Before event 4
+Handled event: arrival (4.0000)
+Person: arrived (4.0000) color (0)
+Curr time    : 3.0000 -> 4.0000
+Busy         : 0 -> 1
+Queue size   : 0 -> 0
+Events size  : 1 -> 2
+
+Before event 5
+Handled event: leave (5.0000)
+Person: arrived (4.0000) color (0)
+Curr time    : 4.0000 -> 5.0000
+Busy         : 1 -> 0
+Queue size   : 0 -> 0
+Events size  : 2 -> 1
+
+Before event 6
+Handled event: arrival (6.0000)
+Person: arrived (6.0000) color (0)
+Curr time    : 5.0000 -> 6.0000
+Busy         : 0 -> 1
+Queue size   : 0 -> 0
+Events size  : 1 -> 2
+
+Before event 7
+Handled event: leave (7.0000)
+Person: arrived (6.0000) color (0)
+Curr time    : 6.0000 -> 7.0000
+Busy         : 1 -> 0
+Queue size   : 0 -> 0
+Events size  : 2 -> 1
+
+Before event 8
+Handled event: arrival (8.0000)
+Person: arrived (8.0000) color (0)
+Curr time    : 7.0000 -> 8.0000
+Busy         : 0 -> 1
+Queue size   : 0 -> 0
+Events size  : 1 -> 2
+
+Wait time (5 samples):
+    avg: 0.0000,     var: 0.0000
+exp_avg: 0.0000, exp_var: 0.0000
+Queue size:
+    avg: 0.0000,     var: 0.0000
+exp_avg: 0.0000, exp_var: 0.0000
+
+Events: (leave - 9.0000 | 0 - 8.0000) (arrival - 10.0000 | 0 - 10.0000)
+Queue:
+
+System 2*lambda = mu: Ok!
+
+==== System lambda = mu (randExp = 1) test ====
+
+Before event 0
+Handled event: leave (1.0000)
+Person: arrived (0.0000) color (0)
+Curr time    : 0.0000 -> 1.0000
+Busy         : 1 -> 0
+Queue size   : 0 -> 0
+Events size  : 2 -> 1
+
+Before event 1
+Handled event: arrival (2.0000)
+Person: arrived (2.0000) color (1)
+Curr time    : 1.0000 -> 2.0000
+Busy         : 0 -> 1
+Queue size   : 0 -> 0
+Events size  : 1 -> 2
+
+Before event 2
+Handled event: arrival (3.0000)
+Person: arrived (3.0000) color (1)
+Curr time    : 2.0000 -> 3.0000
+Busy         : 1 -> 1
+Queue size   : 0 -> 1
+Events size  : 2 -> 2
+
+Before event 3
+Handled event: leave (3.0000)
+Person: arrived (2.0000) color (1)
+Curr time    : 3.0000 -> 3.0000
+Busy         : 1 -> 1
+Queue size   : 1 -> 0
+Events size  : 2 -> 2
+
+Before event 4
+Handled event: arrival (4.0000)
+Person: arrived (4.0000) color (1)
+Curr time    : 3.0000 -> 4.0000
+Busy         : 1 -> 1
+Queue size   : 0 -> 1
+Events size  : 2 -> 2
+
+Before event 5
+Handled event: leave (4.0000)
+Person: arrived (3.0000) color (1)
+Curr time    : 4.0000 -> 4.0000
+Busy         : 1 -> 1
+Queue size   : 1 -> 0
+Events size  : 2 -> 2
+
+Before event 6
+Handled event: arrival (5.0000)
+Person: arrived (5.0000) color (1)
+Curr time    : 4.0000 -> 5.0000
+Busy         : 1 -> 1
+Queue size   : 0 -> 1
+Events size  : 2 -> 2
+
+Before event 7
+Handled event: leave (5.0000)
+Person: arrived (4.0000) color (1)
+Curr time    : 5.0000 -> 5.0000
+Busy         : 1 -> 1
+Queue size   : 1 -> 0
+Events size  : 2 -> 2
+
+Before event 8
+Handled event: arrival (6.0000)
+Person: arrived (6.0000) color (1)
+Curr time    : 5.0000 -> 6.0000
+Busy         : 1 -> 1
+Queue size   : 0 -> 1
+Events size  : 2 -> 2
+
+Before event 9
+Handled event: leave (6.0000)
+Person: arrived (5.0000) color (1)
+Curr time    : 6.0000 -> 6.0000
+Busy         : 1 -> 1
+Queue size   : 1 -> 0
+Events size  : 2 -> 2
+
+Wait time (5 samples):
+    avg: 0.0000,     var: 0.0000
+exp_avg: 0.0000, exp_var: 0.0000
+Queue size:
+    avg: 0.0000,     var: 0.0000
+exp_avg: 0.0000, exp_var: 0.0000
+
+Events: (arrival - 7.0000 | 1 - 7.0000) (leave - 7.0000 | 1 - 6.0000)
+Queue:
+
+System lambda = mu: Ok!
+
+==== System lambda = 2*mu (randExp = 1) test ====
+
+Before event 0
+Handled event: arrival (1.0000)
+Person: arrived (1.0000) color (2)
+Curr time    : 0.0000 -> 1.0000
+Busy         : 1 -> 1
+Queue size   : 0 -> 1
+Events size  : 2 -> 2
+
+Before event 1
+Handled event: leave (1.0000)
+Person: arrived (0.0000) color (1)
+Curr time    : 1.0000 -> 1.0000
+Busy         : 1 -> 1
+Queue size   : 1 -> 0
+Events size  : 2 -> 2
+
+Before event 2
+Handled event: arrival (1.5000)
+Person: arrived (1.5000) color (2)
+Curr time    : 1.0000 -> 1.5000
+Busy         : 1 -> 1
+Queue size   : 0 -> 1
+Events size  : 2 -> 2
+
+Before event 3
+Handled event: leave (2.0000)
+Person: arrived (1.0000) color (2)
+Curr time    : 1.5000 -> 2.0000
+Busy         : 1 -> 1
+Queue size   : 1 -> 0
+Events size  : 2 -> 2
+
+Before event 4
+Handled event: arrival (2.0000)
+Person: arrived (2.0000) color (2)
+Curr time    : 2.0000 -> 2.0000
+Busy         : 1 -> 1
+Queue size   : 0 -> 1
+Events size  : 2 -> 2
+
+Before event 5
+Handled event: arrival (2.5000)
+Person: arrived (2.5000) color (2)
+Curr time    : 2.0000 -> 2.5000
+Busy         : 1 -> 1
+Queue size   : 1 -> 2
+Events size  : 2 -> 2
+
+Before event 6
+Handled event: leave (3.0000)
+Person: arrived (1.5000) color (2)
+Curr time    : 2.5000 -> 3.0000
+Busy         : 1 -> 1
+Queue size   : 2 -> 1
+Events size  : 2 -> 2
+
+Before event 7
+Handled event: arrival (3.0000)
+Person: arrived (3.0000) color (2)
+Curr time    : 3.0000 -> 3.0000
+Busy         : 1 -> 1
+Queue size   : 1 -> 2
+Events size  : 2 -> 2
+
+Before event 8
+Handled event: arrival (3.5000)
+Person: arrived (3.5000) color (2)
+Curr time    : 3.0000 -> 3.5000
+Busy         : 1 -> 1
+Queue size   : 2 -> 3
+Events size  : 2 -> 2
+
+Before event 9
+Handled event: leave (4.0000)
+Person: arrived (2.0000) color (2)
+Curr time    : 3.5000 -> 4.0000
+Busy         : 1 -> 1
+Queue size   : 3 -> 2
+Events size  : 2 -> 2
+
+Before event 10
+Handled event: arrival (4.0000)
+Person: arrived (4.0000) color (2)
+Curr time    : 4.0000 -> 4.0000
+Busy         : 1 -> 1
+Queue size   : 2 -> 3
+Events size  : 2 -> 2
+
+Before event 11
+Handled event: arrival (4.5000)
+Person: arrived (4.5000) color (2)
+Curr time    : 4.0000 -> 4.5000
+Busy         : 1 -> 1
+Queue size   : 3 -> 4
+Events size  : 2 -> 2
+
+Before event 12
+Handled event: leave (5.0000)
+Person: arrived (2.5000) color (2)
+Curr time    : 4.5000 -> 5.0000
+Busy         : 1 -> 1
+Queue size   : 4 -> 3
+Events size  : 2 -> 2
+
+Before event 13
+Handled event: arrival (5.0000)
+Person: arrived (5.0000) color (2)
+Curr time    : 5.0000 -> 5.0000
+Busy         : 1 -> 1
+Queue size   : 3 -> 4
+Events size  : 2 -> 2
+
+Before event 14
+Handled event: arrival (5.5000)
+Person: arrived (5.5000) color (2)
+Curr time    : 5.0000 -> 5.5000
+Busy         : 1 -> 1
+Queue size   : 4 -> 5
+Events size  : 2 -> 2
+
+Before event 15
+Handled event: leave (6.0000)
+Person: arrived (3.0000) color (2)
+Curr time    : 5.5000 -> 6.0000
+Busy         : 1 -> 1
+Queue size   : 5 -> 4
+Events size  : 2 -> 2
+
+Before event 16
+Handled event: arrival (6.0000)
+Person: arrived (6.0000) color (2)
+Curr time    : 6.0000 -> 6.0000
+Busy         : 1 -> 1
+Queue size   : 4 -> 5
+Events size  : 2 -> 2
+
+Before event 17
+Handled event: arrival (6.5000)
+Person: arrived (6.5000) color (2)
+Curr time    : 6.0000 -> 6.5000
+Busy         : 1 -> 1
+Queue size   : 5 -> 6
+Events size  : 2 -> 2
+
+Before event 18
+Handled event: leave (7.0000)
+Person: arrived (3.5000) color (2)
+Curr time    : 6.5000 -> 7.0000
+Busy         : 1 -> 1
+Queue size   : 6 -> 5
+Events size  : 2 -> 2
+
+Before event 19
+Handled event: arrival (7.0000)
+Person: arrived (7.0000) color (2)
+Curr time    : 7.0000 -> 7.0000
+Busy         : 1 -> 1
+Queue size   : 5 -> 6
+Events size  : 2 -> 2
+
+Before event 20
+Handled event: arrival (7.5000)
+Person: arrived (7.5000) color (2)
+Curr time    : 7.0000 -> 7.5000
+Busy         : 1 -> 1
+Queue size   : 6 -> 7
+Events size  : 2 -> 2
+
+Before event 21
+Handled event: leave (8.0000)
+Person: arrived (4.0000) color (2)
+Curr time    : 7.5000 -> 8.0000
+Busy         : 1 -> 1
+Queue size   : 7 -> 6
+Events size  : 2 -> 2
+
+Before event 22
+Handled event: arrival (8.0000)
+Person: arrived (8.0000) color (2)
+Curr time    : 8.0000 -> 8.0000
+Busy         : 1 -> 1
+Queue size   : 6 -> 7
+Events size  : 2 -> 2
+
+Before event 23
+Handled event: arrival (8.5000)
+Person: arrived (8.5000) color (2)
+Curr time    : 8.0000 -> 8.5000
+Busy         : 1 -> 1
+Queue size   : 7 -> 8
+Events size  : 2 -> 2
+
+Before event 24
+Handled event: leave (9.0000)
+Person: arrived (4.5000) color (2)
+Curr time    : 8.5000 -> 9.0000
+Busy         : 1 -> 1
+Queue size   : 8 -> 7
+Events size  : 2 -> 2
+
+Before event 25
+Handled event: arrival (9.0000)
+Person: arrived (9.0000) color (2)
+Curr time    : 9.0000 -> 9.0000
+Busy         : 1 -> 1
+Queue size   : 7 -> 8
+Events size  : 2 -> 2
+
+Before event 26
+Handled event: arrival (9.5000)
+Person: arrived (9.5000) color (2)
+Curr time    : 9.0000 -> 9.5000
+Busy         : 1 -> 1
+Queue size   : 8 -> 9
+Events size  : 2 -> 2
+
+Before event 27
+Handled event: leave (10.0000)
+Person: arrived (5.0000) color (2)
+Curr time    : 9.5000 -> 10.0000
+Busy         : 1 -> 1
+Queue size   : 9 -> 8
+Events size  : 2 -> 2
+
+Wait time (10 samples):
+    avg: 2.2500,     var: 2.2917
+exp_avg: 2.2500, exp_var: 2.2917
+Queue size:
+    avg: 4.0500,     var: 8.0475
+exp_avg: 4.0500, exp_var: 8.0475
+
+Events: (arrival - 10.0000 | 2 - 10.0000) (leave - 11.0000 | 2 - 5.5000)
+Queue:
+ (2 | 6.0000) (2 | 6.5000) (2 | 7.0000) (2 | 7.5000)
+ (2 | 8.0000) (2 | 8.5000) (2 | 9.0000) (2 | 9.5000)
+
+System lambda = 2*mu: Ok!
+
+==== System 2*lambda = mu (randExp = 1) test 2 ====
+
+Before event 0
+Handled event: arrival (0.0000)
+Person: arrived (0.0000) color (3)
+Curr time    : 0.0000 -> 0.0000
+Busy         : 1 -> 1
+Queue size   : 8 -> 9
+Events size  : 2 -> 2
+
+Before event 1
+Handled event: leave (1.0000)
+Person: arrived (-4.5000) color (2)
+Curr time    : 0.0000 -> 1.0000
+Busy         : 1 -> 1
+Queue size   : 9 -> 8
+Events size  : 2 -> 2
+
+Before event 2
+Handled event: arrival (2.0000)
+Person: arrived (2.0000) color (3)
+Curr time    : 1.0000 -> 2.0000
+Busy         : 1 -> 1
+Queue size   : 8 -> 9
+Events size  : 2 -> 2
+
+Before event 3
+Handled event: leave (2.0000)
+Person: arrived (6.0000) color (2)
+Curr time    : 2.0000 -> 2.0000
+Busy         : 1 -> 1
+Queue size   : 9 -> 8
+Events size  : 2 -> 2
+
+Before event 4
+Handled event: leave (3.0000)
+Person: arrived (6.5000) color (2)
+Curr time    : 2.0000 -> 3.0000
+Busy         : 1 -> 1
+Queue size   : 8 -> 7
+Events size  : 2 -> 2
+
+Before event 5
+Handled event: arrival (4.0000)
+Person: arrived (4.0000) color (3)
+Curr time    : 3.0000 -> 4.0000
+Busy         : 1 -> 1
+Queue size   : 7 -> 8
+Events size  : 2 -> 2
+
+Before event 6
+Handled event: leave (4.0000)
+Person: arrived (7.0000) color (2)
+Curr time    : 4.0000 -> 4.0000
+Busy         : 1 -> 1
+Queue size   : 8 -> 7
+Events size  : 2 -> 2
+
+Before event 7
+Handled event: leave (5.0000)
+Person: arrived (7.5000) color (2)
+Curr time    : 4.0000 -> 5.0000
+Busy         : 1 -> 1
+Queue size   : 7 -> 6
+Events size  : 2 -> 2
+
+Before event 8
+Handled event: arrival (6.0000)
+Person: arrived (6.0000) color (3)
+Curr time    : 5.0000 -> 6.0000
+Busy         : 1 -> 1
+Queue size   : 6 -> 7
+Events size  : 2 -> 2
+
+Before event 9
+Handled event: leave (6.0000)
+Person: arrived (8.0000) color (2)
+Curr time    : 6.0000 -> 6.0000
+Busy         : 1 -> 1
+Queue size   : 7 -> 6
+Events size  : 2 -> 2
+
+Before event 10
+Handled event: leave (7.0000)
+Person: arrived (8.5000) color (2)
+Curr time    : 6.0000 -> 7.0000
+Busy         : 1 -> 1
+Queue size   : 6 -> 5
+Events size  : 2 -> 2
+
+Before event 11
+Handled event: arrival (8.0000)
+Person: arrived (8.0000) color (3)
+Curr time    : 7.0000 -> 8.0000
+Busy         : 1 -> 1
+Queue size   : 5 -> 6
+Events size  : 2 -> 2
+
+Before event 12
+Handled event: leave (8.0000)
+Person: arrived (9.0000) color (2)
+Curr time    : 8.0000 -> 8.0000
+Busy         : 1 -> 1
+Queue size   : 6 -> 5
+Events size  : 2 -> 2
+
+Before event 13
+Handled event: leave (9.0000)
+Person: arrived (9.5000) color (2)
+Curr time    : 8.0000 -> 9.0000
+Busy         : 1 -> 1
+Queue size   : 5 -> 4
+Events size  : 2 -> 2
+
+Before event 14
+Handled event: arrival (10.0000)
+Person: arrived (10.0000) color (3)
+Curr time    : 9.0000 -> 10.0000
+Busy         : 1 -> 1
+Queue size   : 4 -> 5
+Events size  : 2 -> 2
+
+Before event 15
+Handled event: leave (10.0000)
+Person: arrived (0.0000) color (3)
+Curr time    : 10.0000 -> 10.0000
+Busy         : 1 -> 1
+Queue size   : 5 -> 4
+Events size  : 2 -> 2
+
+Before event 16
+Handled event: leave (11.0000)
+Person: arrived (2.0000) color (3)
+Curr time    : 10.0000 -> 11.0000
+Busy         : 1 -> 1
+Queue size   : 4 -> 3
+Events size  : 2 -> 2
+
+Before event 17
+Handled event: arrival (12.0000)
+Person: arrived (12.0000) color (3)
+Curr time    : 11.0000 -> 12.0000
+Busy         : 1 -> 1
+Queue size   : 3 -> 4
+Events size  : 2 -> 2
+
+Before event 18
+Handled event: leave (12.0000)
+Person: arrived (4.0000) color (3)
+Curr time    : 12.0000 -> 12.0000
+Busy         : 1 -> 1
+Queue size   : 4 -> 3
+Events size  : 2 -> 2
+
+Before event 19
+Handled event: leave (13.0000)
+Person: arrived (6.0000) color (3)
+Curr time    : 12.0000 -> 13.0000
+Busy         : 1 -> 1
+Queue size   : 3 -> 2
+Events size  : 2 -> 2
+
+Wait time (5 samples):
+    avg: 7.0000,     var: 2.5000
+exp_avg: 7.0000, exp_var: 2.5000
+Queue size:
+    avg: 5.7692,     var: 3.5621
+exp_avg: 5.7692, exp_var: 3.5621
+
+Events: (arrival - 14.0000 | 3 - 14.0000) (leave - 14.0000 | 3 - 8.0000)
+Queue:
+ (3 | 10.0000) (3 | 12.0000)
+
+System 2*lambda = mu (2): Ok!

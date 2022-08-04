@@ -1,0 +1,20 @@
+cc -Wall -Wextra -Werror -lm -D SYSTEM_IMPL -D SYSTEM_MAIN -D VERBOSE src/seed.c -o ./a.out
+./a.out
+
+==== Seed overlap ====
+
+Generating 0x10000 values, with seed 1659623665
+No cicle found with 65536 values
+Generating 0x10000 values, with seed 1659629122
+No cicle found with 65536 values
+Comparing sequences:
+Found equal at indexes: new 22141, old 10386, value 152262527
+Extends for 1 values
+
+Found equal at indexes: new 35315, old 41623, value 1397452342
+Extends for 1 values
+
+Found equal at indexes: new 50037, old 62051, value 1741405568
+Extends for 1 values
+
+Seed overlap: Ok!
