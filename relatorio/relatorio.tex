@@ -10,6 +10,8 @@
 
 \usepackage{verbatim}
 
+\usepackage{multirow}
+
 \usepackage{hyperref}
 
 \newcommand{\E}[1]{E\!\left[#1\right]}
@@ -1026,7 +1028,7 @@ Para achar a variância:
 
 Ao final obtivemos os seguintes valores analíticos:
 \begin{table}[h]
-\centering
+    \centering
     \begin{tabular}{|c|cc|}\hline
         Variável & Média & Variância \\\hline
         $ W_{LCFS} $&$ \frac{\rho}{1-\rho} $&$
@@ -1036,12 +1038,184 @@ Ao final obtivemos os seguintes valores analíticos:
         $ N_q      $&$ \frac{\rho^2}{1 - \rho} $&$
             \frac{\rho^2 + \rho^3 - \rho^4}{(1 - \rho)^2} $\\\hline
     \end{tabular}
-\caption{Valores analíticos}
+    \caption{Valores analíticos}
 \end{table}
 
 \newpage
 \section{Tabelas com Resultados}
-%\newpage
+Todos os valores foram calculados usando 3200 rodadas.
+
+\subsection{Fila FCFS}
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|c|lr|c|c|}\hline
+        \multirow{2}{4.35em}{Utilização}
+            & \multirow{2}{3.95em}{Analítico}
+            & \multirow{2}{4.4em}{Simulação}
+            & \multicolumn{2}{|c|}{IC t-Student}
+            & \multirow{2}{2.4em}{Kmin}
+            & \multirow{2}{3.75em}{Rodadas} \\
+        &&& Inf & Sup &&\\\hline
+        $ 0.2 $&$ 0.25 $&$ 0.250578 $&$ 0.249339 $&$ 0.251817 $&$
+            1100 $&$ 3200 $\\
+        $ 0.4 $&$ 0.66667 $&$ 0.664532 $&$ 0.660929 $&$ 0.668136 $&$
+            1000 $&$ 3200 $\\\hline
+        $ 0.6 $&$ 1.5 $&$ 1.496058 $&$ 1.489644 $&$ 1.502472 $&$
+            3200 $&$ 3200 $\\
+        $ 0.8 $&$ 4 $&$ 4.011640 $&$ 3.988097 $&$ 4.035183 $&$
+            4000 $&$ 3200 $\\\hline
+        $ 0.9 $&$ 9 $&$ 8.936891 $&$ 8.869972 $&$ 9.072329 $&$
+            4300 $&$ 3200 $\\\hline
+    \end{tabular}
+    \caption{Média do tempo de espera (FCFS)}
+\end{table}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|c|lr|c|c|}\hline
+        \multirow{2}{4.35em}{Utilização}
+            & \multirow{2}{3.95em}{Analítico}
+            & \multirow{2}{4.4em}{Simulação}
+            & \multicolumn{2}{|c|}{IC t-Student}
+            & \multirow{2}{2.4em}{Kmin}
+            & \multirow{2}{3.75em}{Rodadas} \\
+        &&& Inf & Sup &&\\\hline
+        $ 0.2 $&$ 0.05 $&$ 0.050200 $&$ 0.049933 $&$ 0.050468 $&$
+            1100 $&$ 3200 $\\
+        $ 0.4 $&$ 0.26667 $&$ 0.266992 $&$ 0.265455 $&$ 0.268529 $&$
+            1000 $&$ 3200 $\\\hline
+        $ 0.6 $&$ 0.9 $&$ 0.899492 $&$ 0.895337 $&$ 0.903646 $&$
+            3200 $&$ 3200 $\\
+        $ 0.8 $&$ 3.2 $&$ 3.202387 $&$ 3.181935 $&$ 3.222838 $&$
+            4000 $&$ 3200 $\\\hline
+        $ 0.9 $&$ 8.1 $&$ 8.079803 $&$ 7.989058 $&$ 8.170548 $&$
+            4300 $&$ 3200 $\\\hline
+    \end{tabular}
+    \caption{Média do número de clientes na fila de espera (FCFS)}
+\end{table}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|lcr|c|c|}\hline
+        \multirow{2}{4.35em}{Utilização}
+            & \multirow{3}{3.95em}{Analítico}
+            & \multicolumn{3}{|c|}{IC t-Student}
+            & \multirow{3}{1em}{K}
+            & \multirow{3}{3.75em}{Rodadas} \\
+        && Inf & Centro & Sup &&\\
+        && \multicolumn{3}{|c|}{IC Chi-Square} &&\\\hline
+        \multirow{2}{2em}{0.2}
+            &\multirow{2}{3em}{0.5625}
+            &$ 0.554137 $&$ 0.559098 $&$ 0.564060 $
+            &\multirow{2}{2em}{1200} & \multirow{2}{2em}{3200}\\
+            &&$ 0.532680 $&$ 0.5601115 $&$ 0.587543 $&&\\\hline
+        \multirow{2}{2em}{0.4}
+            &\multirow{2}{3em}{1.7778}
+            &$ 1.742943 $&$ 1.763068 $&$ 1.783193 $
+            &\multirow{2}{2em}{1000} & \multirow{2}{2em}{3200}\\
+            &&$ 1.679759 $&$ 1.7662615 $&$ 1.852764 $&&\\\hline
+        \multirow{2}{2em}{0.6}
+            &\multirow{2}{2em}{5.25}
+            &$ 5.149998 $&$ 5.202697 $&$ 5.255396 $
+            &\multirow{2}{2em}{3200} & \multirow{2}{2em}{3200}\\
+            &&$ 4.956856 $&$ 5.21212  $&$ 5.467384 $&&\\\hline
+        \multirow{2}{2em}{0.8}
+            &\multirow{2}{2em}{24}
+            &$ 23.509601 $&$ 23.935170 $&$ 24.360740 $
+            &\multirow{2}{2em}{4300} & \multirow{2}{2em}{3200}\\
+            &&$ 22.804172 $&$ 23.9785215 $&$ 25.152871 $&&\\\hline
+        \multirow{2}{2em}{0.9}
+            &\multirow{2}{2em}{99}
+            &$ 95.433237 $&$ 97.497706 $&$ 99.562174 $
+            &\multirow{2}{2.5em}{12000} & \multirow{2}{2em}{3200}\\
+            &&$ 92.890687 $&$ 97.6742925 $&$ 102.457898 $&&\\\hline
+    \end{tabular}
+    \caption{Variância do tempo de espera (FCFS)}
+\end{table}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|lcr|c|c|}\hline
+        \multirow{2}{4.35em}{Utilização}
+            & \multirow{3}{3.95em}{Analítico}
+            & \multicolumn{3}{|c|}{IC t-Student}
+            & \multirow{3}{1em}{K}
+            & \multirow{3}{3.75em}{Rodadas} \\
+        && Inf & Centro & Sup &&\\
+        && \multicolumn{3}{|c|}{IC Chi-Square} &&\\\hline
+        \multirow{2}{2em}{0.2}
+            &\multirow{2}{3em}{0.0725}
+            &$ 0.072231 $&$ 0.072800 $&$ 0.073370 $
+            &\multirow{2}{2em}{1200} & \multirow{2}{2em}{3200}\\
+            &&$ 0.069360 $&$ 0.072932 $&$ 0.076504 $&&\\\hline
+        \multirow{2}{2em}{0.4}
+            &\multirow{2}{3em}{0.55111}
+            &$ 0.545911 $&$ 0.551984 $&$ 0.558057 $
+            &\multirow{2}{2em}{1000} & \multirow{2}{2em}{3200}\\
+            &&$ 0.525901 $&$ 0.5529835 $&$ 0.580066 $&&\\\hline
+        \multirow{2}{2em}{0.6}
+            &\multirow{2}{2em}{2.79}
+            &$ 2.729260 $&$ 2.754135 $&$ 2.779009 $
+            &\multirow{2}{2em}{3200} & \multirow{2}{2em}{3200}\\
+            &&$ 2.623995 $&$ 2.759123 $&$ 2.894251 $&&\\\hline
+        \multirow{2}{2em}{0.8}
+            &\multirow{2}{2em}{18.56}
+            &$ 18.079828 $&$ 18.387566 $&$ 18.695303 $
+            &\multirow{2}{2em}{4300} & \multirow{2}{2em}{3200}\\
+            &&$ 17.518706 $&$ 18.420869 $&$ 19.323032 $&&\\\hline
+        \multirow{2}{2em}{0.9}
+            &\multirow{2}{2em}{88.29}
+            &$ 85.524726 $&$ 87.415661 $&$ 89.306595 $
+            &\multirow{2}{2.5em}{12000} & \multirow{2}{2em}{3200}\\
+            &&$ 83.285045 $&$ 87.5739875 $&$ 91.862929 $&&\\\hline
+    \end{tabular}
+    \caption{Variância do número de clientes
+    na fila de espera (FCFS)}
+\end{table}
+
+\subsubsection{FCFS: Evoluções dos ICs}
+\begin{itemize}
+    \item Utilização 0.2
+    \begin{table}[h!]
+        \centering
+        \begin{tabular}{|c|c|lcr|lcr|}\hline
+            \multirow{2}{3.75em}{Rodadas}
+                & \multirow{2}{1em}{K}
+                & \multicolumn{3}{|c|}{IC t-Student}
+                & \multicolumn{3}{|c|}{IC Chi-Square} \\
+            && Inf & Centro & Sup & Inf & Centro & Sup \\\hline
+            3200 & 1100
+                &$ 0.549500 $&$ 0.554831 $&$ 0.560163 $
+                &$ 0.528614 $&$ 0.555836 $&$ 0.583058 $\\\hline
+            3200 & 1200
+                &$ 0.554137 $&$ 0.559098 $&$ 0.564060 $
+                &$ 0.532680 $&$ 0.5601115 $&$ 0.587543 $\\\hline
+        \end{tabular}
+        \caption{Evolução da variância do tempo de espera --
+            utilização 0.2 (FCFS)}
+    \end{table}
+    \item Utilização 0.6
+    \begin{table}[h!]
+        \centering
+        \begin{tabular}{|c|c|lcr|lcr|}\hline
+            \multirow{2}{3.75em}{Rodadas}
+                & \multirow{2}{1em}{K}
+                & \multicolumn{3}{|c|}{IC t-Student}
+                & \multicolumn{3}{|c|}{IC Chi-Square} \\
+            && Inf & Centro & Sup & Inf & Centro & Sup \\\hline
+            3200 & 4000
+                &$ 22.723773 $&$ 23.086594 $&$ 23.449415 $
+                &$ 21.995693 $&$ 23.1284085 $&$ 24.261124 $\\\hline
+            3200 & 4100
+                &$ 22.877519 $&$ 23.249955 $&$ 23.622390 $
+                &$ 22.151334 $&$ 23.2920645 $&$ 24.432795 $\\\hline
+        \end{tabular}
+        \caption{Evolução da variância do tempo de espera --
+            utilização 0.8 (FCFS)}
+    \end{table}
+\end{itemize}
+
+\newpage
 \section{Conclusão}
 \newpage
 \section{Documentação do Programa}
