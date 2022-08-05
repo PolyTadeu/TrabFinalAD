@@ -48,7 +48,7 @@ Participação principal de cada integrante:
     \item \large Resultados: 
     \hfill Polyana Tadeu
     \item \large Conclusão: 
-    \hfill --
+    \hfill Gustavo Muzy
     \item \large Revisão: 
     \hfill Daniel Hashimoto
 \end{itemize}
@@ -1056,6 +1056,20 @@ Ao final obtivemos os seguintes valores analíticos:
 \section{Tabelas com Resultados}
 %\newpage
 \section{Conclusão}
+\subsection{Dificuldades} 
+Uma certa dificuldade foi encontrar o valor chi-square para a quantidade de rodadas pedidas.
+\subsection{Otimizações} 
+Geração de valores pseudoaleatórios pelo Hashi
+\subsection{Melhorias} 
+    
+    Durante o cálculo da fase transiente, rodamos o programa até 1000000 serem tratados para pegarmos a média e variança do tempo da fila de espera. Apenas isso é feito, não reduzimos o tempo para uma estimativa. Os tempos da fase transiente devem variar também de acordo com a utilização, como vimos na apostila e observamos nos resultados apresentados nos gráficos. Inclusive, podemos observar que o sistema estabiliza bem antes dos 1000000 eventos. Todavia, tratamos a fase transiente da mesma forma para todas utilizações. O tempo total de simulação pode ter uma redução com essa implementação.
+\subsection{Comentários} 
+\subsection{Erros Encontrados} 
+\begin{itemize}
+    \item Random Exponencial
+    Os testes de random exponencial falharam no sistema operacional do Windows.
+\end{itemize}
+
 \newpage
 \section{Documentação do Programa}
 O repositório do projeto se encontra em \par
