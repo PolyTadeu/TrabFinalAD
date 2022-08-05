@@ -26,7 +26,7 @@
   \\
 Gustavo Muzy Fraga -
   \\
-Polyana Tadeu -
+Polyana Tadeu Pacheco da Silva - 119044517
 }
 \date{}
 
@@ -326,7 +326,43 @@ zeramos o \emph{tempo atual} e
 acumuladores de estatística.
 
 \subsection{Kmin e ICs}
-% TODO(Polyana)
+Para determinar o tamanho da rodada Kmin, utilizamos o IC para a
+média do tempo na fila de espera pela t-Student, com 3200 rodadas.
+Dessa forma estipulamos Kmin = \(200\) como valor inicial, e a cada simulação
+fomos verificando os seguintes itens experimentalmente
+
+\begin{itemize}
+    \item \textbf{Validade do intervalo de confiança} \par
+        O Kmin escolhido precisa garantir que o valor
+        analíco da média do tempo de espera na fila esteja dentro do
+        IC para a média pela t-Sudent.
+
+    \item \textbf{Precisão do intervalo de confiança} \par
+        Como estípulado no escopo do trabalho o Kmin deve garantir
+        uam precisão de \(5\%\) para o intervalo.
+    
+    \item \textbf{Independência da semente} \par
+        O Kmin precisa garantir a validade dos dois itens 
+        descritos acima para qualquer semente. Nesse sentido,
+        quando o Kmin atinge um valor que cumpre os dois
+        requisitos citados anteriormente, executamos a simulação 
+        vinte vezes para verificar se o valor está estável para
+        qualquer semente.
+
+\end{itemize}
+Caso o Kmin não atenda algum dos critérios acima, incrementamos o 
+valor em \(100\) unidades, e relizamos todo o processo de verificação
+novamente até achar um valor satisfatório. O processo de achar o Kmin
+é realizado de maneira individual para cada utilização e cada disciplina
+de atendimento.
+
+É importante combinar estes três fatores para a obtenção do Kmin, uma vez que
+olhar apenas uma estatística pode gerar falsos resultados. Por exemplo, ao rodar
+a simulação com Kmin = \(200\), utilização de \(0.6\), para uma fila FCFS,
+obtemos o intervalo \([1.451585 - 1.494867]\) para o IC do tempo médio
+na fila de espera pela t-Student com precisão de \(0.014690\). Caso considerássemos
+apenas a precisão como fator determinante, obteríamos um IC inválido
+pois não contém o valor analítico esperado de \(1.5\).
 
 \subsection{Coleta e Cálculo de Estatísticas}
 Relembrando que todos os calculos estatísticos estão
@@ -385,17 +421,33 @@ O programa foi rodado num MacBook com configurações:
 
 \begin{center} \begin{tabular}{|c|c|c|}
     \hline
-     Utilizacao & Tempo Disciplina FCFS & Tempo Disciplina LCFS\\
+     Utilizacao & Tempo Disciplina FCFS & K\\
     \hline
-    0.2 & 0.633008 & 0.665364 \\
+    0.2 & 0.633008 & 1100 \\
     \hline
-    0.4 & 0.631017 & 0.818632 \\
+    0.4 & 0.631017 & 1000 \\
     \hline
-    0.6 & 1.506515 & 3.188269 \\
+    0.6 & 1.506515 & 3200 \\
     \hline
-    0.8 & 2.282227 & 16.064298 \\
+    0.8 & 2.282227 & 4000 \\
     \hline
-    0.9 & 2.540672 & 39.594384 \\
+    0.9 & 2.540672 & 4300 \\
+    \hline
+\end{tabular} \end{center}
+
+\begin{center} \begin{tabular}{|c|c|c|}
+    \hline
+     Utilizacao & Tempo Disciplina LCFS & K\\
+    \hline
+    0.2 & 0.665364 & 1200 \\
+    \hline
+    0.4 & 0.818632 & 1400\\
+    \hline
+    0.6 &  3.188269 & 6000\\
+    \hline
+    0.8 & 16.064298 & 30000 \\
+    \hline
+    0.9 & 39.594384 & 70000\\
     \hline
 \end{tabular} \end{center}
 
@@ -601,9 +653,12 @@ Para uma fila M/M/1 \(\rho = \lambda \; \E{X}\)
         = \lambda^3 \; \E{X^3} = 6 \; \rho^3
 \end{align*}
 Desse modo:
-\begin{center}
-    COLOCAR IMAGEM
-\end{center}
+\[
+    N_{i+1} = \begin{cases}
+                K \quad&, \qquad\text{se } N = 0 \\
+                N_i + K - 1 \quad&, \qquad\text{se } N > 0 \\    
+        \end{cases}
+\]
 Usando tranformadas e condicionamentos, temos:
 \[
     \E{z^{N_{i+1}}}
@@ -688,9 +743,12 @@ Para M/M/1:
 Com \(N(z)\) calculada, é fácil achar
 o número de pessoas na fila de espera,
 uma vez que:
-\begin{center}
-    COLOCAR IMAGEM
-\end{center}
+\[
+    N_q = \begin{cases}
+                0 \quad&, \qquad\text{se } N = 0 \\
+                N - 1 \quad&, \qquad\text{se } N > 0 \\    
+        \end{cases}
+\]
 \begin{align*}
     \E{z^{N_q}} &= \E{z^N| N = 0} \; P(N = 0)
         + \E{z^{N-1} | N > 0} \;P(N > 0) \\
@@ -964,10 +1022,9 @@ Como o tempo médio de serviço é 1 segundo, \(\lambda = \rho\)
 \]
 O segundo e o terceiro momentos de uma exponencial,
 com \(\mu = 1\) podem ser dados por:
-% TODO: BOTAR INTEGRAL
 \begin{align*}
-    &\E{X^2} \int = \frac{2}{\mu^2 } = 2 \\
-    &\E{X^3} \int = \frac{6}{\mu^3 } = 6
+    &\E{X^2} = \int_{0}^{\infty} \mu \;x^2\;e^{-\mu x}\;dx= \frac{2}{\mu^2 } = 2 \\
+    &\E{X^3} = \int_{0}^{\infty} \mu \;x^3\;e^{-\mu x}\;dx = \frac{6}{\mu^3 } = 6
 \end{align*}
 Então,
 \[
