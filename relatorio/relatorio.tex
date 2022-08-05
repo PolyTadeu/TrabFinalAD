@@ -1297,84 +1297,80 @@ Todos os valores foram calculados usando 3200 rodadas.
     na fila de espera (FCFS)}
 \end{table}
 
-\subsubsection{FCFS: Evoluções dos ICs}
-\begin{itemize}
-    \item Utilização 0.2
-    \begin{table}[h!]
-        \centering
-        \begin{tabular}{|c|c|lcr|lcr|}\hline
-            \multirow{2}{3.75em}{Rodadas}
-                & \multirow{2}{1em}{K}
-                & \multicolumn{3}{|c|}{IC t-Student}
-                & \multicolumn{3}{|c|}{IC Chi-Square} \\
-            && Inf & Centro & Sup & Inf & Centro & Sup \\\hline
-            3200 & 1100
-                &$ 0.549500 $&$ 0.554831 $&$ 0.560163 $
-                &$ 0.528614 $&$ 0.555836 $&$ 0.583058 $\\\hline
-            3200 & 1200
-                &$ 0.554137 $&$ 0.559098 $&$ 0.564060 $
-                &$ 0.532680 $&$ 0.5601115 $&$ 0.587543 $\\\hline
-        \end{tabular}
-        \caption{Evolução da variância do tempo de espera --
-            utilização 0.2 (FCFS)}
-    \end{table}
-    \item Utilização 0.8
-    \begin{table}[h!]
-        \centering
-        \begin{tabular}{|c|c|lcr|lcr|}\hline
-            \multirow{2}{3.75em}{Rodadas}
-                & \multirow{2}{1em}{K}
-                & \multicolumn{3}{|c|}{IC t-Student}
-                & \multicolumn{3}{|c|}{IC Chi-Square} \\
-            && Inf & Centro & Sup & Inf & Centro & Sup \\\hline
-            3200 & 4000
-                &$ 22.723773 $&$ 23.086594 $&$ 23.449415 $
-                &$ 21.995693 $&$ 23.1284085 $&$ 24.261124 $\\\hline
-            3200 & 4100
-                &$ 22.877519 $&$ 23.249955 $&$ 23.622390 $
-                &$ 22.151334 $&$ 23.2920645 $&$ 24.432795 $\\\hline
-            3200 & 4200
-                &$ 22.847088 $&$ 23.206213 $&$ 23.565338 $
-                &$ 22.109659 $&$ 23.2482435 $&$ 24.386828 $\\\hline
-            3200 & 4300
-                &$ 23.509601 $&$ 23.935170 $&$ 24.360740 $
-                &$ 22.804172 $&$ 23.9785215 $&$ 25.152871 $\\\hline
-        \end{tabular}
-        \caption{Evolução da variância do tempo de espera --
-            utilização 0.8 (FCFS)}
-    \end{table}
-    \item Utilização 0.9
-    \begin{table}[h!]
-        \centering
-        \begin{tabular}{|c|c|lcr|lcr|}\hline
-            \multirow{2}{3.75em}{Rodadas}
-                & \multirow{2}{1em}{K}
-                & \multicolumn{3}{|c|}{IC t-Student}
-                & \multicolumn{3}{|c|}{IC Chi-Square} \\
-            && Inf & Centro & Sup & Inf & Centro & Sup \\\hline
-            3200 & 4300
-                &$ 87.375983 $&$ 89.904690 $&$ 92.434497 $
-                &$ 85.656462 $&$ 90.067525 $&$ 94.478588 $\\\hline
-            3200 & 5300
-                &$ 90.818652 $&$ 93.096839 $&$ 95.375025 $
-                &$ 88.697773 $&$ 93.265455 $&$ 97.833137 $\\\hline
-            3200 & 8300
-                &$ 91.937129 $&$ 94.184284 $&$ 96.431438 $
-                &$ 89.733833 $&$ 94.3548695 $&$ 98.975906 $\\\hline
-            3200 & 10000
-                &$ 93.840319 $&$ 95.888738 $&$ 97.937156 $
-                &$ 91.357747 $&$ 96.0624105 $&$ 100.757074 $\\\hline
-            3200 & 11000
-                &$ 94.914793 $&$ 96.914955 $&$ 98.915116 $
-                &$ 92.335473 $&$ 97.0904865 $&$ 101.845500 $\\\hline
-            3200 & 12000
-                &$ 95.433237 $&$ 97.497706 $&$ 99.562174 $
-                &$ 92.890687 $&$ 97.6742925 $&$ 102.457898 $\\\hline
-        \end{tabular}
-        \caption{Evolução da variância do tempo de espera --
-            utilização 0.9 (FCFS)}
-    \end{table}
-\end{itemize}
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|lcr|lcr|}\hline
+        \multirow{2}{3.75em}{Rodadas}
+            & \multirow{2}{1em}{K}
+            & \multicolumn{3}{|c|}{IC t-Student}
+            & \multicolumn{3}{|c|}{IC Chi-Square} \\
+        && Inf & Centro & Sup & Inf & Centro & Sup \\\hline
+        3200 & 1100
+            &$ 0.549500 $&$ 0.554831 $&$ 0.560163 $
+            &$ 0.528614 $&$ 0.555836 $&$ 0.583058 $\\\hline
+        3200 & 1200
+            &$ 0.554137 $&$ 0.559098 $&$ 0.564060 $
+            &$ 0.532680 $&$ 0.5601115 $&$ 0.587543 $\\\hline
+    \end{tabular}
+    \caption{Evolução da variância do tempo de espera --
+        utilização 0.2 (FCFS)}
+\end{table}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|lcr|lcr|}\hline
+        \multirow{2}{3.75em}{Rodadas}
+            & \multirow{2}{1em}{K}
+            & \multicolumn{3}{|c|}{IC t-Student}
+            & \multicolumn{3}{|c|}{IC Chi-Square} \\
+        && Inf & Centro & Sup & Inf & Centro & Sup \\\hline
+        3200 & 4000
+            &$ 22.723773 $&$ 23.086594 $&$ 23.449415 $
+            &$ 21.995693 $&$ 23.1284085 $&$ 24.261124 $\\\hline
+        3200 & 4100
+            &$ 22.877519 $&$ 23.249955 $&$ 23.622390 $
+            &$ 22.151334 $&$ 23.2920645 $&$ 24.432795 $\\\hline
+        3200 & 4200
+            &$ 22.847088 $&$ 23.206213 $&$ 23.565338 $
+            &$ 22.109659 $&$ 23.2482435 $&$ 24.386828 $\\\hline
+        3200 & 4300
+            &$ 23.509601 $&$ 23.935170 $&$ 24.360740 $
+            &$ 22.804172 $&$ 23.9785215 $&$ 25.152871 $\\\hline
+    \end{tabular}
+    \caption{Evolução da variância do tempo de espera --
+        utilização 0.8 (FCFS)}
+\end{table}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|lcr|lcr|}\hline
+        \multirow{2}{3.75em}{Rodadas}
+            & \multirow{2}{1em}{K}
+            & \multicolumn{3}{|c|}{IC t-Student}
+            & \multicolumn{3}{|c|}{IC Chi-Square} \\
+        && Inf & Centro & Sup & Inf & Centro & Sup \\\hline
+        3200 & 4300
+            &$ 87.375983 $&$ 89.904690 $&$ 92.434497 $
+            &$ 85.656462 $&$ 90.067525 $&$ 94.478588 $\\\hline
+        3200 & 5300
+            &$ 90.818652 $&$ 93.096839 $&$ 95.375025 $
+            &$ 88.697773 $&$ 93.265455 $&$ 97.833137 $\\\hline
+        3200 & 8300
+            &$ 91.937129 $&$ 94.184284 $&$ 96.431438 $
+            &$ 89.733833 $&$ 94.3548695 $&$ 98.975906 $\\\hline
+        3200 & 10000
+            &$ 93.840319 $&$ 95.888738 $&$ 97.937156 $
+            &$ 91.357747 $&$ 96.0624105 $&$ 100.757074 $\\\hline
+        3200 & 11000
+            &$ 94.914793 $&$ 96.914955 $&$ 98.915116 $
+            &$ 92.335473 $&$ 97.0904865 $&$ 101.845500 $\\\hline
+        3200 & 12000
+            &$ 95.433237 $&$ 97.497706 $&$ 99.562174 $
+            &$ 92.890687 $&$ 97.6742925 $&$ 102.457898 $\\\hline
+    \end{tabular}
+    \caption{Evolução da variância do tempo de espera --
+        utilização 0.9 (FCFS)}
+\end{table}
 
 \subsection{Fila LCFS}
 \begin{table}[h!]
@@ -1503,48 +1499,6 @@ Todos os valores foram calculados usando 3200 rodadas.
     \caption{Variância do número de clientes
     na fila de espera (LCFS)}
 \end{table}
-
-\subsubsection{FCFS: Evoluções dos ICs}
-\begin{itemize}
-    \item Utilização 0.2
-    \begin{table}[h!]
-        \centering
-        \begin{tabular}{|c|c|lcr|lcr|}\hline
-            \multirow{2}{3.75em}{Rodadas}
-                & \multirow{2}{1em}{K}
-                & \multicolumn{3}{|c|}{IC t-Student}
-                & \multicolumn{3}{|c|}{IC Chi-Square} \\
-            && Inf & Centro & Sup & Inf & Centro & Sup \\\hline
-            3200 & 1100
-                &$ 0.549500 $&$ 0.554831 $&$ 0.560163 $
-                &$ 0.528614 $&$ 0.555836 $&$ 0.583058 $\\\hline
-            3200 & 1200
-                &$ 0.554137 $&$ 0.559098 $&$ 0.564060 $
-                &$ 0.532680 $&$ 0.5601115 $&$ 0.587543 $\\\hline
-        \end{tabular}
-        \caption{Evolução da variância do tempo de espera --
-            utilização 0.2 (LCFS)}
-    \end{table}
-    \item Utilização 0.6
-    \begin{table}[h!]
-        \centering
-        \begin{tabular}{|c|c|lcr|lcr|}\hline
-            \multirow{2}{3.75em}{Rodadas}
-                & \multirow{2}{1em}{K}
-                & \multicolumn{3}{|c|}{IC t-Student}
-                & \multicolumn{3}{|c|}{IC Chi-Square} \\
-            && Inf & Centro & Sup & Inf & Centro & Sup \\\hline
-            3200 & 4000
-                &$ 22.723773 $&$ 23.086594 $&$ 23.449415 $
-                &$ 21.995693 $&$ 23.1284085 $&$ 24.261124 $\\\hline
-            3200 & 4100
-                &$ 22.877519 $&$ 23.249955 $&$ 23.622390 $
-                &$ 22.151334 $&$ 23.2920645 $&$ 24.432795 $\\\hline
-        \end{tabular}
-        \caption{Evolução da variância do tempo de espera --
-            utilização 0.8 (LCFS)}
-    \end{table}
-\end{itemize}
 
 \newpage
 \section{Conclusão}
