@@ -25,7 +25,7 @@
   Avaliação e Desempenho - 2022.1}
 \author{Daniel Kiyoshi Hashimoto Vouzella de Andrade - 119025937
   \\
-Gustavo Muzy Fraga -
+Gustavo Muzy Fraga - 117087103
   \\
 Polyana Tadeu Pacheco da Silva - 119044517
 }
@@ -1169,6 +1169,21 @@ Ao final obtivemos os seguintes valores analíticos:
 \section{Tabelas com Resultados}
 Todos os valores foram calculados usando 3200 rodadas.
 
+Foi possível constatar alguns fatores durante a simulação:
+\begin{itemize}
+    \item \textbf{Little} \par
+        Little pode ser observado durante toda a simulação.
+    \item \textbf{Variância} \par
+        Como esperado, a variância da fila LCFS se mostrou maior 
+        que a da fila FCFS, quanto maior a utilização maior 
+        a diferença entre as duas variâncias.
+    \item \textbf{Kmin para LCFS} \par
+        A fila LCFS precisou de valores maiores de Kmin
+        para se estabilizar,
+        e possuir intervalos de confiança válidos que contêm o valor 
+        analítico calculado.
+\end{itemize}
+
 \begin{table}[h!]
     \centering
     \begin{tabular}{|c|c|c|lr|c|c|}\hline
@@ -1498,7 +1513,6 @@ Todos os valores foram calculados usando 3200 rodadas.
     na fila de espera (LCFS)}
 \end{table}
 
-\newpage\quad
 \newpage\quad
 \newpage\quad
 \newpage
