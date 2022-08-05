@@ -51,7 +51,7 @@ Participação principal de cada integrante:
     \item \large Resultados:
     \hfill Polyana Tadeu
     \item \large Conclusão:
-    \hfill Gustavo Muzy
+    \hfill Gustavo Muzy, Polyana
     \item \large Revisão:
     \hfill Daniel Hashimoto
 \end{itemize}
@@ -1549,7 +1549,14 @@ Todos os valores foram calculados usando 3200 rodadas.
 \newpage
 \section{Conclusão}
 \subsection{Dificuldades}
-Uma certa dificuldade foi encontrar o valor chi-square para a quantidade de rodadas pedidas.
+Uma dificuldade encontrada foi achar o valor da distribuição
+Chi-quadrado para as \(3200\) rodadas solicitadas, todas as
+tabelas que pesquisamos na internet traziam a distribuição
+para intervalos de confiaça com no máximo \(1000\) graus de
+liberdade. Por fim descobrimos que a ferramenta R possui
+a função \inlcode{qchisq()},
+que nos retorna a distribuição da Chi-quadrado
+para os critérios desejados.
 
 \subsection{Otimizações}
 Não foi feita nenhuma ``otimização'' própriamente dita.
@@ -1572,17 +1579,40 @@ para todas utilizações.
 O tempo total de simulação pode ter
 uma redução considerável após essa mudança.
 
-\subsubsection{Especificação da Lista de Eventos}
+\subsubsection{Especialização da Lista de Eventos}
+Outro a ser melhorado é a heap de eventos,
+inicialmente criamos uma heap de mínimo
+para armazenar e gerenciar os eventos da simulação,
+entretanto com o passar da confecção do trabalho
+percebemos que esta estrutura não era necessária uma vez que
+durante a simulação da fila temos no máximo dois eventos
+armazenados no sistema.
+Então potencialmente seria mais rápido
+a implementação de um buffer fixo e circular.
 
 \subsection{Comentários}
+A implementação do simulador e a análise de resultados foram
+fatores que contribuiram para o aprendizado e entendimento
+mais didático da disciplina,
+conseguimos colocar em prática
+o conhecimento teórico visto em sala de aula e construir
+em grupo uma simulação orientada à eventos discretos.
 
 \subsection{Erros Encontrados}
 \begin{itemize}
-    \item Erros de cálculo de Variância \par
-        Em algum momento, foi copiado errado a fórmula incremental
-        do cálculo da variância.
-    \item Random Exponencial \par
-    Os testes de random exponencial falharam no sistema operacional do Windows.
+    \item \textbf{Random Exponencial} \par
+        Os testes de random exponencial falharam no sistema
+        operacional do Windows.
+    \item \textbf{Cálculo da variância} \par
+        Ao relizamos os primeiros testes do nosso sistema,
+        com base nos valores analíticos,
+        percemos que o cáculo da variância,
+        tanto para o tempo de espera na fila
+        quanto para o número de pessoas na fila,
+        estava sendo implementado de maneira incorreta.
+        Foi positivo ter os valores analíticos
+        como uma base comparativa de resultados da simulação,
+        indicando possíveis erros de implementação.
 \end{itemize}
 
 \newpage
