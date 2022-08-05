@@ -1550,15 +1550,38 @@ Todos os valores foram calculados usando 3200 rodadas.
 \section{Conclusão}
 \subsection{Dificuldades}
 Uma certa dificuldade foi encontrar o valor chi-square para a quantidade de rodadas pedidas.
-\subsection{Otimizações}
-Geração de valores pseudoaleatórios pelo Hashi
-\subsection{Melhorias}
 
-    Durante o cálculo da fase transiente, rodamos o programa até 1000000 serem tratados para pegarmos a média e variança do tempo da fila de espera. Apenas isso é feito, não reduzimos o tempo para uma estimativa. Os tempos da fase transiente devem variar também de acordo com a utilização, como vimos na apostila e observamos nos resultados apresentados nos gráficos. Inclusive, podemos observar que o sistema estabiliza bem antes dos 1000000 eventos. Todavia, tratamos a fase transiente da mesma forma para todas utilizações. O tempo total de simulação pode ter uma redução com essa implementação.
+\subsection{Otimizações}
+Não foi feita nenhuma ``otimização'' própriamente dita.
+
+\subsection{Melhorias}
+\subsubsection{Fase Transiente}
+Durante o cálculo da fase transiente,
+rodamos o programa até 1000000 serem tratados
+para pegarmos a média e variância do tempo da fila de espera.
+Apenas isso é feito,
+não reduzimos o tempo para uma estimativa.
+Os tempos da fase transiente devem variar também de acordo
+com a utilização,
+como vimos na apostila e
+observamos nos resultados apresentados nos gráficos da seção 3.
+Inclusive, podemos observar que o sistema estabiliza
+bem antes dos 1000000 eventos.
+Todavia, tratamos a fase transiente da mesma forma
+para todas utilizações.
+O tempo total de simulação pode ter
+uma redução considerável após essa mudança.
+
+\subsubsection{Especificação da Lista de Eventos}
+
 \subsection{Comentários}
+
 \subsection{Erros Encontrados}
 \begin{itemize}
-    \item Random Exponencial
+    \item Erros de cálculo de Variância \par
+        Em algum momento, foi copiado errado a fórmula incremental
+        do cálculo da variância.
+    \item Random Exponencial \par
     Os testes de random exponencial falharam no sistema operacional do Windows.
 \end{itemize}
 
