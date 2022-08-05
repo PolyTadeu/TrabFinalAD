@@ -27,7 +27,7 @@
   \\
 Gustavo Muzy Fraga -
   \\
-Polyana Tadeu Pacheco da Silva - 119044517
+Polyana Tadeu -
 }
 \date{}
 
@@ -38,21 +38,21 @@ Polyana Tadeu Pacheco da Silva - 119044517
 
 Participação principal de cada integrante:
 \begin{itemize}
-    \item \large Código:
+    \item \large Código: 
     \hfill Daniel Hashimoto
-    \item \large Introdução:
+    \item \large Introdução: 
     \hfill Daniel Hashimoto, Gustavo Muzy, Polyana Tadeu
-    \item \large Teste de Correção:
+    \item \large Teste de Correção: 
     \hfill Daniel Hashimoto, Polyana Tadeu
-    \item \large Fase Transiente:
+    \item \large Fase Transiente: 
     \hfill Gustavo Muzy, Polyana Tadeu
-    \item \large Valores Analíticos:
+    \item \large Valores Analíticos: 
     \hfill Daniel Hashimoto, Polyana Tadeu
-    \item \large Resultados:
+    \item \large Resultados: 
     \hfill Polyana Tadeu
-    \item \large Conclusão:
+    \item \large Conclusão: 
     \hfill Gustavo Muzy
-    \item \large Revisão:
+    \item \large Revisão: 
     \hfill Daniel Hashimoto
 \end{itemize}
 
@@ -327,41 +327,7 @@ zeramos o \emph{tempo atual} e
 acumuladores de estatística.
 
 \subsection{Kmin e ICs}
-Para determinar o tamanho da rodada Kmin, utilizamos o IC para a
-média do tempo na fila de espera pela t-Student, com 3200 rodadas.
-Dessa forma estipulamos Kmin = \(200\) como valor inicial, e a cada simulação
-fomos verificando os seguintes itens experimentalmente
-\begin{itemize}
-    \item \textbf{Validade do intervalo de confiança} \par
-        O Kmin escolhido precisa garantir que o valor
-        analíco da média do tempo de espera na fila esteja dentro do
-        IC para a média pela t-Sudent.
-
-    \item \textbf{Precisão do intervalo de confiança} \par
-        Como estípulado no escopo do trabalho o Kmin deve garantir
-        uma precisão de \(5\%\) para o intervalo.
-
-    \item \textbf{Independência da semente} \par
-        O Kmin precisa garantir a validade dos dois itens 
-        descritos acima para qualquer semente. Nesse sentido,
-        quando o Kmin atinge um valor que cumpre os dois
-        requisitos citados anteriormente, executamos a simulação 
-        vinte vezes para verificar se o valor está estável para
-        qualquer semente.
-\end{itemize}
-Caso o Kmin não atenda algum dos critérios acima, incrementamos o
-valor em \(100\) unidades, e relizamos todo o processo de verificação
-novamente até achar um valor satisfatório. O processo de achar o Kmin
-é realizado de maneira individual para cada utilização e cada disciplina
-de atendimento.
-
-É importante combinar estes três fatores para a obtenção do Kmin, uma vez que
-olhar apenas uma estatística pode gerar falsos resultados. Por exemplo, ao rodar
-a simulação com Kmin = \(200\), utilização de \(0.6\), para uma fila FCFS,
-obtemos o intervalo \([1.451585 - 1.494867]\) para o IC do tempo médio
-na fila de espera pela t-Student com precisão de \(0.014690\). Caso considerássemos
-apenas a precisão como fator determinante, obteríamos um IC inválido
-pois não contém o valor analítico esperado de \(1.5\).
+% TODO(Polyana)
 
 \subsection{Coleta e Cálculo de Estatísticas}
 Relembrando que todos os calculos estatísticos estão
@@ -411,7 +377,7 @@ O programa foi rodado num MacBook com configurações:
 \begin{itemize}
     \item Processador 2Ghz intel Core i5 Quad-Core
     \item Memória Ram 16 GB
-    \item Placa de Vídeo Intel Iris Plus Graphics de 1536 Mb
+    \item Placa de Vídeo Intel Iris Plus Graphics de 1536 Mb 
 \end{itemize}
 
 
@@ -420,33 +386,17 @@ O programa foi rodado num MacBook com configurações:
 
 \begin{center} \begin{tabular}{|c|c|c|}
     \hline
-    Utilizacao & Tempo Disciplina FCFS & K \\
+     Utilizacao & Tempo Disciplina FCFS & Tempo Disciplina LCFS\\
     \hline
-    0.2 & 0.633008 & 1100 \\
+    0.2 & 0.633008 & 0.665364 \\
     \hline
-    0.4 & 0.631017 & 1000 \\
+    0.4 & 0.631017 & 0.818632 \\
     \hline
-    0.6 & 1.506515 & 3200 \\
+    0.6 & 1.506515 & 3.188269 \\
     \hline
-    0.8 & 2.282227 & 4000 \\
+    0.8 & 2.282227 & 16.064298 \\
     \hline
-    0.9 & 2.540672 & 4300 \\
-    \hline
-\end{tabular} \end{center}
-
-\begin{center} \begin{tabular}{|c|c|c|}
-    \hline
-    Utilizacao & Tempo Disciplina LCFS & K \\
-    \hline
-    0.2 & 0.665364 & 1200 \\
-    \hline
-    0.4 & 0.818632 & 1400 \\
-    \hline
-    0.6 &  3.188269 & 6000 \\
-    \hline
-    0.8 & 16.064298 & 30000 \\
-    \hline
-    0.9 & 39.594384 & 70000 \\
+    0.9 & 2.540672 & 39.594384 \\
     \hline
 \end{tabular} \end{center}
 
@@ -706,12 +656,9 @@ Para uma fila M/M/1 \(\rho = \lambda \; \E{X}\)
         = \lambda^3 \; \E{X^3} = 6 \; \rho^3
 \end{align*}
 Desse modo:
-\[
-    N_{i+1} = \begin{cases}
-        K           \quad&, \qquad\text{se } N = 0 \\
-        N_i + K - 1 \quad&, \qquad\text{se } N > 0 \\
-    \end{cases}
-\]
+\begin{center}
+    COLOCAR IMAGEM
+\end{center}
 Usando tranformadas e condicionamentos, temos:
 \[
     \E{z^{N_{i+1}}}
@@ -796,12 +743,9 @@ Para M/M/1:
 Com \(N(z)\) calculada, é fácil achar
 o número de pessoas na fila de espera,
 uma vez que:
-\[
-    N_q = \begin{cases}
-        0       \quad&, \qquad\text{se } N = 0 \\
-        N - 1   \quad&, \qquad\text{se } N > 0 \\
-    \end{cases}
-\]
+\begin{center}
+    COLOCAR IMAGEM
+\end{center}
 \begin{align*}
     \E{z^{N_q}} &= \E{z^N| N = 0} \; P(N = 0)
         + \E{z^{N-1} | N > 0} \;P(N > 0) \\
@@ -1075,13 +1019,10 @@ Como o tempo médio de serviço é 1 segundo, \(\lambda = \rho\)
 \]
 O segundo e o terceiro momentos de uma exponencial,
 com \(\mu = 1\) podem ser dados por:
+% TODO: BOTAR INTEGRAL
 \begin{align*}
-    \E{X^2}
-        &= \int_{0}^{\infty} \mu \; x^2 \; e^{-\mu x} \; dx
-        = \frac{2}{\mu^2} = 2 \\
-    \E{X^3}
-        &= \int_{0}^{\infty} \mu \; x^3 \; e^{-\mu x} \; dx
-        = \frac{6}{\mu^3} = 6
+    &\E{X^2} \int = \frac{2}{\mu^2 } = 2 \\
+    &\E{X^3} \int = \frac{6}{\mu^3 } = 6
 \end{align*}
 Então,
 \[
@@ -1216,7 +1157,7 @@ Todos os valores foram calculados usando 3200 rodadas.
         $ 0.8 $&$ 3.2 $&$ 3.202387 $&$ 3.181935 $&$ 3.222838 $&$
             4000 $&$ 3200 $\\\hline
         $ 0.9 $&$ 8.1 $&$ 8.079803 $&$ 7.989058 $&$ 8.170548 $&$
-            4300 $&$ 3200 $\\\hline
+            4300 $&$ 3200 $\\\hline 
     \end{tabular}
     \caption{Média do número de clientes na fila de espera (FCFS)}
 \end{table}
@@ -1321,7 +1262,7 @@ Todos os valores foram calculados usando 3200 rodadas.
         \caption{Evolução da variância do tempo de espera --
             utilização 0.2 (FCFS)}
     \end{table}
-    \item Utilização 0.8
+    \item Utilização 0.6
     \begin{table}[h!]
         \centering
         \begin{tabular}{|c|c|lcr|lcr|}\hline
@@ -1336,17 +1277,143 @@ Todos os valores foram calculados usando 3200 rodadas.
             3200 & 4100
                 &$ 22.877519 $&$ 23.249955 $&$ 23.622390 $
                 &$ 22.151334 $&$ 23.2920645 $&$ 24.432795 $\\\hline
-            3200 & 4200
-                &$ 22.847088 $&$ 23.206213 $&$ 23.565338 $
-                &$ 22.109659 $&$ 23.2482435 $&$ 24.386828 $\\\hline
-            3200 & 4300
-                &$ 23.509601 $&$ 23.935170 $&$ 24.360740 $
-                &$ 22.804172 $&$ 23.9785215 $&$ 25.152871 $\\\hline
         \end{tabular}
         \caption{Evolução da variância do tempo de espera --
             utilização 0.8 (FCFS)}
     \end{table}
-    \item Utilização 0.9
+\end{itemize}
+
+\subsection{Fila LCFS}
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|c|lr|c|c|}\hline
+        \multirow{2}{4.35em}{Utilização}
+            & \multirow{2}{3.95em}{Analítico}
+            & \multirow{2}{4.4em}{Simulação}
+            & \multicolumn{2}{|c|}{IC t-Student}
+            & \multirow{2}{2.4em}{Kmin}
+            & \multirow{2}{3.75em}{Rodadas} \\
+        &&& Inf & Sup &&\\\hline
+        $ 0.2 $&$ 0.25 $&$ 0.250152 $&$ 0.248964 $&$ 0.251341 $&$
+            1200 $&$ 3200 $\\\hline
+        $ 0.4 $&$ 0.66667 $&$ 0.665933 $&$ 0.662841 $&$ 0.669025 $&$
+            1400 $&$ 3200 $\\\hline
+        $ 0.6 $&$ 1.5 $&$ 1.496743 $&$ 1.492677 $&$ 1.500808 $&$
+            5900 $&$ 3200 $\\\hline
+        $ 0.8 $&$ 4 $&$ 3.994512 $&$ 3.985804 $&$ 4.003220 $&$
+            30000 $&$ 3200 $\\\hline
+        $ 0.9 $&$ 9 $&$ 8.984672 $&$ 8.958928 $&$ 9.010416 $&$
+            70000 $&$ 3200 $\\\hline
+    \end{tabular}
+    \caption{Média do tempo de espera (LCFS)}
+\end{table}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|c|lr|c|c|}\hline
+        \multirow{2}{4.35em}{Utilização}
+            & \multirow{2}{3.95em}{Analítico}
+            & \multirow{2}{4.4em}{Simulação}
+            & \multicolumn{2}{|c|}{IC t-Student}
+            & \multirow{2}{2.4em}{Kmin}
+            & \multirow{2}{3.75em}{Rodadas} \\
+        &&& Inf & Sup &&\\\hline
+        $ 0.2 $&$ 0.05 $&$ 0.050158 $&$ 0.049902 $&$ 0.050414 $&$
+            1200 $&$ 3200 $\\\hline
+        $ 0.4 $&$ 0.26667 $&$ 0.267424 $&$ 0.266066 $&$ 0.268782 $&$
+            1400 $&$ 3200 $\\\hline
+        $ 0.6 $&$ 0.9 $&$ 0.899740 $&$ 0.897107 $&$ 0.902374 $&$
+            5900 $&$ 3200 $\\\hline
+        $ 0.8 $&$ 3.2 $&$ 3.198500 $&$ 3.191076 $&$ 3.205924 $&$
+            30000 $&$ 3200 $\\\hline
+        $ 0.9 $&$ 8.1 $&$ 8.105467 $&$ 8.082076 $&$ 8.128858 $&$
+            70000 $&$ 3200 $\\\hline
+    \end{tabular}
+    \caption{Média do número de clientes na fila de espera (LCFS)}
+\end{table}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|lcr|c|c|}\hline
+        \multirow{2}{4.35em}{Utilização}
+            & \multirow{3}{3.95em}{Analítico}
+            & \multicolumn{3}{|c|}{IC t-Student}
+            & \multirow{3}{1em}{K}
+            & \multirow{3}{3.75em}{Rodadas} \\
+        && Inf & Centro & Sup &&\\
+        && \multicolumn{3}{|c|}{IC Chi-Square} &&\\\hline
+        \multirow{2}{2em}{0.2}
+            &\multirow{2}{3em}{0.71875}
+            &$ 0.713348 $&$ 0.721617 $&$ 0.729887 $
+            &\multirow{2}{2em}{1200} & \multirow{2}{2em}{3200}\\
+            &&$ 0.687519 $&$ 0.722924 $&$ 0.758329 $&&\\\hline
+        \multirow{2}{2em}{0.4}
+            &\multirow{2}{3em}{3.25926}
+            &$ 3.224278 $&$ 3.269136 $&$ 3.313993 $
+            &\multirow{2}{2em}{1400} & \multirow{2}{2em}{3200}\\
+            &&$ 3.114660 $&$ 3.2750565 $&$ 3.435453  $&&\\\hline
+        \multirow{2}{2em}{0.6}
+            &\multirow{2}{2em}{16.5}
+            &$ 16.202029 $&$ 16.372836 $&$ 16.543643 $
+            &\multirow{2}{2em}{5900} & \multirow{2}{2em}{3200}\\
+            &&$ 15.599177 $&$ 16.40249  $&$ 17.205803 $&&\\\hline
+        \multirow{2}{2em}{0.8}
+            &\multirow{2}{2em}{184}
+            &$ 181.632087 $&$ 183.429733 $&$ 185.227378 $
+            &\multirow{2}{2em}{30000} & \multirow{2}{2em}{3200}\\
+            &&$ 174.762205 $&$ 183.761959 $&$ 192.761713 $&&\\\hline
+        \multirow{2}{2em}{0.9}
+            &\multirow{2}{2em}{1719}
+            &$ 1692.385319 $&$ 1713.164478 $&$ 1733.943637 $
+            &\multirow{2}{2.5em}{70000} & \multirow{2}{2em}{3200}\\
+            &&$ 1632.213038 $&$ 1716.26734 $&$ 1800.321657 $&&\\\hline
+    \end{tabular}
+    \caption{Variância do tempo de espera (LCFS)}
+\end{table}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|lcr|c|c|}\hline
+        \multirow{2}{4.35em}{Utilização}
+            & \multirow{3}{3.95em}{Analítico}
+            & \multicolumn{3}{|c|}{IC t-Student}
+            & \multirow{3}{1em}{K}
+            & \multirow{3}{3.75em}{Rodadas} \\
+        && Inf & Centro & Sup &&\\
+        && \multicolumn{3}{|c|}{IC Chi-Square} &&\\\hline
+        \multirow{2}{2em}{0.2}
+            &\multirow{2}{3em}{0.0725}
+            &$ 0.072113 $&$ 0.072718 $&$ 0.073322 $
+            &\multirow{2}{2em}{1200} & \multirow{2}{2em}{3200}\\
+            &&$ 0.069282 $&$ 0.0728495 $&$ 0.076417 $&&\\\hline
+        \multirow{2}{2em}{0.4}
+            &\multirow{2}{3em}{0.55111}
+            &$ 0.545040 $&$ 0.550439 $&$ 0.555837 $
+            &\multirow{2}{2em}{1400} & \multirow{2}{2em}{3200}\\
+            &&$ 0.524429 $&$ 0.5514355 $&$ 0.578442 $&&\\\hline
+        \multirow{2}{2em}{0.6}
+            &\multirow{2}{2em}{2.79}
+            &$ 2.758380 $&$ 2.796462 $&$ 2.796462 $
+            &\multirow{2}{2em}{5900} & \multirow{2}{2em}{3200}\\
+            &&$ 2.646181 $&$ 2.7824515 $&$ 2.918722 $&&\\\hline
+        \multirow{2}{2em}{0.8}
+            &\multirow{2}{2em}{18.56}
+            &$ 18.430844 $&$ 18.547782 $&$ 18.664721 $
+            &\multirow{2}{2em}{30000} & \multirow{2}{2em}{3200}\\
+            &&$ 17.671352 $&$ 18.581376 $&$ 19.491400 $&&\\\hline
+        \multirow{2}{2em}{0.9}
+            &\multirow{2}{2em}{88.29}
+            &$ 87.298955 $&$ 88.040016 $&$ 88.781077 $
+            &\multirow{2}{2.5em}{70000} & \multirow{2}{2em}{3200}\\
+            &&$ 83.879898 $&$ 88.199473 $&$ 92.519048 $&&\\\hline
+    \end{tabular}
+    \caption{Variância do número de clientes
+    na fila de espera (LCFS)}
+\end{table}
+
+\subsubsection{FCFS: Evoluções dos ICs}
+\begin{itemize}
+    \item Utilização 0.2
     \begin{table}[h!]
         \centering
         \begin{tabular}{|c|c|lcr|lcr|}\hline
@@ -1355,41 +1422,48 @@ Todos os valores foram calculados usando 3200 rodadas.
                 & \multicolumn{3}{|c|}{IC t-Student}
                 & \multicolumn{3}{|c|}{IC Chi-Square} \\
             && Inf & Centro & Sup & Inf & Centro & Sup \\\hline
-            3200 & 4300
-                &$ 87.375983 $&$ 89.904690 $&$ 92.434497 $
-                &$ 85.656462 $&$ 90.067525 $&$ 94.478588 $\\\hline
-            3200 & 5300
-                &$ 90.818652 $&$ 93.096839 $&$ 95.375025 $
-                &$ 88.697773 $&$ 93.265455 $&$ 97.833137 $\\\hline
-            3200 & 8300
-                &$ 91.937129 $&$ 94.184284 $&$ 96.431438 $
-                &$ 89.733833 $&$ 94.3548695 $&$ 98.975906 $\\\hline
-            3200 & 10000
-                &$ 93.840319 $&$ 95.888738 $&$ 97.937156 $
-                &$ 91.357747 $&$ 96.0624105 $&$ 100.757074 $\\\hline
-            3200 & 11000
-                &$ 94.914793 $&$ 96.914955 $&$ 98.915116 $
-                &$ 92.335473 $&$ 97.0904865 $&$ 101.845500 $\\\hline
-            3200 & 12000
-                &$ 95.433237 $&$ 97.497706 $&$ 99.562174 $
-                &$ 92.890687 $&$ 97.6742925 $&$ 102.457898 $\\\hline
+            3200 & 1100
+                &$ 0.549500 $&$ 0.554831 $&$ 0.560163 $
+                &$ 0.528614 $&$ 0.555836 $&$ 0.583058 $\\\hline
+            3200 & 1200
+                &$ 0.554137 $&$ 0.559098 $&$ 0.564060 $
+                &$ 0.532680 $&$ 0.5601115 $&$ 0.587543 $\\\hline
         \end{tabular}
         \caption{Evolução da variância do tempo de espera --
-            utilização 0.9 (FCFS)}
+            utilização 0.2 (LCFS)}
+    \end{table}
+    \item Utilização 0.6
+    \begin{table}[h!]
+        \centering
+        \begin{tabular}{|c|c|lcr|lcr|}\hline
+            \multirow{2}{3.75em}{Rodadas}
+                & \multirow{2}{1em}{K}
+                & \multicolumn{3}{|c|}{IC t-Student}
+                & \multicolumn{3}{|c|}{IC Chi-Square} \\
+            && Inf & Centro & Sup & Inf & Centro & Sup \\\hline
+            3200 & 4000
+                &$ 22.723773 $&$ 23.086594 $&$ 23.449415 $
+                &$ 21.995693 $&$ 23.1284085 $&$ 24.261124 $\\\hline
+            3200 & 4100
+                &$ 22.877519 $&$ 23.249955 $&$ 23.622390 $
+                &$ 22.151334 $&$ 23.2920645 $&$ 24.432795 $\\\hline
+        \end{tabular}
+        \caption{Evolução da variância do tempo de espera --
+            utilização 0.8 (LCFS)}
     \end{table}
 \end{itemize}
 
 \newpage
 \section{Conclusão}
-\subsection{Dificuldades}
+\subsection{Dificuldades} 
 Uma certa dificuldade foi encontrar o valor chi-square para a quantidade de rodadas pedidas.
-\subsection{Otimizações}
+\subsection{Otimizações} 
 Geração de valores pseudoaleatórios pelo Hashi
-\subsection{Melhorias}
-
+\subsection{Melhorias} 
+    
     Durante o cálculo da fase transiente, rodamos o programa até 1000000 serem tratados para pegarmos a média e variança do tempo da fila de espera. Apenas isso é feito, não reduzimos o tempo para uma estimativa. Os tempos da fase transiente devem variar também de acordo com a utilização, como vimos na apostila e observamos nos resultados apresentados nos gráficos. Inclusive, podemos observar que o sistema estabiliza bem antes dos 1000000 eventos. Todavia, tratamos a fase transiente da mesma forma para todas utilizações. O tempo total de simulação pode ter uma redução com essa implementação.
-\subsection{Comentários}
-\subsection{Erros Encontrados}
+\subsection{Comentários} 
+\subsection{Erros Encontrados} 
 \begin{itemize}
     \item Random Exponencial
     Os testes de random exponencial falharam no sistema operacional do Windows.
