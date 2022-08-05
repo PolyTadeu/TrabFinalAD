@@ -37,17 +37,22 @@ Polyana Tadeu -
 
 Participação principal de cada integrante:
 \begin{itemize}
-    \item Daniel: \par
-        Arquitetou e implementou o simulador,
-        escreveu principalmente
-        as seções 1 (exceção 1.6 e 1.7), 2 e 7.
-    \item Gustavo: \par
-        Escreveu a versão rascunho do relatório.
-    \item Polyana: \par
-        Deduziu os valores analíticos,
-        rodou o simulador para coletar os resultados
-        escreveu principalmente
-        as seções 4 e 5.
+    \item \large Código: 
+    \hfill Daniel Hashimoto
+    \item \large Introdução: 
+    \hfill Daniel Hashimoto, Gustavo Muzy, Polyana Tadeu
+    \item \large Teste de Correção: 
+    \hfill Daniel Hashimoto, Polyana Tadeu
+    \item \large Fase Transiente: 
+    \hfill Gustavo Muzy, Polyana Tadeu
+    \item \large Valores Analíticos: 
+    \hfill Daniel Hashimoto, Polyana Tadeu
+    \item \large Resultados: 
+    \hfill Polyana Tadeu
+    \item \large Conclusão: 
+    \hfill Gustavo Muzy
+    \item \large Revisão: 
+    \hfill Daniel Hashimoto
 \end{itemize}
 
 \newpage
@@ -367,7 +372,13 @@ e as fórmulas abaixo para calcular a média e variância:
 \]
 
 \subsection{Máquina Utilizada e Tempo Total}
-O programa foi rodado num MacBook
+O programa foi rodado num MacBook com configurações:
+\begin{itemize}
+    \item Processador 2Ghz intel Core i5 Quad-Core
+    \item Memória Ram 16 GB
+    \item Placa de Vídeo Intel Iris Plus Graphics de 1536 Mb 
+\end{itemize}
+
 
 É importante informar que os tempos na tabela são apenas o tempo da simulação. O tempo gasto para realizar as contas são desprezíveis para o tempo total, visto que as contas são calculadas de forma incremental.
 
@@ -566,7 +577,9 @@ e iria gastar muitas páginas no relatório.
 
 \newpage
 \section{Estimativa da Fase Transiente}
+Para a estimativa da fase transiente, não podemos apenas pegar uma das métricas e esperar que esta chegue ao equilíbrio. Sendo assim, teriamos que checar a métrica que mais demora a chegar ao equilíbrio. Também poderiamos deixar o sistema rodando por um longo tempo para analisarmos quando chegamos em equilíbrio. Esta foi exatamente a estratégia que utilizamos, deixamos o sistema rodar 1000000 eventos e com isso observamos que ele chega ao equilíbrio depois disso. Ao invés de rodarmos novamente com um valor menor para acharmos uma estimativa, utilizamos essa 1000000 para todas as utilizações. Como as métricas tendem a estabilizar, sempre teremos um sistema em equilíbrio após a fase transiente. Podemos ver nos gráficos abaixo os valores da média(em azul) e variânca(em vermelho) ao longo dos eventos durante a fase transiente para cada utilização.
 
+%Colocar grafico aqui
 \newpage
 \section{Dedução dos Valores Analíticos}
 \subsection{Número médio de pessoas na fila}
@@ -1217,6 +1230,20 @@ Todos os valores foram calculados usando 3200 rodadas.
 
 \newpage
 \section{Conclusão}
+\subsection{Dificuldades} 
+Uma certa dificuldade foi encontrar o valor chi-square para a quantidade de rodadas pedidas.
+\subsection{Otimizações} 
+Geração de valores pseudoaleatórios pelo Hashi
+\subsection{Melhorias} 
+    
+    Durante o cálculo da fase transiente, rodamos o programa até 1000000 serem tratados para pegarmos a média e variança do tempo da fila de espera. Apenas isso é feito, não reduzimos o tempo para uma estimativa. Os tempos da fase transiente devem variar também de acordo com a utilização, como vimos na apostila e observamos nos resultados apresentados nos gráficos. Inclusive, podemos observar que o sistema estabiliza bem antes dos 1000000 eventos. Todavia, tratamos a fase transiente da mesma forma para todas utilizações. O tempo total de simulação pode ter uma redução com essa implementação.
+\subsection{Comentários} 
+\subsection{Erros Encontrados} 
+\begin{itemize}
+    \item Random Exponencial
+    Os testes de random exponencial falharam no sistema operacional do Windows.
+\end{itemize}
+
 \newpage
 \section{Documentação do Programa}
 O repositório do projeto se encontra em \par

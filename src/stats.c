@@ -94,8 +94,8 @@ f64 continuous_variance(Stats stat, f64 t) {
 }
 
 #define TCONST      1.960
-#define CHI_HIGH    3069.559
-#define CHI_LOW     3332.715
+#define CHI_HIGH    3044.13
+#define CHI_LOW     3357.658
 
 
 // Salva as estatisticas na estrutura de CachedStats
