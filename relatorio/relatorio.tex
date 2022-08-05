@@ -330,7 +330,6 @@ Para determinar o tamanho da rodada Kmin, utilizamos o IC para a
 média do tempo na fila de espera pela t-Student, com 3200 rodadas.
 Dessa forma estipulamos Kmin = \(200\) como valor inicial, e a cada simulação
 fomos verificando os seguintes itens experimentalmente
-
 \begin{itemize}
     \item \textbf{Validade do intervalo de confiança} \par
         O Kmin escolhido precisa garantir que o valor
@@ -339,8 +338,8 @@ fomos verificando os seguintes itens experimentalmente
 
     \item \textbf{Precisão do intervalo de confiança} \par
         Como estípulado no escopo do trabalho o Kmin deve garantir
-        uam precisão de \(5\%\) para o intervalo.
-    
+        uma precisão de \(5\%\) para o intervalo.
+
     \item \textbf{Independência da semente} \par
         O Kmin precisa garantir a validade dos dois itens 
         descritos acima para qualquer semente. Nesse sentido,
@@ -348,9 +347,8 @@ fomos verificando os seguintes itens experimentalmente
         requisitos citados anteriormente, executamos a simulação 
         vinte vezes para verificar se o valor está estável para
         qualquer semente.
-
 \end{itemize}
-Caso o Kmin não atenda algum dos critérios acima, incrementamos o 
+Caso o Kmin não atenda algum dos critérios acima, incrementamos o
 valor em \(100\) unidades, e relizamos todo o processo de verificação
 novamente até achar um valor satisfatório. O processo de achar o Kmin
 é realizado de maneira individual para cada utilização e cada disciplina
@@ -421,7 +419,7 @@ O programa foi rodado num MacBook com configurações:
 
 \begin{center} \begin{tabular}{|c|c|c|}
     \hline
-     Utilizacao & Tempo Disciplina FCFS & K\\
+    Utilizacao & Tempo Disciplina FCFS & K \\
     \hline
     0.2 & 0.633008 & 1100 \\
     \hline
@@ -437,17 +435,17 @@ O programa foi rodado num MacBook com configurações:
 
 \begin{center} \begin{tabular}{|c|c|c|}
     \hline
-     Utilizacao & Tempo Disciplina LCFS & K\\
+    Utilizacao & Tempo Disciplina LCFS & K \\
     \hline
     0.2 & 0.665364 & 1200 \\
     \hline
-    0.4 & 0.818632 & 1400\\
+    0.4 & 0.818632 & 1400 \\
     \hline
-    0.6 &  3.188269 & 6000\\
+    0.6 &  3.188269 & 6000 \\
     \hline
     0.8 & 16.064298 & 30000 \\
     \hline
-    0.9 & 39.594384 & 70000\\
+    0.9 & 39.594384 & 70000 \\
     \hline
 \end{tabular} \end{center}
 
@@ -655,9 +653,9 @@ Para uma fila M/M/1 \(\rho = \lambda \; \E{X}\)
 Desse modo:
 \[
     N_{i+1} = \begin{cases}
-                K \quad&, \qquad\text{se } N = 0 \\
-                N_i + K - 1 \quad&, \qquad\text{se } N > 0 \\    
-        \end{cases}
+        K           \quad&, \qquad\text{se } N = 0 \\
+        N_i + K - 1 \quad&, \qquad\text{se } N > 0 \\
+    \end{cases}
 \]
 Usando tranformadas e condicionamentos, temos:
 \[
@@ -745,9 +743,9 @@ o número de pessoas na fila de espera,
 uma vez que:
 \[
     N_q = \begin{cases}
-                0 \quad&, \qquad\text{se } N = 0 \\
-                N - 1 \quad&, \qquad\text{se } N > 0 \\    
-        \end{cases}
+        0       \quad&, \qquad\text{se } N = 0 \\
+        N - 1   \quad&, \qquad\text{se } N > 0 \\
+    \end{cases}
 \]
 \begin{align*}
     \E{z^{N_q}} &= \E{z^N| N = 0} \; P(N = 0)
@@ -1023,8 +1021,12 @@ Como o tempo médio de serviço é 1 segundo, \(\lambda = \rho\)
 O segundo e o terceiro momentos de uma exponencial,
 com \(\mu = 1\) podem ser dados por:
 \begin{align*}
-    &\E{X^2} = \int_{0}^{\infty} \mu \;x^2\;e^{-\mu x}\;dx= \frac{2}{\mu^2 } = 2 \\
-    &\E{X^3} = \int_{0}^{\infty} \mu \;x^3\;e^{-\mu x}\;dx = \frac{6}{\mu^3 } = 6
+    \E{X^2}
+        &= \int_{0}^{\infty} \mu \; x^2 \; e^{-\mu x} \; dx
+        = \frac{2}{\mu^2} = 2 \\
+    \E{X^3}
+        &= \int_{0}^{\infty} \mu \; x^3 \; e^{-\mu x} \; dx
+        = \frac{6}{\mu^3} = 6
 \end{align*}
 Então,
 \[
